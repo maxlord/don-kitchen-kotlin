@@ -1,0 +1,14 @@
+<resources>
+	<dimen name="activity_horizontal_margin">16dp</dimen>
+	<dimen name="activity_vertical_margin">16dp</dimen>
+	<dimen name="button_height">64dp</dimen>
+	<dimen name="progress_linear_height">4dp</dimen>
+
+	<dimen name="progress_circular_size">32dp</dimen>
+
+	<dimen name="recycler_horizontal_margin">8dp</dimen>
+	<dimen name="recycler_vertical_margin">8dp</dimen>
+	<dimen name="activity_order_list_label_width">100dp</dimen>
+	<dimen name="preview_width">80dp</dimen>
+	<dimen name="preview_height">60dp</dimen>
+</resources>

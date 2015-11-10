@@ -1,0 +1,11 @@
+<resources>
+	<string name="app_name">Донская кухня</string>
+	<string name="activity_category_list_no_data">Категории отсутствуют</string>
+	<string name="activity_category_list_title">Категории</string>
+	<string name="activity_receipt_list_no_data">Рецепты отсутствуют</string>
+	<string name="activity_receipt_detail_ingredients">Ингредиенты:</string>
+	<string name="activity_receipt_detail_receipt">Рецепт:</string>
+	<string name="activity_receipt_detail_dialog_error_loading_receipt">Во время загрузки рецепта произошла ошибка</string>
+	<string name="common_ok">ОК</string>
+	<string name="activity_receipt_detail_title">Рецепт</string>
+</resources>

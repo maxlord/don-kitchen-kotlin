@@ -1,0 +1,150 @@
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+	compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
+	buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+
+	defaultConfig {
+		minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
+		targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
+
+		applicationId "ru.ls.donkitchen"
+		versionCode 101
+		versionName "1.0.1"
+
+		buildConfigField "int", "DATABASE_VERSION", "1";
+		buildConfigField "String", "API_URL", "\"http://dk.lord-services.ru/api/v1\"";
+	}
+
+	signingConfigs {
+		debug {
+		}
+
+		release {
+			storeFile file('../keys/ls.jks')
+			storePassword 'Maxfactor1.'
+			keyAlias 'LordServicesKey'
+			keyPassword 'Maxfactor1.'
+		}
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+			signingConfig signingConfigs.release
+		}
+	}
+
+	packagingOptions {
+		exclude 'META-INF/LICENSE.txt'
+		exclude 'META-INF/NOTICE.txt'
+		exclude 'META-INF/services/javax.annotation.processing.Processor'
+	}
+
+	compileOptions {
+		encoding = 'UTF-8'
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
+}
+
+retrolambda {
+	jdk System.getenv("JAVA_HOME")
+	oldJdk System.getenv("JAVA_HOME")
+	javaVersion JavaVersion.VERSION_1_7
+	jvmArgs '-noverify'
+//	jvmArgs '-arg1', '-arg2'
+
+	println("***************** ---------- *******************")
+	println("JAVA_HOME: " + System.getenv("JAVA_HOME"))
+	println("JAVA7_HOME: " + System.getenv("JAVA7_HOME"))
+	println("JAVA8_HOME: " + System.getenv("JAVA8_HOME"))
+	println("***************** ---------- *******************")
+}
+
+dependencies {
+	compile fileTree(dir: 'libs', include: ['*.jar'])
+	testCompile 'junit:junit:4.12'
+
+	compile supportDependencies.appCompat
+	compile supportDependencies.supportV4
+	compile supportDependencies.recyclerView
+	compile supportDependencies.cardView
+	compile supportDependencies.design
+
+	compile googlePlayServices.base
+//	compile googlePlayServices.location
+//	compile googlePlayServices.maps
+
+	// Rx
+	compile 'io.reactivex:rxandroid:1.0.1'
+	compile 'com.trello:rxlifecycle:0.2.0'
+	compile 'com.trello:rxlifecycle-components:0.2.0'
+
+	compile 'com.squareup.retrofit:retrofit:1.9.0'
+	compile 'com.squareup.okhttp:okhttp:2.5.0'
+	compile 'joda-time:joda-time:2.7'
+	compile 'org.joda:joda-convert:1.7'
+	compile 'com.jakewharton.timber:timber:2.7.1'
+	compile 'com.google.dagger:dagger:2.1-SNAPSHOT'
+	apt 'com.google.dagger:dagger-compiler:2.1-SNAPSHOT'
+	provided 'org.glassfish:javax.annotation:10.0-b28'
+	compile 'com.squareup:otto:1.3.6'
+	compile 'com.jakewharton:butterknife:7.0.1'
+	compile('com.crashlytics.sdk.android:crashlytics:2.5.1@aar') {
+		transitive = true;
+	}
+	compile('com.afollestad.material-dialogs:core:0.8.1.0@aar') {
+		transitive = true
+	}
+	compile 'javax.inject:javax.inject:1'
+	compile 'com.mobsandgeeks:android-saripaar:2.0.3'
+	compile 'org.apache.commons:commons-lang3:3.4'
+//	compile 'org.lucasr.twowayview:core:1.0.0-SNAPSHOT@aar'
+//	compile 'org.lucasr.twowayview:layouts:1.0.0-SNAPSHOT@aar'
+	compile project(":core")
+	compile project(":layouts")
+//	compile 'com.rengwuxian.materialedittext:library:2.1.4'
+//	compile ('com.github.ganfra:material-spinner:1.1.0'){
+//		exclude group: 'com.nineoldandroids', module: 'library'
+//		exclude group: 'com.android.support', module: 'appcompat-v7'
+//	}
+	compile 'com.github.rey5137:material:1.2.1'
+	compile('com.mikepenz:materialdrawer:4.3.4@aar') {
+		transitive = true
+	}
+	compile 'com.wdullaer:materialdatetimepicker:1.5.2'
+	compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.2.0'
+	compile 'com.j256.ormlite:ormlite-core:4.49-SNAPSHOT'
+	compile 'com.j256.ormlite:ormlite-android:4.49-SNAPSHOT'
+	compile 'org.flywaydb:flyway-core:3.0'
+	compile 'org.sqldroid:sqldroid:1.0.3'
+//	compile 'com.googlecode.libphonenumber:libphonenumber:7.0.11'
+//	compile('com.android.support:support-v4-preferencefragment:1.+@aar') {
+//		exclude module: 'support-v4'
+//	}
+	compile 'com.facebook.stetho:stetho:1.2.0'
+	compile 'com.facebook.stetho:stetho-okhttp:1.2.0'
+//	compile 'com.google.maps.android:android-maps-utils:0.4'
+	compile 'com.squareup.picasso:picasso:2.5.2'
+
+	retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.0.0'
+}
+
+task copyRelease(type: Copy) {
+	def releaseDir = project.RELEASE_DIR
+
+	def apkPath = "$buildDir/outputs/apk/" + project.name + "-release.apk"
+
+	from apkPath
+	into releaseDir
+	rename {  String fileName ->
+		fileName = "DonKitchen" + "-v${android.defaultConfig.versionName}.apk"
+	}
+}
+
+assembleRelease.finalizedBy copyRelease
