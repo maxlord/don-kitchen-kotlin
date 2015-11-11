@@ -140,7 +140,7 @@ class Lanes {
 
     private void offsetLane(int lane, int offset) {
         mLanes[lane].offset(mIsVertical ? 0 : offset,
-                mIsVertical ? offset : 0);
+		        mIsVertical ? offset : 0);
     }
 
     public void offset(int offset) {
@@ -163,23 +163,27 @@ class Lanes {
     public int pushChildFrame(Rect outRect, int lane, int margin, Direction direction) {
         final int delta;
 
-        final Rect laneRect = mLanes[lane];
-        if (mIsVertical) {
-            if (direction == Direction.END) {
-                delta = outRect.top - laneRect.bottom;
-                laneRect.bottom = outRect.bottom + margin;
-            } else {
-                delta = outRect.bottom - laneRect.top;
-                laneRect.top = outRect.top - margin;
-            }
+        if (lane < mLanes.length) {
+	        final Rect laneRect = mLanes[lane];
+	        if (mIsVertical) {
+		        if (direction == Direction.END) {
+			        delta = outRect.top - laneRect.bottom;
+			        laneRect.bottom = outRect.bottom + margin;
+		        } else {
+			        delta = outRect.bottom - laneRect.top;
+			        laneRect.top = outRect.top - margin;
+		        }
+	        } else {
+		        if (direction == Direction.END) {
+			        delta = outRect.left - laneRect.right;
+			        laneRect.right = outRect.right + margin;
+		        } else {
+			        delta = outRect.right - laneRect.left;
+			        laneRect.left = outRect.left - margin;
+		        }
+	        }
         } else {
-            if (direction == Direction.END) {
-                delta = outRect.left - laneRect.right;
-                laneRect.right = outRect.right + margin;
-            } else {
-                delta = outRect.right - laneRect.left;
-                laneRect.left = outRect.left - margin;
-            }
+	        delta = 0;
         }
 
         invalidateEdges();
@@ -188,19 +192,21 @@ class Lanes {
     }
 
     public void popChildFrame(Rect outRect, int lane, int margin, Direction direction) {
-        final Rect laneRect = mLanes[lane];
-        if (mIsVertical) {
-            if (direction == Direction.END) {
-                laneRect.top = outRect.bottom - margin;
-            } else {
-                laneRect.bottom = outRect.top + margin;
-            }
-        } else {
-            if (direction == Direction.END) {
-                laneRect.left = outRect.right - margin;
-            } else {
-                laneRect.right = outRect.left + margin;
-            }
+        if (lane < mLanes.length) {
+	        final Rect laneRect = mLanes[lane];
+	        if (mIsVertical) {
+		        if (direction == Direction.END) {
+			        laneRect.top = outRect.bottom - margin;
+		        } else {
+			        laneRect.bottom = outRect.top + margin;
+		        }
+	        } else {
+		        if (direction == Direction.END) {
+			        laneRect.left = outRect.right - margin;
+		        } else {
+			        laneRect.right = outRect.left + margin;
+		        }
+	        }
         }
 
         invalidateEdges();

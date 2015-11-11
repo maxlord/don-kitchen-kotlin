@@ -8,10 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.rey.material.widget.ProgressView;
 
 import org.lucasr.twowayview.ItemClickSupport;
 import org.lucasr.twowayview.widget.TwoWayView;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,17 +30,22 @@ import ru.ls.donkitchen.annotation.IOScheduler;
 import ru.ls.donkitchen.annotation.UIScheduler;
 import ru.ls.donkitchen.app.DonKitchenApplication;
 import ru.ls.donkitchen.base.BaseFragment;
+import ru.ls.donkitchen.db.DatabaseHelper;
+import ru.ls.donkitchen.db.table.Category;
+import ru.ls.donkitchen.db.table.Receipt;
 import ru.ls.donkitchen.helper.ActivityHelper;
 import ru.ls.donkitchen.rest.Api;
 import ru.ls.donkitchen.rest.model.response.ReceiptListResult;
+import rx.Observable;
 import rx.Observer;
 import rx.Scheduler;
+import timber.log.Timber;
 
 /**
  * @author Lord (Kuleshov M.V.)
  * @since 22.09.15
  */
-public class ReceiptListFragment extends BaseFragment implements Observer<ReceiptListResult> {
+public class ReceiptListFragment extends BaseFragment implements Observer<List<ReceiptListResult.ReceiptItem>> {
 	@Bind(R.id.list)
 	TwoWayView recyclerView;
 
@@ -61,6 +72,9 @@ public class ReceiptListFragment extends BaseFragment implements Observer<Receip
 	@IOScheduler
 	Scheduler io;
 
+	@Inject
+	DatabaseHelper databaseHelper;
+
 	private ReceiptAdapter adapter;
 	private int categoryId;
 	private String categoryName;
@@ -78,7 +92,7 @@ public class ReceiptListFragment extends BaseFragment implements Observer<Receip
 
 	@Override
 	protected int getLayoutRes() {
-		return R.layout.fragment_category_list;
+		return R.layout.fragment_receipt_list;
 	}
 
 	@Override
@@ -161,26 +175,12 @@ public class ReceiptListFragment extends BaseFragment implements Observer<Receip
 
 	@Override
 	public void onError(Throwable e) {
+		Timber.e(e, "Ошибка при загрузке рецептов");
+
 		if (activity != null) {
 			progress.setVisibility(View.GONE);
 
-			recyclerView.setVisibility(View.GONE);
-			empty.setVisibility(View.VISIBLE);
-
-			empty.setText(e.getLocalizedMessage());
-		}
-	}
-
-	@Override
-	public void onNext(ReceiptListResult result) {
-		if (activity != null && result != null) {
-			progress.setVisibility(View.GONE);
-
-			adapter.clear();
-			adapter.addAllItems(result.receipts);
-			adapter.notifyDataSetChanged();
-
-			if (result.receipts.isEmpty()) {
+			if (adapter.getItemCount() == 0) {
 				recyclerView.setVisibility(View.GONE);
 				empty.setVisibility(View.VISIBLE);
 			} else {
@@ -190,9 +190,108 @@ public class ReceiptListFragment extends BaseFragment implements Observer<Receip
 		}
 	}
 
+	@Override
+	public void onNext(List<ReceiptListResult.ReceiptItem> result) {
+		Timber.i("Обновляем UI");
+
+		refreshData(result);
+	}
+
+	private void refreshData(List<ReceiptListResult.ReceiptItem> result) {
+		try {
+			if (activity != null && result != null) {
+				progress.setVisibility(View.GONE);
+
+				adapter.clear();
+				adapter.addAllItems(result);
+				adapter.notifyDataSetChanged();
+
+				if (result.isEmpty()) {
+					recyclerView.setVisibility(View.GONE);
+					empty.setVisibility(View.VISIBLE);
+				} else {
+					recyclerView.setVisibility(View.VISIBLE);
+					empty.setVisibility(View.GONE);
+				}
+			}
+		} catch (Exception e) {
+			Timber.e(e, "Ошибка получения списка рецептов");
+		}
+	}
+
 	private void reloadData() {
-		// Обновляем список категорий
-		api.getReceipts(categoryId)
+		// Обновляем список рецептов
+		// сеть
+		Observable<List<ReceiptListResult.ReceiptItem>> network = api.getReceipts(categoryId)
+				.map(result -> result.receipts);
+		// сохранение/обновление в БД из сети
+		Observable<List<ReceiptListResult.ReceiptItem>> networkWithSave = network.doOnNext(data -> {
+			Timber.i("Сохраняем рецепты в БД");
+
+			if (data != null && !data.isEmpty()) {
+				try {
+					Dao<Category, Integer> categoryDao = databaseHelper.getDao(Category.class);
+					Dao<Receipt, Integer> receiptDao = databaseHelper.getDao(Receipt.class);
+
+					for (ReceiptListResult.ReceiptItem ri : data) {
+						// Получаем категорию
+						Category receiptCategory = categoryDao.queryForId(ri.categoryId);
+
+						Receipt item = new Receipt();
+						item.id = ri.id;
+						item.name = ri.name;
+						item.ingredients = ri.ingredients;
+						item.receipt = ri.receipt;
+						item.imageLink = ri.imageLink;
+						item.category = receiptCategory;
+						item.viewsCount = 0;
+
+						receiptDao.createOrUpdate(item);
+					}
+				} catch (SQLException e) {
+					Timber.e(e, "Ошибка сохранения рецептов в БД");
+				}
+			}
+		});
+		// БД
+		Observable<List<ReceiptListResult.ReceiptItem>> db = Observable.create(s -> {
+			Timber.i("Получаем рецепты из БД");
+
+			try {
+				Dao<Receipt, Integer> dao = databaseHelper.getDao(Receipt.class);
+				QueryBuilder<Receipt, Integer> qb = dao.queryBuilder();
+				qb.where().eq(Receipt.CATEGORY_ID, categoryId);
+				qb.orderBy(Receipt.NAME, true);
+				List<Receipt> receipts = qb.query();
+				List<ReceiptListResult.ReceiptItem> receiptItems = new ArrayList<>();
+				if (!receipts.isEmpty()) {
+					// Выполняем перепаковку объектов
+					for (Receipt r : receipts) {
+						ReceiptListResult.ReceiptItem item = new ReceiptListResult.ReceiptItem();
+
+						item.id = r.id;
+						item.name = r.name;
+						item.ingredients = r.ingredients;
+						item.receipt = r.receipt;
+						//item. = r.viewsCount;
+						item.categoryId = r.category.id;
+						item.categoryName = r.category.name;
+						item.imageLink = r.imageLink;
+
+						receiptItems.add(item);
+					}
+				}
+
+				s.onNext(receiptItems);
+
+				s.onCompleted();
+			} catch (SQLException e) {
+				s.onError(e);
+			}
+		});
+
+		// Выполняем все запросы
+		Observable.concat(db, networkWithSave)
 				.subscribeOn(io)
 				.observeOn(ui)
 				.subscribe(this);

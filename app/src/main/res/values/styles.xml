@@ -7,6 +7,12 @@
 		<item name="android:textColorPrimary">@color/primary_text</item>
 		<item name="android:textColorSecondary">@color/secondary_text</item>
 		<item name="colorButtonNormal">@color/button</item>
+		<!-- color for widget theming, eg EditText. Doesn't effect ActionBar. -->
+		<item name="colorControlNormal">@color/white</item>
+		<!-- The animated arrow style -->
+		<item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+		<!-- The style for the widgets on the ActionBar. -->
+		<item name="actionBarWidgetTheme">@style/WidgetStyle</item>
 
 		<!-- MaterialDrawer specific values -->
 		<!--<item name="material_drawer_background">@color/material_drawer_background</item>-->
@@ -20,6 +26,16 @@
 		<!--<item name="material_drawer_selected_text">@color/material_drawer_selected_text</item>-->
 		<!--<item name="material_drawer_header_selection_text">@color/material_drawer_header_selection_text</item>-->
 
+	</style>
+
+	<!-- Style for the navigation drawer icon -->
+	<style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+		<item name="spinBars">true</item>
+		<item name="color">@color/white</item>
+	</style>
+
+	<style name="WidgetStyle" parent="style/ThemeOverlay.AppCompat.Light">
+		<item name="colorControlNormal">@color/white</item>
 	</style>
 
 	<style name="Custom.TextAppearance.AppCompat.Widget.ActionBar.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">

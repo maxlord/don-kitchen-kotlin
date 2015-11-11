@@ -5,8 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import org.lucasr.twowayview.widget.StaggeredGridLayoutManager;
 import org.lucasr.twowayview.widget.TwoWayView;
 
 import java.util.ArrayList;
@@ -23,6 +27,8 @@ import ru.ls.donkitchen.rest.model.response.CategoryListResult;
  */
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 	public static class ViewHolder extends RecyclerView.ViewHolder {
+		@Bind(R.id.photo)
+		ImageView photo;
 		@Bind(R.id.title)
 		TextView title;
 		@Bind(R.id.count)
@@ -76,6 +82,22 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
 		holder.title.setText(item.name);
 		holder.count.setText(String.valueOf(item.receiptCount));
+
+		Picasso.with(context)
+				.load(item.imageLink)
+				.fit()
+				.centerCrop()
+				.into(holder.photo);
+
+		final StaggeredGridLayoutManager.LayoutParams lp =
+				(StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+		if (position == getItemCount() - 1 && (position + 1) % 2 == 1) {
+			// если это последний элемент и он один, растягиваем его на всю строку
+			lp.span = 2;
+		} else {
+			lp.span = 1;
+		}
+		holder.itemView.setLayoutParams(lp);
 	}
 
 	@Override

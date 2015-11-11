@@ -12,8 +12,8 @@ android {
 		targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
 
 		applicationId "ru.ls.donkitchen"
-		versionCode 101
-		versionName "1.0.1"
+		versionCode 110
+		versionName "1.1.0"
 
 		buildConfigField "int", "DATABASE_VERSION", "1";
 		buildConfigField "String", "API_URL", "\"http://dk.lord-services.ru/api/v1\"";
@@ -131,6 +131,12 @@ dependencies {
 	compile 'com.facebook.stetho:stetho-okhttp:1.2.0'
 //	compile 'com.google.maps.android:android-maps-utils:0.4'
 	compile 'com.squareup.picasso:picasso:2.5.2'
+
+	// Database
+	compile 'com.j256.ormlite:ormlite-core:4.49-SNAPSHOT'
+	compile 'com.j256.ormlite:ormlite-android:4.49-SNAPSHOT'
+	compile 'org.flywaydb:flyway-core:3.0'
+	compile 'org.sqldroid:sqldroid:1.0.3'
 
 	retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.0.0'
 }

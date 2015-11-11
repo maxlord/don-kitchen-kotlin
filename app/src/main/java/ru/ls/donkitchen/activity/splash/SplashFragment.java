@@ -1,10 +1,14 @@
 package ru.ls.donkitchen.activity.splash;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.SystemClock;
 
 import com.crashlytics.android.Crashlytics;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+
+import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.android.ContextHolder;
 
 import javax.inject.Inject;
 
@@ -15,9 +19,11 @@ import ru.ls.donkitchen.annotation.IOScheduler;
 import ru.ls.donkitchen.annotation.UIScheduler;
 import ru.ls.donkitchen.app.DonKitchenApplication;
 import ru.ls.donkitchen.base.BaseFragment;
+import ru.ls.donkitchen.db.DatabaseHelper;
 import ru.ls.donkitchen.helper.ActivityHelper;
 import ru.ls.donkitchen.rest.Api;
 import rx.Scheduler;
+import timber.log.Timber;
 
 public class SplashFragment extends BaseFragment {
 
@@ -72,17 +78,17 @@ public class SplashFragment extends BaseFragment {
 			Fabric.with(activity, new Crashlytics());
 
 //			// Инициализируем БД
-//			try {
-//				SQLiteDatabase db = activity.openOrCreateDatabase(DatabaseHelper.DATABASE_NAME, 0, null);
-//				ContextHolder.setContext(activity);
-//				Flyway flyway = new Flyway();
-//				flyway.setDataSource("jdbc:sqlite:" + db.getPath(), "", "");
-//				flyway.setInitOnMigrate(true);
-//				flyway.migrate();
-//				db.close();
-//			} catch (Exception e) {
-//				Timber.e(e, "Ошибка инициализации flyway");
-//			}
+			try {
+				SQLiteDatabase db = activity.openOrCreateDatabase(DatabaseHelper.DATABASE_NAME, 0, null);
+				ContextHolder.setContext(activity);
+				Flyway flyway = new Flyway();
+				flyway.setDataSource("jdbc:sqlite:" + db.getPath(), "", "");
+				flyway.setInitOnMigrate(true);
+				flyway.migrate();
+				db.close();
+			} catch (Exception e) {
+				Timber.e(e, "Ошибка инициализации flyway");
+			}
 
 			SystemClock.sleep(1000);
 

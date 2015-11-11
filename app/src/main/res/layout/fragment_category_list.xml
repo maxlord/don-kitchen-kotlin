@@ -9,20 +9,21 @@
 
 	<FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingStart="@dimen/recycler_horizontal_margin"
-        android:paddingLeft="@dimen/recycler_horizontal_margin"
-        android:paddingEnd="@dimen/recycler_horizontal_margin"
-        android:paddingRight="@dimen/recycler_horizontal_margin"
-	    android:paddingBottom="@dimen/recycler_vertical_margin"
-        >
+        android:layout_height="match_parent">
 
-        <org.lucasr.twowayview.widget.TwoWayView
-            android:id="@+id/list"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:twowayview_layoutManager="ListLayoutManager"/>
+        <FrameLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:padding="4dp">
+
+	        <org.lucasr.twowayview.widget.TwoWayView
+		        android:id="@+id/list"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        app:twowayview_layoutManager="StaggeredGridLayoutManager"
+		        app:twowayview_numColumns="2" />
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/empty"

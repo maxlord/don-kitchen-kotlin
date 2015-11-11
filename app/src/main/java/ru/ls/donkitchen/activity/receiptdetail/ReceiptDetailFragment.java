@@ -8,6 +8,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.j256.ormlite.dao.Dao;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Picasso;
 
@@ -22,16 +23,17 @@ import ru.ls.donkitchen.annotation.IOScheduler;
 import ru.ls.donkitchen.annotation.UIScheduler;
 import ru.ls.donkitchen.app.DonKitchenApplication;
 import ru.ls.donkitchen.base.BaseFragment;
+import ru.ls.donkitchen.db.DatabaseHelper;
+import ru.ls.donkitchen.db.table.Receipt;
 import ru.ls.donkitchen.rest.Api;
-import ru.ls.donkitchen.rest.model.response.ReceiptDetailResult;
-import rx.Observer;
 import rx.Scheduler;
+import timber.log.Timber;
 
 /**
  * @author Lord (Kuleshov M.V.)
  * @since 13.10.15
  */
-public class ReceiptDetailFragment extends BaseFragment implements Observer<ReceiptDetailResult> {
+public class ReceiptDetailFragment extends BaseFragment {
 
 	@Bind(R.id.container)
 	ScrollView container;
@@ -67,8 +69,11 @@ public class ReceiptDetailFragment extends BaseFragment implements Observer<Rece
 	@IOScheduler
 	Scheduler io;
 
+	@Inject
+	DatabaseHelper databaseHelper;
+
 	int receiptId;
-	ReceiptDetailResult receiptItem;
+	Receipt receiptItem;
 
 	@Override
 	protected int getLayoutRes() {
@@ -115,61 +120,59 @@ public class ReceiptDetailFragment extends BaseFragment implements Observer<Rece
 			receiptId = getArguments().getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0);
 
 			if (receiptId > 0) {
-				api.getReceiptDetail(receiptId)
-						.subscribeOn(io)
-						.observeOn(ui)
-						.subscribe(this);
-			}
-		}
-	}
+				try {
+					Dao<Receipt, Integer> dao = databaseHelper.getDao(Receipt.class);
 
-	@Override
-	public void onCompleted() {
+					Receipt r = dao.queryForId(receiptId);
 
-	}
+					if (r != null) {
+						receiptItem = r;
 
-	@Override
-	public void onError(Throwable e) {
-		if (activity != null) {
-			progress.setVisibility(View.GONE);
+						try {
+							if (activity != null) {
+								progress.setVisibility(View.GONE);
+								container.setVisibility(View.VISIBLE);
 
-			new MaterialDialog.Builder(activity)
-					.content(R.string.activity_receipt_detail_dialog_error_loading_receipt)
-					.positiveText(R.string.common_ok)
-					.autoDismiss(false)
-					.callback(new MaterialDialog.ButtonCallback() {
-						@Override
-						public void onPositive(MaterialDialog dialog) {
-							super.onPositive(dialog);
+								Picasso.with(activity)
+										.load(receiptItem.imageLink)
+										.fit()
+										.centerCrop()
+										.into(icon);
 
-							activity.finish();
+								title.setText(receiptItem.name);
+
+								if (!StringUtils.isEmpty(receiptItem.ingredients)) {
+									ingredients.setText(receiptItem.ingredients);
+									containerIngredients.setVisibility(View.VISIBLE);
+								} else {
+									containerIngredients.setVisibility(View.GONE);
+								}
+
+								receipt.setText(receiptItem.receipt);
+							}
+						} catch (Exception e) {
+							Timber.e(e, "Ошибка во время получения рецепта");
 						}
-					})
-					.show();
-		}
-	}
+					}
+				} catch (Exception e) {
+					Timber.e(e, "Ошибка получения информации о рецепте");
 
-	@Override
-	public void onNext(ReceiptDetailResult result) {
-		if (activity != null) {
-			progress.setVisibility(View.GONE);
-			container.setVisibility(View.VISIBLE);
+					progress.setVisibility(View.GONE);
 
-			if (result != null) {
-				receiptItem = result;
+					new MaterialDialog.Builder(activity)
+							.content(R.string.activity_receipt_detail_dialog_error_loading_receipt)
+							.positiveText(R.string.common_ok)
+							.autoDismiss(false)
+							.callback(new MaterialDialog.ButtonCallback() {
+								@Override
+								public void onPositive(MaterialDialog dialog) {
+									super.onPositive(dialog);
 
-				Picasso.with(activity).load(receiptItem.imageLink).into(icon);
-
-				title.setText(receiptItem.name);
-
-				if (!StringUtils.isEmpty(receiptItem.ingredients)) {
-					ingredients.setText(receiptItem.ingredients);
-					containerIngredients.setVisibility(View.VISIBLE);
-				} else {
-					containerIngredients.setVisibility(View.GONE);
+									activity.finish();
+								}
+							})
+							.show();
 				}
-
-				receipt.setText(receiptItem.receipt);
 			}
 		}
 	}

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.lucasr.twowayview.widget.StaggeredGridLayoutManager;
 import org.lucasr.twowayview.widget.TwoWayView;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import ru.ls.donkitchen.R;
 import ru.ls.donkitchen.rest.model.response.ReceiptListResult;
+import timber.log.Timber;
 
 /**
  * @author Lord (Kuleshov M.V.)
@@ -26,8 +28,8 @@ import ru.ls.donkitchen.rest.model.response.ReceiptListResult;
  */
 public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ViewHolder> {
 	public static class ViewHolder extends RecyclerView.ViewHolder {
-		@Bind(R.id.preview)
-		ImageView preview;
+		@Bind(R.id.photo)
+		ImageView photo;
 		@Bind(R.id.title)
 		TextView title;
 
@@ -59,8 +61,12 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ViewHold
 	}
 
 	public ReceiptListResult.ReceiptItem getItem(int position) {
-		if (items != null && position < items.size()) {
-			return items.get(position);
+		try {
+			if (items != null && position < items.size()) {
+				return items.get(position);
+			}
+		} catch (Exception e) {
+			Timber.e(e, "Индекс вне диапазона");
 		}
 
 		return null;
@@ -79,12 +85,21 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ViewHold
 
 		Picasso.with(context)
 				.load(item.imageLink)
-				.resizeDimen(R.dimen.preview_width, R.dimen.preview_height)
-//				.fit()
+				.fit()
 				.centerCrop()
-				.into(holder.preview);
+				.into(holder.photo);
 
 		holder.title.setText(item.name);
+
+		final StaggeredGridLayoutManager.LayoutParams lp =
+				(StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+		if (position == getItemCount() - 1 && (position + 1) % 2 == 1) {
+			// если это последний элемент и он один, растягиваем его на всю строку
+			lp.span = 2;
+		} else {
+			lp.span = 1;
+		}
+		holder.itemView.setLayoutParams(lp);
 	}
 
 	@Override

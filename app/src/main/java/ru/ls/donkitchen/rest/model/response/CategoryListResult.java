@@ -49,5 +49,7 @@ public class CategoryListResult {
 		public String name;
 		@SerializedName("priority")
 		public int priority;
+		@SerializedName("imageLink")
+		public String imageLink;
 	}
 }

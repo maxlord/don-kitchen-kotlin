@@ -28,16 +28,19 @@
 				android:paddingTop="@dimen/recycler_vertical_margin">
 
 				<TextView
+					android:textAppearance="?android:attr/textAppearanceMedium"
 					android:id="@+id/title"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:gravity="center_horizontal"
-					android:textStyle="bold" />
+					android:textStyle="bold"
+					android:textAllCaps="true"
+					/>
 
 				<ImageView
 					android:id="@+id/icon"
 					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
+					android:layout_height="300dp"
 					android:layout_marginTop="@dimen/recycler_vertical_margin" />
 
 				<LinearLayout
@@ -48,6 +51,7 @@
 					android:paddingTop="@dimen/recycler_vertical_margin">
 
 					<TextView
+						android:textAppearance="?android:attr/textAppearanceMedium"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:textStyle="bold"
@@ -55,6 +59,7 @@
 						/>
 
 					<TextView
+						android:textAppearance="?android:attr/textAppearanceMedium"
 						android:id="@+id/ingredients"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"/>
@@ -69,6 +74,7 @@
 					android:paddingTop="@dimen/recycler_vertical_margin">
 
 					<TextView
+						android:textAppearance="?android:attr/textAppearanceMedium"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:textStyle="bold"
@@ -76,9 +82,11 @@
 						/>
 
 					<TextView
+						android:textAppearance="?android:attr/textAppearanceMedium"
 						android:id="@+id/receipt"
 						android:layout_width="match_parent"
-						android:layout_height="wrap_content"/>
+						android:layout_height="wrap_content"
+						/>
 
 				</LinearLayout>
 
