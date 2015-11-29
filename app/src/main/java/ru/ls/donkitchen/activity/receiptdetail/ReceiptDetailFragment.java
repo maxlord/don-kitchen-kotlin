@@ -1,31 +1,41 @@
 package ru.ls.donkitchen.activity.receiptdetail;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.RatingBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.j256.ormlite.dao.Dao;
-import com.rey.material.widget.ProgressView;
-import com.squareup.picasso.Picasso;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
+import ru.ls.donkitchen.BuildConfig;
 import ru.ls.donkitchen.R;
 import ru.ls.donkitchen.activity.base.BaseActivity;
+import ru.ls.donkitchen.activity.receiptdetail.event.AddReviewEvent;
+import ru.ls.donkitchen.activity.receiptdetail.event.ReviewAddedEvent;
 import ru.ls.donkitchen.annotation.IOScheduler;
 import ru.ls.donkitchen.annotation.UIScheduler;
 import ru.ls.donkitchen.app.DonKitchenApplication;
 import ru.ls.donkitchen.base.BaseFragment;
 import ru.ls.donkitchen.db.DatabaseHelper;
-import ru.ls.donkitchen.db.table.Receipt;
 import ru.ls.donkitchen.rest.Api;
+import ru.ls.donkitchen.rest.model.request.ReceiptIncrementViews;
+import ru.ls.donkitchen.rest.model.response.ReceiptDetailResult;
+import ru.ls.donkitchen.rest.model.response.ReviewResult;
+import rx.Observer;
 import rx.Scheduler;
 import timber.log.Timber;
 
@@ -34,23 +44,10 @@ import timber.log.Timber;
  * @since 13.10.15
  */
 public class ReceiptDetailFragment extends BaseFragment {
-
-	@Bind(R.id.container)
-	ScrollView container;
-	@Bind(R.id.progress)
-	ProgressView progress;
-	@Bind(R.id.title)
-	TextView title;
-	@Bind(R.id.icon)
-	ImageView icon;
-	@Bind(R.id.ingredients)
-	TextView ingredients;
-	@Bind(R.id.container_ingredients)
-	LinearLayout containerIngredients;
-	@Bind(R.id.receipt)
-	TextView receipt;
-	@Bind(R.id.container_receipt)
-	LinearLayout containerReceipt;
+	@Bind(R.id.tablayout)
+	TabLayout tablayout;
+	@Bind(R.id.pager)
+	ViewPager pager;
 
 	@Inject
 	DonKitchenApplication application;
@@ -72,8 +69,107 @@ public class ReceiptDetailFragment extends BaseFragment {
 	@Inject
 	DatabaseHelper databaseHelper;
 
+	@Inject
+	Bus bus;
+
 	int receiptId;
-	Receipt receiptItem;
+	String receiptName;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setHasOptionsMenu(true);
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_receipt_detail, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == R.id.action_rate) {
+			addReview();
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+
+		bus.unregister(this);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		bus.register(this);
+	}
+
+	@Subscribe
+	public void eventAddReview(AddReviewEvent event) {
+		addReview();
+	}
+
+	private void addReview() {
+		new MaterialDialog.Builder(getActivity())
+				.title(R.string.activity_receipt_detail_dialog_add_review_title)
+				.customView(R.layout.dialog_new_review, false)
+				.positiveText(R.string.common_ok)
+				.onPositive((dialog, dialogAction) -> {
+					RatingBar dialogRatingBar = ButterKnife.findById(dialog, R.id.rating_bar);
+					EditText userName = ButterKnife.findById(dialog, R.id.user_name);
+					EditText comments = ButterKnife.findById(dialog, R.id.comments);
+
+					int rating1 = (int) dialogRatingBar.getRating();
+
+					String uname = "";
+					if (!StringUtils.isEmpty(userName.getText())) {
+						uname = userName.getText().toString();
+					}
+
+					String comment = "";
+					if (!StringUtils.isEmpty(comments.getText())) {
+						comment = comments.getText().toString();
+					}
+
+					api.addReview(receiptId, rating1, uname, comment)
+							.observeOn(ui)
+							.subscribeOn(io)
+							.subscribe(new Observer<ReviewResult>() {
+								@Override
+								public void onCompleted() {
+
+								}
+
+								@Override
+								public void onError(Throwable e) {
+
+								}
+
+								@Override
+								public void onNext(ReviewResult ratingResult) {
+									if (ratingResult != null) {
+										bus.post(new ReviewAddedEvent());
+
+										new MaterialDialog.Builder(getActivity())
+												.title(R.string.activity_receipt_detail_dialog_title_review_added_success)
+												.content(R.string.activity_receipt_detail_dialog_review_added_success)
+												.positiveText(R.string.common_ok)
+												.show();
+									}
+								}
+							});
+				})
+				.negativeText(R.string.common_cancel)
+				.show();
+	}
 
 	@Override
 	protected int getLayoutRes() {
@@ -85,9 +181,10 @@ public class ReceiptDetailFragment extends BaseFragment {
 		getComponent().inject(this);
 	}
 
-	public static ReceiptDetailFragment newInstance(int receiptId) {
+	public static ReceiptDetailFragment newInstance(int receiptId, String receiptName) {
 		Bundle args = new Bundle();
 		args.putInt(ReceiptDetail.EXT_IN_RECEIPT_ID, receiptId);
+		args.putString(ReceiptDetail.EXT_IN_RECEIPT_NAME, receiptName);
 
 		ReceiptDetailFragment fragment = new ReceiptDetailFragment();
 		fragment.setArguments(args);
@@ -97,10 +194,6 @@ public class ReceiptDetailFragment extends BaseFragment {
 	@Override
 	protected void initControls(View v) {
 		super.initControls(v);
-
-		containerIngredients.setVisibility(View.GONE);
-		container.setVisibility(View.GONE);
-		progress.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -116,62 +209,68 @@ public class ReceiptDetailFragment extends BaseFragment {
 			toolbar.setNavigationOnClickListener(view -> activity.onBackPressed());
 		}
 
+		pager.setAdapter(new FragmentPagerAdapter(getFragmentManager()) {
+			@Override
+			public android.support.v4.app.Fragment getItem(int position) {
+				switch (position) {
+					case 0:
+						return ReceiptDetailInfoFragment.newInstance(receiptId);
+					case 1:
+						return ReceiptDetailReviewsFragment.newInstance(receiptId);
+				}
+
+				return null;
+			}
+
+			@Override
+			public CharSequence getPageTitle(int position) {
+				switch (position) {
+					case 0:
+						return getResources().getString(R.string.activity_receipt_detail_tab_info);
+
+					case 1:
+						return getResources().getString(R.string.activity_receipt_detail_tab_reviews);
+				}
+
+				return super.getPageTitle(position);
+			}
+
+			@Override
+			public int getCount() {
+				return 2;
+			}
+		});
+
+		tablayout.setupWithViewPager(pager);
+
 		if (getArguments() != null) {
 			receiptId = getArguments().getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0);
+			receiptName = getArguments().getString(ReceiptDetail.EXT_IN_RECEIPT_NAME);
+
+			toolbar.setTitle(receiptName);
 
 			if (receiptId > 0) {
-				try {
-					Dao<Receipt, Integer> dao = databaseHelper.getDao(Receipt.class);
-
-					Receipt r = dao.queryForId(receiptId);
-
-					if (r != null) {
-						receiptItem = r;
-
-						try {
-							if (activity != null) {
-								progress.setVisibility(View.GONE);
-								container.setVisibility(View.VISIBLE);
-
-								Picasso.with(activity)
-										.load(receiptItem.imageLink)
-										.fit()
-										.centerCrop()
-										.into(icon);
-
-								title.setText(receiptItem.name);
-
-								if (!StringUtils.isEmpty(receiptItem.ingredients)) {
-									ingredients.setText(receiptItem.ingredients);
-									containerIngredients.setVisibility(View.VISIBLE);
-								} else {
-									containerIngredients.setVisibility(View.GONE);
-								}
-
-								receipt.setText(receiptItem.receipt);
-							}
-						} catch (Exception e) {
-							Timber.e(e, "Ошибка во время получения рецепта");
-						}
-					}
-				} catch (Exception e) {
-					Timber.e(e, "Ошибка получения информации о рецепте");
-
-					progress.setVisibility(View.GONE);
-
-					new MaterialDialog.Builder(activity)
-							.content(R.string.activity_receipt_detail_dialog_error_loading_receipt)
-							.positiveText(R.string.common_ok)
-							.autoDismiss(false)
-							.callback(new MaterialDialog.ButtonCallback() {
+				// Увеличиваем счетчик просмотров
+				if (!BuildConfig.DEBUG) {
+					api.incrementReceiptViews(receiptId, new ReceiptIncrementViews())
+							.observeOn(ui)
+							.subscribeOn(io)
+							.subscribe(new Observer<ReceiptDetailResult>() {
 								@Override
-								public void onPositive(MaterialDialog dialog) {
-									super.onPositive(dialog);
+								public void onCompleted() {
 
-									activity.finish();
 								}
-							})
-							.show();
+
+								@Override
+								public void onError(Throwable e) {
+									Timber.e(e, "Ошибка увеличения количества просмотров");
+								}
+
+								@Override
+								public void onNext(ReceiptDetailResult receiptDetailResult) {
+
+								}
+							});
 				}
 			}
 		}

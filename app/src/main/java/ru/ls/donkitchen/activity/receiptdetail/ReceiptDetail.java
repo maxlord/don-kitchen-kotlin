@@ -12,16 +12,19 @@ import ru.ls.donkitchen.activity.base.BaseActivity;
  */
 public class ReceiptDetail extends BaseActivity {
 	public static final String EXT_IN_RECEIPT_ID = "receipt_id";
+	public static final String EXT_IN_RECEIPT_NAME = "receipt_name";
 
 	int receiptId;
+	String receiptName;
 
 	@Override
 	protected Fragment loadFragment() {
-		return ReceiptDetailFragment.newInstance(receiptId);
+		return ReceiptDetailFragment.newInstance(receiptId, receiptName);
 	}
 
 	@Override
 	protected void readArguments(@NonNull Bundle args) {
 		receiptId = args.getInt(EXT_IN_RECEIPT_ID, 0);
+		receiptName = args.getString(EXT_IN_RECEIPT_NAME);
 	}
 }

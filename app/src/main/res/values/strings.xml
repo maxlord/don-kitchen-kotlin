@@ -1,11 +1,22 @@
 <resources>
 	<string name="app_name">Донская кухня</string>
-	<string name="activity_category_list_no_data">Категории отсутствуют</string>
+	<string name="activity_category_list_no_data">Подождите, идет загрузка…</string>
 	<string name="activity_category_list_title">Категории</string>
-	<string name="activity_receipt_list_no_data">Рецепты отсутствуют</string>
+	<string name="activity_receipt_list_no_data">Подождите, идет загрузка…</string>
 	<string name="activity_receipt_detail_ingredients">Ингредиенты:</string>
 	<string name="activity_receipt_detail_receipt">Рецепт:</string>
 	<string name="activity_receipt_detail_dialog_error_loading_receipt">Во время загрузки рецепта произошла ошибка</string>
 	<string name="common_ok">ОК</string>
 	<string name="activity_receipt_detail_title">Рецепт</string>
+	<string name="menu_action_rate">Оценить</string>
+	<string name="activity_receipt_detail_dialog_add_review_title">Добавление отзыва</string>
+	<string name="activity_receipt_detail_dialog_comments">Напишите что-нибудь об этом рецепте</string>
+	<string name="activity_receipt_detail_dialog_user_name">Как Вас зовут?</string>
+	<string name="activity_receipt_detail_dialog_review_added_success">Ваш отзыв успешно добавлен.</string>
+	<string name="activity_receipt_detail_dialog_title_review_added_success">Спасибо</string>
+	<string name="common_cancel">Отмена</string>
+	<string name="activity_receipt_detail_rate_button">Оценить рецепт</string>
+	<string name="activity_receipt_detail_tab_info">Рецепт</string>
+	<string name="activity_receipt_detail_tab_reviews">Отзывы</string>
+	<string name="activity_receipt_detail_tab_reviews_no_data">Отзывы отсутствуют</string>
 </resources>

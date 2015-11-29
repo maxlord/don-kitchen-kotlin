@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -32,6 +33,10 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ViewHold
 		ImageView photo;
 		@Bind(R.id.title)
 		TextView title;
+		@Bind(R.id.views)
+		TextView views;
+		@Bind(R.id.rating)
+		RatingBar rating;
 
 		public ViewHolder(View view) {
 			super(view);
@@ -90,6 +95,8 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ViewHold
 				.into(holder.photo);
 
 		holder.title.setText(item.name);
+		holder.views.setText(String.valueOf(item.views));
+		holder.rating.setRating(item.rating);
 
 		final StaggeredGridLayoutManager.LayoutParams lp =
 				(StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();

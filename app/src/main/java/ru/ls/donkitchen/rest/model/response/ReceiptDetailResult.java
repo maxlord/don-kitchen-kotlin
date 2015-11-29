@@ -32,4 +32,8 @@ public class ReceiptDetailResult {
 	public String receipt;
 	@SerializedName("categoryName")
 	public String categoryName;
+	@SerializedName("views")
+	public int views;
+	@SerializedName("rating")
+	public int rating;
 }

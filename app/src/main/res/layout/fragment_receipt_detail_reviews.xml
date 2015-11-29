@@ -1,0 +1,39 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp">
+
+        <org.lucasr.twowayview.widget.TwoWayView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:twowayview_layoutManager="ListLayoutManager"
+	        android:clipToPadding="false" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/activity_receipt_detail_tab_reviews_no_data"
+        />
+
+    <com.rey.material.widget.ProgressView
+        android:id="@+id/progress"
+        android:layout_width="@dimen/progress_circular_size"
+        android:layout_height="@dimen/progress_circular_size"
+        android:layout_gravity="center"
+        app:pv_autostart="true"
+        app:pv_circular="true"
+        app:pv_progressMode="indeterminate" />
+
+</FrameLayout>

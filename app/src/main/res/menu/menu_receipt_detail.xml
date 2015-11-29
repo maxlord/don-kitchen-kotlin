@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="ru.ls.donkitchen.activity.receiptdetail.ReceiptDetail">
+
+	<item android:id="@+id/action_rate"
+	      android:icon="@drawable/ic_action_rate"
+	      android:title="@string/menu_action_rate"
+	      app:showAsAction="always" />
+
+</menu>

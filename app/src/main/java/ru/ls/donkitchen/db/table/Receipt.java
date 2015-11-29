@@ -17,6 +17,7 @@ public class Receipt implements BaseColumns {
 	public static final String RECEIPT = "receipt";
 	public static final String IMAGE_LINK = "image_link";
 	public static final String VIEWS_COUNT = "views_count";
+	public static final String RATING = "rating";
 
 	@DatabaseField(id = true, canBeNull = false, columnName = _ID)
 	public int id;
@@ -32,6 +33,8 @@ public class Receipt implements BaseColumns {
 	public String receipt;
 	@DatabaseField(columnName = VIEWS_COUNT)
 	public int viewsCount;
+	@DatabaseField(columnName = RATING)
+	public int rating;
 
 	@Override
 	public String toString() {
@@ -43,6 +46,7 @@ public class Receipt implements BaseColumns {
 				", ingredients='" + ingredients + '\'' +
 				", receipt='" + receipt + '\'' +
 				", viewsCount=" + viewsCount +
+				", rating=" + rating +
 				'}';
 	}
 }

@@ -118,6 +118,7 @@ public class ReceiptListFragment extends BaseFragment implements Observer<List<R
 
 			Bundle b = new Bundle();
 			b.putInt(ReceiptDetail.EXT_IN_RECEIPT_ID, item.id);
+			b.putString(ReceiptDetail.EXT_IN_RECEIPT_NAME, item.name);
 
 			ActivityHelper.startActivity(activity, ReceiptDetail.class, false, b);
 		});
@@ -202,14 +203,14 @@ public class ReceiptListFragment extends BaseFragment implements Observer<List<R
 			if (activity != null && result != null) {
 				progress.setVisibility(View.GONE);
 
-				adapter.clear();
-				adapter.addAllItems(result);
-				adapter.notifyDataSetChanged();
-
 				if (result.isEmpty()) {
 					recyclerView.setVisibility(View.GONE);
 					empty.setVisibility(View.VISIBLE);
 				} else {
+					adapter.clear();
+					adapter.addAllItems(result);
+					adapter.notifyDataSetChanged();
+
 					recyclerView.setVisibility(View.VISIBLE);
 					empty.setVisibility(View.GONE);
 				}
@@ -244,7 +245,8 @@ public class ReceiptListFragment extends BaseFragment implements Observer<List<R
 						item.receipt = ri.receipt;
 						item.imageLink = ri.imageLink;
 						item.category = receiptCategory;
-						item.viewsCount = 0;
+						item.viewsCount = ri.views;
+						item.rating = ri.rating;
 
 						receiptDao.createOrUpdate(item);
 					}
@@ -261,6 +263,8 @@ public class ReceiptListFragment extends BaseFragment implements Observer<List<R
 				Dao<Receipt, Integer> dao = databaseHelper.getDao(Receipt.class);
 				QueryBuilder<Receipt, Integer> qb = dao.queryBuilder();
 				qb.where().eq(Receipt.CATEGORY_ID, categoryId);
+				qb.orderBy(Receipt.RATING, false);
+				qb.orderBy(Receipt.VIEWS_COUNT, false);
 				qb.orderBy(Receipt.NAME, true);
 				List<Receipt> receipts = qb.query();
 				List<ReceiptListResult.ReceiptItem> receiptItems = new ArrayList<>();
@@ -273,10 +277,11 @@ public class ReceiptListFragment extends BaseFragment implements Observer<List<R
 						item.name = r.name;
 						item.ingredients = r.ingredients;
 						item.receipt = r.receipt;
-						//item. = r.viewsCount;
+						item.views = r.viewsCount;
 						item.categoryId = r.category.id;
 						item.categoryName = r.category.name;
 						item.imageLink = r.imageLink;
+						item.rating = r.rating;
 
 						receiptItems.add(item);
 					}
