@@ -9,12 +9,12 @@
         android:layout_height="match_parent"
         android:padding="4dp">
 
-        <org.lucasr.twowayview.widget.TwoWayView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:twowayview_layoutManager="ListLayoutManager"
 	        android:clipToPadding="false" />
+        <!--app:twowayview_layoutManager="ListLayoutManager"-->
 
     </FrameLayout>
 

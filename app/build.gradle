@@ -1,11 +1,14 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
 	compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
-	buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+	buildToolsVersion '23.0.3'
 
 	defaultConfig {
 		minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
@@ -16,7 +19,8 @@ android {
 		versionName "1.2"
 
 		buildConfigField "int", "DATABASE_VERSION", "1";
-		buildConfigField "String", "API_URL", "\"http://dk.lord-services.ru/api/v1\"";
+		buildConfigField "String", "API_URL", "\"http://dk.lord-services.ru/api/v1/\"";
+		buildConfigField "String", "BUILD_TIME", "\"${buildTime()}\""
 	}
 
 	signingConfigs {
@@ -24,10 +28,10 @@ android {
 		}
 
 		release {
-			storeFile file('../keys/ls.jks')
-			storePassword 'Maxfactor1.'
-			keyAlias 'LordServicesKey'
-			keyPassword 'Maxfactor1.'
+			storeFile file(System.getenv("LS_APP_PRIVATE_KEY"))
+			keyAlias System.getenv("LS_APP_ALIAS")
+			storePassword System.getenv("LS_APP_STORE_PW")
+			keyPassword System.getenv("LS_APP_PW")
 		}
 	}
 
@@ -45,33 +49,29 @@ android {
 		exclude 'META-INF/services/javax.annotation.processing.Processor'
 	}
 
-	compileOptions {
-		encoding = 'UTF-8'
-		sourceCompatibility JavaVersion.VERSION_1_8
-		targetCompatibility JavaVersion.VERSION_1_8
+	lintOptions {
+		abortOnError false
 	}
-}
 
-retrolambda {
-	jdk System.getenv("JAVA_HOME")
-	oldJdk System.getenv("JAVA_HOME")
-	javaVersion JavaVersion.VERSION_1_7
-	jvmArgs '-noverify'
-//	jvmArgs '-arg1', '-arg2'
+	sourceSets {
+		main.java.srcDirs += 'src/main/kotlin'
+	}
 
-	println("***************** ---------- *******************")
-	println("JAVA_HOME: " + System.getenv("JAVA_HOME"))
-	println("JAVA7_HOME: " + System.getenv("JAVA7_HOME"))
-	println("JAVA8_HOME: " + System.getenv("JAVA8_HOME"))
-	println("***************** ---------- *******************")
+	configurations.all {
+		resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+	}
 }
 
 dependencies {
 	compile fileTree(dir: 'libs', include: ['*.jar'])
+	androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+		exclude group: 'com.android.support', module: 'support-annotations'
+	})
 	testCompile 'junit:junit:4.12'
 
 	compile supportDependencies.appCompat
 	compile supportDependencies.supportV4
+	compile supportDependencies.supportV13
 	compile supportDependencies.recyclerView
 	compile supportDependencies.cardView
 	compile supportDependencies.design
@@ -80,77 +80,127 @@ dependencies {
 //	compile googlePlayServices.location
 //	compile googlePlayServices.maps
 
-	// Rx
-	compile 'io.reactivex:rxandroid:1.0.1'
-	compile 'com.trello:rxlifecycle:0.2.0'
-	compile 'com.trello:rxlifecycle-components:0.2.0'
-
-	compile 'com.squareup.retrofit:retrofit:1.9.0'
-	compile 'com.squareup.okhttp:okhttp:2.5.0'
-	compile 'joda-time:joda-time:2.7'
-	compile 'org.joda:joda-convert:1.7'
-	compile 'com.jakewharton.timber:timber:2.7.1'
-	compile 'com.google.dagger:dagger:2.1-SNAPSHOT'
-	apt 'com.google.dagger:dagger-compiler:2.1-SNAPSHOT'
+	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+	compile 'com.google.dagger:dagger:2.7'
+	kapt 'com.google.dagger:dagger-compiler:2.7'
 	provided 'org.glassfish:javax.annotation:10.0-b28'
-	compile 'com.squareup:otto:1.3.6'
-	compile 'com.jakewharton:butterknife:7.0.1'
-	compile('com.crashlytics.sdk.android:crashlytics:2.5.1@aar') {
+	compile 'com.jakewharton.timber:timber:4.1.2'
+
+	// Rx
+	compile 'io.reactivex:rxkotlin:0.40.1'
+	compile 'io.reactivex:rxandroid:1.2.0'
+	compile 'com.trello:rxlifecycle:+'
+	compile 'com.trello:rxlifecycle-components:+'
+	compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
+	compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:0.4.0'
+
+	// Retrofit
+	compile 'com.squareup.retrofit2:retrofit:+'
+	compile 'com.squareup.retrofit2:converter-gson:+'
+	compile 'com.squareup.retrofit2:adapter-rxjava:+'
+	// OkHttp
+	compile 'com.squareup.okhttp3:okhttp:+'
+	compile 'com.squareup.okhttp3:logging-interceptor:+'
+
+	// Anko
+	compile 'org.jetbrains.anko:anko-sdk15:+' // sdk19, sdk21, sdk23 are also available
+	compile 'org.jetbrains.anko:anko-appcompat-v7:+' // For appcompat-v7 bindings
+
+	compile 'com.squareup:otto:1.3.8'
+
+	compile('com.crashlytics.sdk.android:crashlytics:+@aar') {
 		transitive = true;
 	}
-	compile('com.afollestad.material-dialogs:core:0.8.1.0@aar') {
-		transitive = true
-	}
-	compile 'javax.inject:javax.inject:1'
-	compile 'com.mobsandgeeks:android-saripaar:2.0.3'
-	compile 'org.apache.commons:commons-lang3:3.4'
-//	compile 'org.lucasr.twowayview:core:1.0.0-SNAPSHOT@aar'
-//	compile 'org.lucasr.twowayview:layouts:1.0.0-SNAPSHOT@aar'
-	compile project(":core")
-	compile project(":layouts")
-//	compile 'com.rengwuxian.materialedittext:library:2.1.4'
-//	compile ('com.github.ganfra:material-spinner:1.1.0'){
-//		exclude group: 'com.nineoldandroids', module: 'library'
-//		exclude group: 'com.android.support', module: 'appcompat-v7'
-//	}
-	compile 'com.github.rey5137:material:1.2.1'
-	compile('com.mikepenz:materialdrawer:4.3.4@aar') {
-		transitive = true
-	}
-	compile 'com.wdullaer:materialdatetimepicker:1.5.2'
-	compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.2.0'
-	compile 'com.j256.ormlite:ormlite-core:4.49-SNAPSHOT'
-	compile 'com.j256.ormlite:ormlite-android:4.49-SNAPSHOT'
-	compile 'org.flywaydb:flyway-core:3.0'
-	compile 'org.sqldroid:sqldroid:1.0.3'
-//	compile 'com.googlecode.libphonenumber:libphonenumber:7.0.11'
-//	compile('com.android.support:support-v4-preferencefragment:1.+@aar') {
-//		exclude module: 'support-v4'
-//	}
-	compile 'com.facebook.stetho:stetho:1.2.0'
-	compile 'com.facebook.stetho:stetho-okhttp:1.2.0'
-//	compile 'com.google.maps.android:android-maps-utils:0.4'
-	compile 'com.squareup.picasso:picasso:2.5.2'
 
-	// Database
-	compile 'com.j256.ormlite:ormlite-core:4.49-SNAPSHOT'
-	compile 'com.j256.ormlite:ormlite-android:4.49-SNAPSHOT'
-	compile 'org.flywaydb:flyway-core:3.0'
+	compile 'com.github.rey5137:material:1.2.2'
+
+	// OrmLite
+	compile 'com.j256.ormlite:ormlite-core:5.0'
+	compile 'com.j256.ormlite:ormlite-android:5.0'
+	compile 'org.flywaydb:flyway-core:4.0'
 	compile 'org.sqldroid:sqldroid:1.0.3'
 
-	retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.0.0'
+	// Glide
+	compile 'com.github.bumptech.glide:glide:3.7.0'
+
+//
+//
+//	// Rx
+//	compile 'io.reactivex:rxandroid:1.0.1'
+//	compile 'com.trello:rxlifecycle:0.2.0'
+//	compile 'com.trello:rxlifecycle-components:0.2.0'
+//
+//	compile 'com.squareup.retrofit:retrofit:1.9.0'
+//	compile 'com.squareup.okhttp:okhttp:2.5.0'
+//	compile 'joda-time:joda-time:2.7'
+//	compile 'org.joda:joda-convert:1.7'
+//	compile 'com.jakewharton.timber:timber:2.7.1'
+//	compile 'com.google.dagger:dagger:2.7'
+//	apt 'com.google.dagger:dagger-compiler:2.7'
+//	provided 'org.glassfish:javax.annotation:10.0-b28'
+//	compile 'com.squareup:otto:1.3.6'
+//	compile 'com.jakewharton:butterknife:7.0.1'
+//	compile('com.crashlytics.sdk.android:crashlytics:2.5.1@aar') {
+//		transitive = true;
+//	}
+//	compile('com.afollestad.material-dialogs:core:0.8.1.0@aar') {
+//		transitive = true
+//	}
+//	compile 'javax.inject:javax.inject:1'
+//	compile 'com.mobsandgeeks:android-saripaar:2.0.3'
+//	compile 'org.apache.commons:commons-lang3:3.4'
+////	compile 'org.lucasr.twowayview:core:1.0.0-SNAPSHOT@aar'
+////	compile 'org.lucasr.twowayview:layouts:1.0.0-SNAPSHOT@aar'
+//	compile project(":core")
+//	compile project(":layouts")
+////	compile 'com.rengwuxian.materialedittext:library:2.1.4'
+////	compile ('com.github.ganfra:material-spinner:1.1.0'){
+////		exclude group: 'com.nineoldandroids', module: 'library'
+////		exclude group: 'com.android.support', module: 'appcompat-v7'
+////	}
+//	compile 'com.github.rey5137:material:1.2.1'
+//	compile('com.mikepenz:materialdrawer:4.3.4@aar') {
+//		transitive = true
+//	}
+//	compile 'com.wdullaer:materialdatetimepicker:1.5.2'
+//	compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.2.0'
+//	compile 'com.j256.ormlite:ormlite-core:4.49-SNAPSHOT'
+//	compile 'com.j256.ormlite:ormlite-android:4.49-SNAPSHOT'
+//	compile 'org.flywaydb:flyway-core:3.0'
+//	compile 'org.sqldroid:sqldroid:1.0.3'
+////	compile 'com.googlecode.libphonenumber:libphonenumber:7.0.11'
+////	compile('com.android.support:support-v4-preferencefragment:1.+@aar') {
+////		exclude module: 'support-v4'
+////	}
+////	compile 'com.facebook.stetho:stetho:1.2.0'
+////	compile 'com.facebook.stetho:stetho-okhttp:1.2.0'
+////	compile 'com.google.maps.android:android-maps-utils:0.4'
+//	compile 'com.squareup.picasso:picasso:2.5.2'
+//
+//	// Database
+//	compile 'com.j256.ormlite:ormlite-core:4.49-SNAPSHOT'
+//	compile 'com.j256.ormlite:ormlite-android:4.49-SNAPSHOT'
+//	compile 'org.flywaydb:flyway-core:3.0'
+//	compile 'org.sqldroid:sqldroid:1.0.3'
+//
+//	retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.0.0'
+//	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
-task copyRelease(type: Copy) {
-	def releaseDir = project.RELEASE_DIR
-
-	def apkPath = "$buildDir/outputs/apk/" + project.name + "-release.apk"
-
-	from apkPath
-	into releaseDir
-	rename {  String fileName ->
-		fileName = "DonKitchen" + "-v${android.defaultConfig.versionName}.apk"
-	}
+kapt {
+	generateStubs = true
 }
 
-assembleRelease.finalizedBy copyRelease
+apply from: '../publishRelease.gradle'
+
+
+def buildTime() {
+	def df = new SimpleDateFormat("dd.MM.yyyy")
+	df.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+	return df.format(new Date())
+}
+
+repositories {
+	mavenCentral()
+}

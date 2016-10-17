@@ -1,6 +1,6 @@
 ext {
 	//Version
-	supportLibrary = '23.1.1'
+	supportLibrary = '24.2.0'
 
 	// Support Libraries dependencies
 	supportDependencies = [
@@ -10,10 +10,11 @@ ext {
 			appCompat           :   "com.android.support:appcompat-v7:${supportLibrary}",
 			supportAnnotation   :   "com.android.support:support-annotations:${supportLibrary}",
 			supportV4           :   "com.android.support:support-v4:${supportLibrary}",
+			supportV13          :   "com.android.support:support-v13:${supportLibrary}",
 	]
 
 	// Google Play Services Version
-	googlePlayServicesVersion = '7.8.0'
+	googlePlayServicesVersion = '9.6.1'
 
 	// Google Play Services
 	googlePlayServices = [
