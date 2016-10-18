@@ -6,7 +6,6 @@ import ru.ls.donkitchen.activity.receiptdetail.ReceiptDetailFragment
 import ru.ls.donkitchen.activity.receiptdetail.ReceiptDetailInfoFragment
 import ru.ls.donkitchen.activity.receiptdetail.ReceiptDetailReviewsFragment
 import ru.ls.donkitchen.activity.receiptlist.ReceiptListFragment
-import ru.ls.donkitchen.activity.splash.SplashFragment
 import ru.ls.donkitchen.annotation.PerFragment
 
 
@@ -19,9 +18,6 @@ import ru.ls.donkitchen.annotation.PerFragment
 @PerFragment
 @Subcomponent(modules = arrayOf(FragmentModule::class))
 interface FragmentSubComponent {
-//    fun provideValidator(): Validator
-
-    fun inject(fragment: SplashFragment)
     fun inject(fragment: CategoryListFragment)
     fun inject(fragment: ReceiptListFragment)
     fun inject(fragment: ReceiptDetailFragment)

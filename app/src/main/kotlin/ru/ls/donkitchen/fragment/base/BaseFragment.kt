@@ -10,7 +10,6 @@ import com.trello.rxlifecycle.components.RxFragment
 import kotlinx.android.synthetic.main.widget_toolbar.*
 import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.activity.base.BaseNoActionBarActivity
-import ru.ls.donkitchen.activity.splash.Splash
 import ru.ls.donkitchen.annotation.ConfigPrefs
 import javax.inject.Inject
 
@@ -49,15 +48,10 @@ abstract class BaseFragment: RxFragment() {
             this.component = activity.getComponent().plus(FragmentModule(this))
 
             inject()
-        } else if (activity is Splash) {
-            val activity = activity as Splash
-            this.component = activity.getComponent().plus(FragmentModule(this))
-
-            inject()
         }
 
         if (toolbar != null) {
-            toolbar!!.title = activity.title
+            toolbar.title = activity.title
         }
 
         loadData()

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import com.trello.rxlifecycle.components.RxDialogFragment
 import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.activity.base.BaseNoActionBarActivity
-import ru.ls.donkitchen.activity.splash.Splash
 import ru.ls.donkitchen.annotation.ConfigPrefs
 import javax.inject.Inject
 
@@ -45,11 +44,6 @@ abstract class BaseDialogFragment: RxDialogFragment() {
             inject()
         } else if (activity is BaseNoActionBarActivity) {
             val activity = activity as BaseNoActionBarActivity
-            this.component = activity.getComponent().plus(FragmentModule(this))
-
-            inject()
-        } else if (activity is Splash) {
-            val activity = activity as Splash
             this.component = activity.getComponent().plus(FragmentModule(this))
 
             inject()

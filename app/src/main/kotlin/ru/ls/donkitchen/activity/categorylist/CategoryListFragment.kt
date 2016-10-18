@@ -12,7 +12,7 @@ import ru.ls.donkitchen.app.DonKitchenApplication
 import ru.ls.donkitchen.db.DatabaseHelper
 import ru.ls.donkitchen.db.table.Category
 import ru.ls.donkitchen.fragment.base.BaseFragment
-import ru.ls.donkitchen.helper.ActivityHelper
+import ru.ls.donkitchen.navigateActivity
 import ru.ls.donkitchen.rest.Api
 import ru.ls.donkitchen.rest.model.response.CategoryListResult
 import rx.Observable
@@ -55,7 +55,7 @@ class CategoryListFragment : BaseFragment() {
                 b.putInt(ReceiptList.EXT_IN_CATEGORY_ID, item.id)
                 b.putString(ReceiptList.EXT_IN_CATEGORY_NAME, item.name)
 
-                ActivityHelper.startActivity(activity, ReceiptList::class.java, false, b)
+                navigateActivity<ReceiptList>(false, b)
             }
         })
         list.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
