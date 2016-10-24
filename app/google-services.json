@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "173011528251",
+    "firebase_url": "https://donkitchen-496c3.firebaseio.com",
+    "project_id": "donkitchen-496c3",
+    "storage_bucket": "donkitchen-496c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173011528251:android:157ba875d6ce6e84",
+        "android_client_info": {
+          "package_name": "ru.ls.donkitchen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173011528251-fbacghs69gp2gdp8agjm33a0498sav3a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6fR-tToSVGe5SdxWtTWaew3uDKFoy1Cw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

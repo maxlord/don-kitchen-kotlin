@@ -25,7 +25,7 @@
 			android:name=".activity.splash.Splash"
 			android:label="@string/app_name"
 			android:screenOrientation="portrait"
-		    android:theme="@style/SplashTheme"
+			android:theme="@style/SplashTheme"
 			>
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
@@ -48,6 +48,23 @@
 			android:name=".activity.receiptdetail.ReceiptDetail"
 			android:label="@string/activity_receipt_detail_title"
 			/>
+
+
+		<service
+			android:name=".fcm.ReceiptFirebaseMessagingService">
+			<intent-filter>
+				<action android:name="com.google.firebase.MESSAGING_EVENT"/>
+			</intent-filter>
+		</service>
+
+		<service
+			android:name=".fcm.ReceiptFirebaseInstanceIdService">
+			<intent-filter>
+				<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+			</intent-filter>
+		</service>
+
+		<service android:name=".fcm.FcmRegistrationIntentService" />
 
 	</application>
 

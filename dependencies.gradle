@@ -21,5 +21,6 @@ ext {
 			base            :   "com.google.android.gms:play-services-base:${googlePlayServicesVersion}",
 			location        :   "com.google.android.gms:play-services-location:${googlePlayServicesVersion}",
 			maps            :   "com.google.android.gms:play-services-maps:${googlePlayServicesVersion}",
+			fcm             :   "com.google.firebase:firebase-messaging:${googlePlayServicesVersion}"
 	]
 }

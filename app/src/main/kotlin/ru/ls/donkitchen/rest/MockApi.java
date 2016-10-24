@@ -6,4 +6,5 @@ package ru.ls.donkitchen.rest;
  */
 public class MockApi {
 
+
 }

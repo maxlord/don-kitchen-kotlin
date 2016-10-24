@@ -10,6 +10,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.activity.categorylist.CategoryList
+import ru.ls.donkitchen.activity.receiptdetail.ReceiptDetail
 import ru.ls.donkitchen.db.DatabaseHelper
 import ru.ls.donkitchen.navigate
 import timber.log.Timber
@@ -21,6 +22,11 @@ import timber.log.Timber
  * @since 11.01.16
  */
 class Splash: RxAppCompatActivity() {
+    companion object {
+        val EXT_IN_DISPLAY_RECEIPT_ID = "display_receipt_id"
+        val EXT_IN_DISPLAY_RECEIPT_NAME = "display_receipt_name"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,8 +50,27 @@ class Splash: RxAppCompatActivity() {
             }
 
             uiThread {
-                // Запускаем главный экран
-                navigate<CategoryList>(true)
+                var displayReceiptId = 0
+                var displayReceiptName = ""
+                if (intent != null) {
+                    if (intent.hasExtra(EXT_IN_DISPLAY_RECEIPT_ID)) {
+                        displayReceiptId = intent.getIntExtra(EXT_IN_DISPLAY_RECEIPT_ID, 0)
+                    }
+                    if (intent.hasExtra(EXT_IN_DISPLAY_RECEIPT_NAME)) {
+                        displayReceiptName = intent.getStringExtra(EXT_IN_DISPLAY_RECEIPT_NAME)
+                    }
+                }
+
+                if (displayReceiptId > 0) {
+                    val b = Bundle()
+                    b.putInt(ReceiptDetail.EXT_IN_RECEIPT_ID, displayReceiptId)
+                    b.putString(ReceiptDetail.EXT_IN_RECEIPT_NAME, displayReceiptName)
+
+                    navigate<ReceiptDetail>(true, b)
+                } else {
+                    // Запускаем главный экран
+                    navigate<CategoryList>(true)
+                }
             }
         }
     }

@@ -1,9 +1,11 @@
-package ru.ls.donkitchen.fragment.base
+package ru.ls.donkitchen.service.base
 
 import android.app.Service
+import com.j256.ormlite.android.apptools.OpenHelperManager
 import dagger.Module
 import dagger.Provides
 import ru.ls.donkitchen.annotation.PerService
+import ru.ls.donkitchen.db.DatabaseHelper
 
 /**
  *
@@ -19,11 +21,11 @@ class ServiceModule(private val service: Service) {
         return service
     }
 
-//    @Provides
-//    @PerService
-//    fun provideDatabaseHelper(): DatabaseHelper {
-//        return OpenHelperManager.getHelper(service, DatabaseHelper::class.java)
-//    }
+    @Provides
+    @PerService
+    fun provideDatabaseHelper(): DatabaseHelper {
+        return OpenHelperManager.getHelper(service, DatabaseHelper::class.java)
+    }
 
 //    @Provides
 //    @PerService

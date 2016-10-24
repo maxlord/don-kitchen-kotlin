@@ -33,4 +33,10 @@ interface Api {
 
     @POST("receipts/increment-views/{id}")
     fun incrementReceiptViews(@Path("id") receiptId: Int, @Body r: ReceiptIncrementViews): Observable<ReceiptDetailResult>
+
+    @POST("fcm/register")
+    @FormUrlEncoded
+    fun registerFcm(@Field("token") token: String,
+                    @Field("device") deviceName: String,
+                    @Field("app_name") appName: String): Observable<FcmRegisterResult>
 }

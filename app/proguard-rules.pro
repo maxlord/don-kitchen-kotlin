@@ -16,44 +16,42 @@
 #   public *;
 #}
 
+#-libraryjars <java.home>/lib/rt.jar
 -dontwarn java.lang.invoke.*
+-dontnote **
 
--keepattributes *Annotation*
--keepattributes Signature
+#-keepattributes *Annotation*
+#-keepattributes Signature
 
 -keepclassmembers class ** {
     @com.squareup.otto.Subscribe public *;
     @com.squareup.otto.Produce public *;
 }
--keepattributes SourceFile, LineNumberTable
+#-keepattributes SourceFile, LineNumberTable
+
+-keepattributes SourceFile,LineNumberTable,Signature,InnerClasses,*Annotation*
 
 
-# ButterKnife
--keep class butterknife.** { *; }
--dontwarn butterknife.internal.**
--keep class **$$ViewBinder { *; }
-
--keepclasseswithmembernames class * {
-    @butterknife.* <fields>;
-}
-
--keepclasseswithmembernames class * {
-    @butterknife.* <methods>;
-}
+# Retrofit2
+# Platform calls Class.forName on types which do not exist on Android to determine platform.
+-dontnote retrofit2.Platform
+# Platform used when running on RoboVM on iOS. Will not be used at runtime.
+-dontnote retrofit2.Platform$IOS$MainThreadExecutor
+# Platform used when running on Java 8 VMs. Will not be used at runtime.
+-dontwarn retrofit2.Platform$Java8
+# Retain generic type information for use by reflection by converters and adapters.
+-keepattributes Signature
+# Retain declared checked exceptions for use by a Proxy instance.
+-keepattributes Exceptions
 
 # OkHttp
--keep class com.squareup.okhttp.** { *; }
--keep interface com.squareup.okhttp.** { *; }
--dontwarn com.squareup.okhttp.**
+-keep class com.squareup.okhttp3.** { *; }
+-keep interface com.squareup.okhttp3.** { *; }
+-dontwarn com.squareup.okhttp3.**
 -dontwarn okio.**
 
 # RxJava, Retrofit
 -dontwarn rx.**
--dontwarn retrofit.**
--keep class retrofit.** { *; }
--keepclasseswithmembers class * {
-    @retrofit.http.* <methods>;
-}
 
 # RxAndroid
 -keep class rx.schedulers.Schedulers {
@@ -111,9 +109,8 @@
 -keep class android.support.v7.** { *; }
 -keep interface android.support.v7.** { *; }
 
-
 # Material Spinner
--dontwarn com.rey.material.**
+#-dontwarn com.rey.material.**
 #-keep class com.rey.material.** { *; }
 #-keepclasseswithmembers class com.rey.material.** { *; }
 
@@ -124,16 +121,35 @@
 -keep class org.sqldroid.**
 -keepclassmembers class org.sqldroid.** { *; }
 
-# OrmLite
+
+# OrmLite uses reflection
 -keep class com.j256.**
--keep class com.j256.** { *; }
 -keepclassmembers class com.j256.** { *; }
 -keep enum com.j256.**
 -keepclassmembers enum com.j256.** { *; }
 -keep interface com.j256.**
 -keepclassmembers interface com.j256.** { *; }
+
+## OrmLite
+#-keep class com.j256.**
+#-keep class com.j256.** { *; }
+#-keepclassmembers class com.j256.** { *; }
+#-keep enum com.j256.**
+#-keepclassmembers enum com.j256.** { *; }
+#-keep interface com.j256.**
+#-keepclassmembers interface com.j256.** { *; }
+
 -dontwarn org.slf4j.**
 -dontwarn javax.persistence.**
+-dontwarn org.apache.log4j.**
+-dontwarn org.apache.commons.logging.**
+-dontwarn org.apache.commons.codec.binary.**
+-dontwarn javax.persistence.**
+-dontwarn javax.lang.**
+-dontwarn javax.annotation.**
+-dontwarn javax.tools.**
+
+-dontwarn org.jetbrains.anko.internals.**
 
 # Keep the helper class and its constructor
 -keep class * extends com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper
@@ -141,12 +157,14 @@
   public <init>(android.content.Context);
 }
 
+# Keep the annotations
+-keepattributes *Annotation*
+
 # Keep all model classes that are used by OrmLite
 # Also keep their field names and the constructor
 -keep @com.j256.ormlite.table.DatabaseTable class * {
     @com.j256.ormlite.field.DatabaseField <fields>;
     @com.j256.ormlite.field.ForeignCollectionField <fields>;
-    # Add the ormlite field annotations that your model uses here
     <init>();
 }
 
@@ -155,13 +173,6 @@
     long getMillis();
 }
 
--keep class ru.zernovozonline.zerno.db.DatabaseHelper.**
--keepclassmembers class ru.zernovozonline.zerno.db.DatabaseHelper.** { *; }
--keep class ru.zernovozonline.zerno.db.dao.**
--keepclassmembers class ru.zernovozonline.zerno.db.dao.** { *; }
--keep class ru.zernovozonline.zerno.db.converter.**
--keepclassmembers class ru.zernovozonline.zerno.db.converter.** { *; }
-
 #Stetho
--keep class com.facebook.stetho.** { *; }
--dontwarn com.facebook.stetho.**
+#-keep class com.facebook.stetho.** { *; }
+#-dontwarn com.facebook.stetho.**
