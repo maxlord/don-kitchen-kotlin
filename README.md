@@ -10,3 +10,7 @@ Android application Receipts Dons Kitchen developed by Kotlin
 * Timber
 * Fabric (Crashlytics) - Crash Reporting System
 * FCM
+
+# Nearest plans
+* Integrate MVP (Mosby)
+* Coverage unit-tests
