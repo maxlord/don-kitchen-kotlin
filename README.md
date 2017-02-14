@@ -12,5 +12,5 @@ Android application Receipts Dons Kitchen developed by Kotlin
 * FCM
 
 # Nearest plans
-* Integrate MVP (Mosby)
+* Integrate MVP (Moxy)
 * Coverage unit-tests
