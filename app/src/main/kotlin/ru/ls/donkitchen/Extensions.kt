@@ -5,6 +5,7 @@ import android.app.Fragment
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
+import com.arellomobile.mvp.MvpAppCompatFragment
 
 /**
  * Класс функций-расширений
@@ -34,6 +35,6 @@ inline fun <reified T : Activity> Activity.navigate(close: Boolean = false, args
 /**
  * Открывае новую активити из фрагмента
  */
-inline fun <reified T : Activity> Fragment.navigateActivity(close: Boolean = false, args: Bundle? = null) {
+inline fun <reified T : Activity> MvpAppCompatFragment.navigateActivity(close: Boolean = false, args: Bundle? = null) {
     activity.navigate<T>(close, args)
 }

@@ -3,7 +3,7 @@ package ru.ls.donkitchen.activity.base
 import android.app.Fragment
 import android.os.Bundle
 import android.view.MenuItem
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity
+import com.arellomobile.mvp.MvpAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main_no_action_bar.*
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.app.DonKitchenApplication
@@ -14,7 +14,7 @@ import ru.ls.donkitchen.app.DonKitchenApplication
  * @author Lord (Kuleshov M.V.)
  * @since 11.01.16
  */
-abstract class BaseNoActionBarActivity: RxAppCompatActivity() {
+abstract class BaseNoActionBarActivity: MvpAppCompatActivity() {
     val FRAGMENT_TAG = "fragment_main"
 
     protected var fragment: Fragment? = null

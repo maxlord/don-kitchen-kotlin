@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_item_category.view.*
 import org.jetbrains.anko.onClick
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.rest.model.response.CategoryListResult
+import ru.ls.donkitchen.data.rest.response.CategoryListResult
 import java.util.*
 
 /**
@@ -21,32 +21,32 @@ import java.util.*
  */
 class CategoryAdapter(private val context: Context, private val callback: Callback) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
     interface Callback {
-        fun onItemClick(item: CategoryListResult.CategoryItem)
+        fun onItemClick(item: CategoryViewItem)
     }
 
     class ViewHolder(view: View, adapter: CategoryAdapter) : RecyclerView.ViewHolder(view) {
         init {
             view.onClick {
-                adapter.callback.onItemClick(it?.tag as CategoryListResult.CategoryItem)
+                adapter.callback.onItemClick(it?.tag as CategoryViewItem)
             }
         }
     }
 
-    private val items: MutableList<CategoryListResult.CategoryItem>?
+    private val items: MutableList<CategoryViewItem>?
 
     init {
-        this.items = ArrayList<CategoryListResult.CategoryItem>()
+        this.items = arrayListOf()
     }
 
     fun clear() {
         this.items!!.clear()
     }
 
-    fun addAllItems(items: List<CategoryListResult.CategoryItem>) {
+    fun addAllItems(items: List<CategoryViewItem>) {
         this.items!!.addAll(items)
     }
 
-    fun getItem(position: Int): CategoryListResult.CategoryItem? {
+    fun getItem(position: Int): CategoryViewItem? {
         if (items != null && position < items.size) {
             return items[position]
         }

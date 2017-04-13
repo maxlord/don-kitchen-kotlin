@@ -32,4 +32,5 @@
 	<string name="common_cancel">Отмена</string>
 	<string name="dialog_button_logout">Выйти</string>
 	<string name="dialog_confirm_exit">Вы действительно хотите выйти из приложения?</string>
+	<string name="menu_action_share">Поделиться</string>
 </resources>

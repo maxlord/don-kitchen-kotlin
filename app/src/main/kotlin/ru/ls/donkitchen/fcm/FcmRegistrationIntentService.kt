@@ -10,10 +10,8 @@ import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.ServiceSchedulersManager
 import ru.ls.donkitchen.app.DonKitchenApplication
-import ru.ls.donkitchen.rest.Api
-import ru.ls.donkitchen.rest.model.response.FcmRegisterResult
+import ru.ls.donkitchen.data.rest.Api
 import ru.ls.donkitchen.service.base.ServiceModule
-import rx.lang.kotlin.subscribeWith
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -50,16 +48,16 @@ class FcmRegistrationIntentService : IntentService("") {
         val deviceName = Build.VERSION.RELEASE
         val appName = "${getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}"
 
-        api.registerFcm("$token", deviceName, appName)
-                .compose(schedulersManager.applySchedulers<FcmRegisterResult>())
-                .subscribeWith {
-                    onNext {
-                        Timber.i("Токен зарегистрирован")
-                    }
-
-                    onError {
-                        Timber.e(it, "Ошибка при регистрации токена")
-                    }
-                }
+//        api.registerFcm("$token", deviceName, appName)
+//                .compose(schedulersManager.applySchedulers<FcmRegisterResult>())
+//                .subscribeWith {
+//                    onNext {
+//                        Timber.i("Токен зарегистрирован")
+//                    }
+//
+//                    onError {
+//                        Timber.e(it, "Ошибка при регистрации токена")
+//                    }
+//                }
     }
 }

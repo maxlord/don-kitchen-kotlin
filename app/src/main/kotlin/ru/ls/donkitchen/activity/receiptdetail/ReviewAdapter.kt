@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.list_item_review.view.*
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.rest.model.response.ReviewListResult
+import ru.ls.donkitchen.data.rest.response.ReviewListResult
 import java.text.SimpleDateFormat
 import java.util.*
 

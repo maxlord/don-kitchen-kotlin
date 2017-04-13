@@ -3,11 +3,11 @@ package ru.ls.donkitchen.activity.base
 import android.app.Fragment
 import android.content.SharedPreferences
 import android.os.Bundle
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity
+import com.arellomobile.mvp.MvpAppCompatActivity
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.annotation.ConfigPrefs
 import ru.ls.donkitchen.app.DonKitchenApplication
-import ru.ls.donkitchen.rest.Api
+import ru.ls.donkitchen.data.rest.Api
 import javax.inject.Inject
 
 /**
@@ -15,7 +15,7 @@ import javax.inject.Inject
  * @author Lord (Kuleshov M.V.)
  * @since 11.01.16
  */
-abstract class BaseActivity : RxAppCompatActivity() {
+abstract class BaseActivity : MvpAppCompatActivity() {
     val FRAGMENT_TAG = "fragment_main"
 
     @Inject lateinit var app: DonKitchenApplication

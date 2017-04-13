@@ -13,9 +13,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.annotation.IOSched
 import ru.ls.donkitchen.annotation.UISched
-import ru.ls.donkitchen.rest.Api
-import ru.ls.donkitchen.rest.MockApi
+import ru.ls.donkitchen.data.rest.Api
 import ru.ls.donkitchen.rest.converter.DateTimeDeserializer
+import ru.terrakok.cicerone.Cicerone
+import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.Router
 import rx.Scheduler
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -24,12 +26,9 @@ import java.util.*
 import javax.inject.Singleton
 
 
-@Module class AppModule(application: DonKitchenApplication) {
-    protected val application: DonKitchenApplication
-
+@Module
+class AppModule(private val application: DonKitchenApplication) {
     init {
-        this.application = application
-
         Timber.plant(Timber.DebugTree())
     }
 
@@ -61,11 +60,6 @@ import javax.inject.Singleton
     }
 
     @Provides
-    @Singleton fun provideMockApi(gson: Gson): MockApi {
-        return MockApi()
-    }
-
-    @Provides
     @Singleton fun provideGson(): Gson {
         return GsonBuilder()
                 .registerTypeAdapter(Date::class.java, DateTimeDeserializer())
@@ -76,4 +70,16 @@ import javax.inject.Singleton
     @Provides @Singleton @IOSched fun provideIoScheduler(): Scheduler = Schedulers.io()
 
     @Provides @Singleton @UISched fun provideUiScheduler(): Scheduler = AndroidSchedulers.mainThread()
+
+    @Provides @Singleton fun provideCicerone(): Cicerone<Router> {
+        return Cicerone.create()
+    }
+
+    @Provides @Singleton fun provideNavigatorHolder(cicerone: Cicerone<Router>): NavigatorHolder {
+        return cicerone.navigatorHolder
+    }
+
+    @Provides @Singleton fun provideNavigatorRouter(cicerone: Cicerone<Router>): Router {
+        return cicerone.router
+    }
 }

@@ -1,6 +1,6 @@
 ext {
 	//Version
-	supportLibrary = '24.2.0'
+	supportLibrary = '25.3.1'
 
 	// Support Libraries dependencies
 	supportDependencies = [
@@ -14,7 +14,7 @@ ext {
 	]
 
 	// Google Play Services Version
-	googlePlayServicesVersion = '9.6.1'
+	googlePlayServicesVersion = '10.2.1'
 
 	// Google Play Services
 	googlePlayServices = [

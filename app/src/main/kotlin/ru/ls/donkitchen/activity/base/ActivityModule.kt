@@ -1,16 +1,19 @@
 package ru.ls.donkitchen.activity.base
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import com.arellomobile.mvp.MvpAppCompatActivity
 import com.j256.ormlite.android.apptools.OpenHelperManager
 import com.squareup.otto.Bus
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity
 import dagger.Module
 import dagger.Provides
 import ru.ls.donkitchen.annotation.ConfigPrefs
 import ru.ls.donkitchen.annotation.PerActivity
-import ru.ls.donkitchen.db.DatabaseHelper
+import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import ru.ls.donkitchen.util.AsyncBus
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 /**
  *
@@ -18,10 +21,16 @@ import ru.ls.donkitchen.util.AsyncBus
  * @since 11.01.16
  */
 @Module
-class ActivityModule(private val activity: RxAppCompatActivity) {
+class ActivityModule(private val activity: MvpAppCompatActivity) {
     @Provides
     @PerActivity
-    fun provideActivity(): RxAppCompatActivity {
+    fun provideContext(): Context {
+        return activity
+    }
+
+    @Provides
+    @PerActivity
+    fun provideActivity(): MvpAppCompatActivity {
         return activity
     }
 
@@ -46,7 +55,19 @@ class ActivityModule(private val activity: RxAppCompatActivity) {
 
     @Provides
     @PerActivity
-    fun provideDatabaseHerlper(): DatabaseHelper {
+    fun provideSchedulersManager() : SchedulersManager {
+        return SchedulersManager(Schedulers.io(), AndroidSchedulers.mainThread())
+    }
+
+    @Provides
+    @PerActivity
+    fun provideSchedulersFactory() : SchedulersFactory {
+        return SchedulersFactoryImpl()
+    }
+
+    @Provides
+    @PerActivity
+    fun provideDatabaseHelper(): DatabaseHelper {
         return OpenHelperManager.getHelper(activity, DatabaseHelper::class.java)
     }
 }

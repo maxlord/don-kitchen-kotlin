@@ -1,31 +1,36 @@
 package ru.ls.donkitchen.activity.receiptdetail
 
 import android.app.Fragment
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.support.v13.app.FragmentPagerAdapter
+import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.view.View
+import com.bumptech.glide.Glide
 import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
 import kotlinx.android.synthetic.main.dialog_new_review.view.*
 import kotlinx.android.synthetic.main.fragment_receipt_detail.*
 import kotlinx.android.synthetic.main.widget_toolbar.*
 import org.jetbrains.anko.appcompat.v7.navigationIconResource
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.activity.base.SchedulersManager
 import ru.ls.donkitchen.activity.receiptdetail.event.AddReviewEvent
-import ru.ls.donkitchen.activity.receiptdetail.event.ReviewAddedEvent
 import ru.ls.donkitchen.app.DonKitchenApplication
-import ru.ls.donkitchen.db.DatabaseHelper
+import ru.ls.donkitchen.data.rest.Api
+import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import ru.ls.donkitchen.fragment.base.BaseFragment
-import ru.ls.donkitchen.rest.Api
-import ru.ls.donkitchen.rest.model.request.ReceiptIncrementViews
-import ru.ls.donkitchen.rest.model.response.ReceiptDetailResult
-import ru.ls.donkitchen.rest.model.response.ReviewResult
-import rx.lang.kotlin.subscribeWith
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileNotFoundException
 import javax.inject.Inject
 
 /**
@@ -44,6 +49,7 @@ class ReceiptDetailFragment : BaseFragment() {
 
     private var receiptId: Int = 0
     private var receiptName: String = ""
+    private var receiptPhotoUrl: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,22 +91,22 @@ class ReceiptDetailFragment : BaseFragment() {
                         comment = dv.comments.text.toString()
                     }
 
-                    api.addReview(receiptId, rating, uname, comment)
-                            .compose(schedulersManager.applySchedulers<ReviewResult>())
-                            .subscribeWith {
-                                onNext {
-                                    if (it != null) {
-                                        bus.post(ReviewAddedEvent())
-
-                                        AlertDialog.Builder(activity)
-                                                .setTitle(R.string.activity_receipt_detail_dialog_title_review_added_success)
-                                                .setMessage(R.string.activity_receipt_detail_dialog_review_added_success)
-                                                .setPositiveButton(R.string.common_ok, null)
-                                                .create()
-                                                .show()
-                                    }
-                                }
-                            }
+//                    api.addReview(receiptId, rating, uname, comment)
+//                            .compose(schedulersManager.applySchedulers<ReviewResult>())
+//                            .subscribeWith {
+//                                onNext {
+//                                    if (it != null) {
+//                                        bus.post(ReviewAddedEvent())
+//
+//                                        AlertDialog.Builder(activity)
+//                                                .setTitle(R.string.activity_receipt_detail_dialog_title_review_added_success)
+//                                                .setMessage(R.string.activity_receipt_detail_dialog_review_added_success)
+//                                                .setPositiveButton(R.string.common_ok, null)
+//                                                .create()
+//                                                .show()
+//                                    }
+//                                }
+//                            }
                 })
                 .setNegativeButton(R.string.common_cancel, null)
                 .create()
@@ -123,11 +129,67 @@ class ReceiptDetailFragment : BaseFragment() {
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_rate -> addReview()
+                R.id.action_share -> shareReceipt()
             }
 
             true
         }
         toolbar?.inflateMenu(R.menu.menu_receipt_detail)
+    }
+
+    private fun shareReceipt() {
+        var intent = activity.packageManager.getLaunchIntentForPackage(BuildConfig.INSTAGRAM_PKG_ID)
+        if (intent != null) {
+            var imageUri: Uri? = null
+            doAsync {
+                try {
+                    val bytes = ByteArrayOutputStream()
+                    val bm = Glide
+                            .with(activity)
+                            .load(receiptPhotoUrl)
+                            .asBitmap()
+                            .into(500, 500)
+                            .get()
+                    bm.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+
+                    val folder = File(activity.filesDir, "image")
+                    val imageFile = File(folder, "image")
+                    if (imageFile.exists())
+                        imageFile.delete()
+
+                    imageFile.writeBytes(bytes.toByteArray())
+
+                    imageUri = FileProvider.getUriForFile(activity, BuildConfig.FILE_PROVIDER_AUTHORITY, imageFile)
+
+                    // Разрешаем доступ для Instagram
+                    activity.grantUriPermission(BuildConfig.INSTAGRAM_PKG_ID, imageUri,
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+                } catch (e: FileNotFoundException) {
+                    Timber.e(e, "Ошибка публикации рецепта в Instagram")
+                }
+
+                uiThread {
+                    if (imageUri != null) {
+                        val shareIntent = Intent()
+                        shareIntent.action = Intent.ACTION_SEND
+                        shareIntent.`package` = BuildConfig.INSTAGRAM_PKG_ID
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri!!)
+
+                        shareIntent.type = "image/*"
+
+                        startActivity(shareIntent)
+                    }
+                }
+            }
+        } else {
+            // bring user to the market to download the app.
+            // or let them choose an app?
+            intent = Intent(Intent.ACTION_VIEW)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.data = Uri.parse("market://details?id=${BuildConfig.INSTAGRAM_PKG_ID}")
+            startActivity(intent)
+        }
     }
 
     override fun loadData() {
@@ -161,23 +223,24 @@ class ReceiptDetailFragment : BaseFragment() {
         if (arguments != null) {
             receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
             receiptName = arguments.getString(ReceiptDetail.EXT_IN_RECEIPT_NAME)
+            receiptPhotoUrl = arguments.getString(ReceiptDetail.EXT_IN_RECEIPT_PHOTO_URL)
 
             toolbar?.title = receiptName
 
             if (receiptId > 0) {
                 // Увеличиваем счетчик просмотров
                 if (!BuildConfig.DEBUG) {
-                    api.incrementReceiptViews(receiptId, ReceiptIncrementViews())
-                            .compose(schedulersManager.applySchedulers<ReceiptDetailResult>())
-                            .subscribeWith {
-                                onNext {
-
-                                }
-
-                                onError {
-                                    Timber.e(it, "Ошибка увеличения количества просмотров")
-                                }
-                            }
+//                    api.incrementReceiptViews(receiptId, ReceiptIncrementViews())
+//                            .compose(schedulersManager.applySchedulers<ReceiptDetailResult>())
+//                            .subscribeWith {
+//                                onNext {
+//
+//                                }
+//
+//                                onError {
+//                                    Timber.e(it, "Ошибка увеличения количества просмотров")
+//                                }
+//                            }
                 }
             }
         }
@@ -185,10 +248,11 @@ class ReceiptDetailFragment : BaseFragment() {
 
     companion object {
 
-        fun newInstance(receiptId: Int, receiptName: String): ReceiptDetailFragment {
+        fun newInstance(receiptId: Int, receiptName: String, receiptPhotoUrl: String): ReceiptDetailFragment {
             val args = Bundle()
             args.putInt(ReceiptDetail.EXT_IN_RECEIPT_ID, receiptId)
             args.putString(ReceiptDetail.EXT_IN_RECEIPT_NAME, receiptName)
+            args.putString(ReceiptDetail.EXT_IN_RECEIPT_PHOTO_URL, receiptPhotoUrl)
 
             val fragment = ReceiptDetailFragment()
             fragment.arguments = args

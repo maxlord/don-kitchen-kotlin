@@ -5,7 +5,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager
 import dagger.Module
 import dagger.Provides
 import ru.ls.donkitchen.annotation.PerService
-import ru.ls.donkitchen.db.DatabaseHelper
+import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 
 /**
  *

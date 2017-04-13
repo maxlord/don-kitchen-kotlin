@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_item_receipt.view.*
 import org.jetbrains.anko.onClick
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.rest.model.response.ReceiptListResult
+import ru.ls.donkitchen.data.rest.response.ReceiptListResult
 import timber.log.Timber
 import java.util.*
 

@@ -10,11 +10,10 @@ import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.SchedulersManager
 import ru.ls.donkitchen.activity.receiptdetail.event.ReviewAddedEvent
 import ru.ls.donkitchen.app.DonKitchenApplication
-import ru.ls.donkitchen.db.DatabaseHelper
+import ru.ls.donkitchen.data.rest.Api
+import ru.ls.donkitchen.data.rest.response.ReviewListResult
+import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import ru.ls.donkitchen.fragment.base.BaseFragment
-import ru.ls.donkitchen.rest.Api
-import ru.ls.donkitchen.rest.model.response.ReviewListResult
-import rx.lang.kotlin.subscribeWith
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -96,31 +95,31 @@ class ReceiptDetailReviewsFragment : BaseFragment() {
     }
 
     private fun reloadData() {
-        api.getReviewsByReceipt(receiptId)
-                .compose(schedulersManager.applySchedulers<ReviewListResult?>())
-                .subscribeWith {
-                    onNext {
-                        Timber.i("Обновляем UI")
-
-                        refreshData(it)
-                    }
-
-                    onError {
-                        Timber.e(it, "Ошибка при загрузке категорий")
-
-                        if (activity != null) {
-                            progress!!.visibility = View.GONE
-
-                            if (adapter!!.itemCount == 0) {
-                                list.visibility = View.GONE
-                                empty!!.visibility = View.VISIBLE
-                            } else {
-                                list.visibility = View.VISIBLE
-                                empty!!.visibility = View.GONE
-                            }
-                        }
-                    }
-                }
+//        api.getReviewsByReceipt(receiptId)
+//                .compose(schedulersManager.applySchedulers<ReviewListResult?>())
+//                .subscribeWith {
+//                    onNext {
+//                        Timber.i("Обновляем UI")
+//
+//                        refreshData(it)
+//                    }
+//
+//                    onError {
+//                        Timber.e(it, "Ошибка при загрузке категорий")
+//
+//                        if (activity != null) {
+//                            progress!!.visibility = View.GONE
+//
+//                            if (adapter!!.itemCount == 0) {
+//                                list.visibility = View.GONE
+//                                empty!!.visibility = View.VISIBLE
+//                            } else {
+//                                list.visibility = View.VISIBLE
+//                                empty!!.visibility = View.GONE
+//                            }
+//                        }
+//                    }
+//                }
     }
 
     @Subscribe

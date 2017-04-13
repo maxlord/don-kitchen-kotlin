@@ -11,10 +11,10 @@ import org.jetbrains.anko.onClick
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.receiptdetail.event.AddReviewEvent
 import ru.ls.donkitchen.app.DonKitchenApplication
-import ru.ls.donkitchen.db.DatabaseHelper
-import ru.ls.donkitchen.db.table.Receipt
+import ru.ls.donkitchen.data.rest.Api
+import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
+import ru.ls.donkitchen.data.db.table.Receipt
 import ru.ls.donkitchen.fragment.base.BaseFragment
-import ru.ls.donkitchen.rest.Api
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -1,29 +1,26 @@
 package ru.ls.donkitchen.fragment.base
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.trello.rxlifecycle.components.RxFragment
+import com.arellomobile.mvp.MvpAppCompatFragment
 import kotlinx.android.synthetic.main.widget_toolbar.*
 import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.activity.base.BaseNoActionBarActivity
-import ru.ls.donkitchen.annotation.ConfigPrefs
-import javax.inject.Inject
 
 /**
  *
  * @author Lord (Kuleshov M.V.)
  * @since 11.01.16
  */
-abstract class BaseFragment: RxFragment() {
-    lateinit var prefs: SharedPreferences
-    @Inject
-    fun setSharedPreferences(@ConfigPrefs prefs: SharedPreferences) {
-        this.prefs = prefs
-    }
+abstract class BaseFragment: MvpAppCompatFragment() {
+//    lateinit var prefs: SharedPreferences
+//    @Inject
+//    fun setSharedPreferences(@ConfigPrefs prefs: SharedPreferences) {
+//        this.prefs = prefs
+//    }
 
     private var component: FragmentSubComponent? = null
 
@@ -38,16 +35,15 @@ abstract class BaseFragment: RxFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (activity is BaseActivity) {
-            val activity = activity as BaseActivity
-            this.component = activity.getComponent().plus(FragmentModule(this))
+        activity.let { it ->
+            if (it is BaseActivity) {
+                this.component = it.getComponent().plus(FragmentModule(this))
+                inject()
+            } else if (it is BaseNoActionBarActivity) {
+                this.component = it.getComponent().plus(FragmentModule(this))
 
-            inject()
-        } else if (activity is BaseNoActionBarActivity) {
-            val activity = activity as BaseNoActionBarActivity
-            this.component = activity.getComponent().plus(FragmentModule(this))
-
-            inject()
+                inject()
+            }
         }
 
         if (toolbar != null) {

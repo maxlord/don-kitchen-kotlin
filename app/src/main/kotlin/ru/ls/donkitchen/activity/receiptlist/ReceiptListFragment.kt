@@ -12,13 +12,13 @@ import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.SchedulersManager
 import ru.ls.donkitchen.activity.receiptdetail.ReceiptDetail
 import ru.ls.donkitchen.app.DonKitchenApplication
-import ru.ls.donkitchen.db.DatabaseHelper
-import ru.ls.donkitchen.db.table.Category
-import ru.ls.donkitchen.db.table.Receipt
+import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
+import ru.ls.donkitchen.data.db.table.Category
+import ru.ls.donkitchen.data.db.table.Receipt
 import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.navigateActivity
-import ru.ls.donkitchen.rest.Api
-import ru.ls.donkitchen.rest.model.response.ReceiptListResult
+import ru.ls.donkitchen.data.rest.Api
+import ru.ls.donkitchen.data.rest.response.ReceiptListResult
 import rx.Observable
 import rx.Observer
 import rx.lang.kotlin.subscribeWith
@@ -26,7 +26,6 @@ import timber.log.Timber
 import java.sql.SQLException
 import java.util.*
 import javax.inject.Inject
-import kotlin.comparisons.compareBy
 
 /**
  *
@@ -83,6 +82,7 @@ class ReceiptListFragment : BaseFragment(), Observer<List<ReceiptListResult.Rece
                 val b = Bundle()
                 b.putInt(ReceiptDetail.EXT_IN_RECEIPT_ID, item.id)
                 b.putString(ReceiptDetail.EXT_IN_RECEIPT_NAME, item.name)
+                b.putString(ReceiptDetail.EXT_IN_RECEIPT_PHOTO_URL, item.imageLink)
 
                 navigateActivity<ReceiptDetail>(false, b)
             }
@@ -163,38 +163,38 @@ class ReceiptListFragment : BaseFragment(), Observer<List<ReceiptListResult.Rece
     private fun reloadData() {
         // Обновляем список рецептов
         // сеть
-        val network = api.getReceipts(categoryId).map { it.receipts }
-        // сохранение/обновление в БД из сети
-        val networkWithSave = network.doOnNext { data ->
-            Timber.i("Сохраняем рецепты в БД")
-
-            if (data != null && !data.isEmpty()) {
-                try {
-                    val categoryDao = databaseHelper.getDao<Dao<Category, Int>, Category>(Category::class.java)
-                    val receiptDao = databaseHelper.getDao<Dao<Receipt, Int>, Receipt>(Receipt::class.java)
-
-                    for (ri in data) {
-                        // Получаем категорию
-                        val receiptCategory = categoryDao.queryForId(ri.categoryId)
-
-                        val item = Receipt()
-                        item.id = ri.id
-                        item.name = ri.name
-                        item.ingredients = ri.ingredients
-                        item.receipt = ri.receipt
-                        item.imageLink = ri.imageLink
-                        item.category = receiptCategory
-                        item.viewsCount = ri.views
-                        item.rating = ri.rating
-
-                        receiptDao.createOrUpdate(item)
-                    }
-                } catch (e: SQLException) {
-                    Timber.e(e, "Ошибка сохранения рецептов в БД")
-                }
-
-            }
-        }
+//        val network = api.getReceipts(categoryId).map { it.receipts }
+//        // сохранение/обновление в БД из сети
+//        val networkWithSave = network.doOnNext { data ->
+//            Timber.i("Сохраняем рецепты в БД")
+//
+//            if (data != null && !data.isEmpty()) {
+//                try {
+//                    val categoryDao = databaseHelper.getDao<Dao<Category, Int>, Category>(Category::class.java)
+//                    val receiptDao = databaseHelper.getDao<Dao<Receipt, Int>, Receipt>(Receipt::class.java)
+//
+//                    for (ri in data) {
+//                        // Получаем категорию
+//                        val receiptCategory = categoryDao.queryForId(ri.categoryId)
+//
+//                        val item = Receipt()
+//                        item.id = ri.id
+//                        item.name = ri.name
+//                        item.ingredients = ri.ingredients
+//                        item.receipt = ri.receipt
+//                        item.imageLink = ri.imageLink
+//                        item.category = receiptCategory
+//                        item.viewsCount = ri.views
+//                        item.rating = ri.rating
+//
+//                        receiptDao.createOrUpdate(item)
+//                    }
+//                } catch (e: SQLException) {
+//                    Timber.e(e, "Ошибка сохранения рецептов в БД")
+//                }
+//
+//            }
+//        }
         // БД
         val db = Observable.create<List<ReceiptListResult.ReceiptItem>> { s ->
             Timber.i("Получаем рецепты из БД")
@@ -236,30 +236,30 @@ class ReceiptListFragment : BaseFragment(), Observer<List<ReceiptListResult.Rece
         }
 
         // Выполняем все запросы
-        Observable.concat(db, networkWithSave)
-                .compose(schedulersManager.applySchedulers<List<ReceiptListResult.ReceiptItem>?>())
-                .subscribeWith {
-                    onNext {
-                        Timber.i("Обновляем UI")
-
-                        refreshData(it)
-                    }
-
-                    onError {
-                        Timber.e(it, "Ошибка при загрузке рецептов")
-
-                        if (activity != null) {
-                            progress!!.visibility = View.GONE
-
-                            if (adapter!!.itemCount == 0) {
-                                list.visibility = View.GONE
-                                empty!!.visibility = View.VISIBLE
-                            } else {
-                                list.visibility = View.VISIBLE
-                                empty!!.visibility = View.GONE
-                            }
-                        }
-                    }
-                }
+//        Observable.concat(db, networkWithSave)
+//                .compose(schedulersManager.applySchedulers<List<ReceiptListResult.ReceiptItem>?>())
+//                .subscribeWith {
+//                    onNext {
+//                        Timber.i("Обновляем UI")
+//
+//                        refreshData(it)
+//                    }
+//
+//                    onError {
+//                        Timber.e(it, "Ошибка при загрузке рецептов")
+//
+//                        if (activity != null) {
+//                            progress!!.visibility = View.GONE
+//
+//                            if (adapter!!.itemCount == 0) {
+//                                list.visibility = View.GONE
+//                                empty!!.visibility = View.VISIBLE
+//                            } else {
+//                                list.visibility = View.VISIBLE
+//                                empty!!.visibility = View.GONE
+//                            }
+//                        }
+//                    }
+//                }
     }
 }
