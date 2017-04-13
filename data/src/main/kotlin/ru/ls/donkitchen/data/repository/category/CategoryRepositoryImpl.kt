@@ -80,10 +80,10 @@ class CategoryRepositoryImpl(
         }
 
         // Выполняем все запросы
-        return Single.concat(db, networkWithSave).flatMap {
-            it -> Single.create {
-            return arrayListOf<CategoryEntity>()
-        }
+//        return Single.concat(db, networkWithSave).flatMap {
+//            it -> Single.create {
+//            return arrayListOf<CategoryEntity>()
+//        }
 //            val cats = it
 //
 //            cats?.let {
@@ -97,7 +97,7 @@ class CategoryRepositoryImpl(
 //                    }
 //                }
 //            }
-        }
 
+        return Single.just(arrayListOf())
     }
 }
