@@ -1,6 +1,5 @@
 package ru.ls.donkitchen.activity.receiptlist
 
-import android.app.Fragment
 import android.os.Bundle
 import ru.ls.donkitchen.activity.base.BaseActivity
 
@@ -19,9 +18,7 @@ class ReceiptList : BaseActivity() {
     var categoryId: Int = 0
     var categoryName: String = ""
 
-    override fun loadFragment(): Fragment {
-        return ReceiptListFragment.newInstance(categoryId, categoryName)
-    }
+    override fun loadFragment() = ReceiptListFragment.newInstance(categoryId, categoryName)
 
     override fun readArguments(args: Bundle) {
         categoryId = args.getInt(EXT_IN_CATEGORY_ID, 0)

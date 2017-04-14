@@ -11,6 +11,8 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.ls.donkitchen.BuildConfig
+import ru.ls.donkitchen.activity.base.SchedulersFactory
+import ru.ls.donkitchen.activity.base.SchedulersFactoryImpl
 import ru.ls.donkitchen.annotation.IOSched
 import ru.ls.donkitchen.annotation.UISched
 import ru.ls.donkitchen.data.rest.Api
@@ -81,5 +83,12 @@ class AppModule(private val application: DonKitchenApplication) {
 
     @Provides @Singleton fun provideNavigatorRouter(cicerone: Cicerone<Router>): Router {
         return cicerone.router
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideSchedulersFactory(): SchedulersFactory {
+        return SchedulersFactoryImpl()
     }
 }

@@ -1,6 +1,5 @@
 package ru.ls.donkitchen.activity.categorylist
 
-import android.app.Fragment
 import android.os.Bundle
 import ru.ls.donkitchen.activity.base.BaseActivity
 
@@ -15,7 +14,5 @@ class CategoryList: BaseActivity() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun loadFragment(): Fragment {
-        return CategoryListFragment.newInstance()
-    }
+    override fun loadFragment() = CategoryListFragment.newInstance()
 }

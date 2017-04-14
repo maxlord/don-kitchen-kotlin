@@ -3,10 +3,10 @@ package ru.ls.donkitchen.fragment.base
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.annotation.LayoutRes
+import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.trello.rxlifecycle.components.RxDialogFragment
 import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.activity.base.BaseNoActionBarActivity
 import ru.ls.donkitchen.annotation.ConfigPrefs
@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @author Lord (Kuleshov M.V.)
  * @since 28.03.16
  */
-abstract class BaseDialogFragment: RxDialogFragment() {
+abstract class BaseDialogFragment: DialogFragment() {
     lateinit var prefs: SharedPreferences
     @Inject
     fun setSharedPreferences(@ConfigPrefs prefs: SharedPreferences) {

@@ -31,4 +31,10 @@ class CategoryListModule {
     fun provideCategoryEntityConverter(): CategoryEntityConverter {
         return CategoryEntityConverterImpl()
     }
+
+    @PerScreen
+    @Provides
+    fun provideCategoryViewItemConverter(): CategoryViewItemConverter {
+        return CategoryViewItemConverterImpl()
+    }
 }

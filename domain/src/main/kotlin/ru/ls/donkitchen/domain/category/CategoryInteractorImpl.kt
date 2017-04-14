@@ -7,9 +7,6 @@ import rx.Single
 
 class CategoryInteractorImpl(private var categoryRepository: CategoryRepository) : CategoryInteractor {
     override fun getCategories(): Single<List<CategoryModel>> {
-        return categoryRepository.getCategories()
-                .flatMap {
-                    Single.just(CategoryMapper().mapToModel(it))
-                }
+        return categoryRepository.getCategories().map(CategoryMapper()::mapToModel)
     }
 }

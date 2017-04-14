@@ -61,12 +61,6 @@ class ActivityModule(private val activity: MvpAppCompatActivity) {
 
     @Provides
     @PerActivity
-    fun provideSchedulersFactory() : SchedulersFactory {
-        return SchedulersFactoryImpl()
-    }
-
-    @Provides
-    @PerActivity
     fun provideDatabaseHelper(): DatabaseHelper {
         return OpenHelperManager.getHelper(activity, DatabaseHelper::class.java)
     }

@@ -1,22 +1,15 @@
 package ru.ls.donkitchen.activity.categorylist
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_category_list.*
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.activity.base.SchedulersManager
 import ru.ls.donkitchen.activity.receiptlist.ReceiptList
-import ru.ls.donkitchen.activity.splash.SplashPresenter
-import ru.ls.donkitchen.app.DonKitchenApplication
-import ru.ls.donkitchen.data.rest.Api
-import ru.ls.donkitchen.data.rest.response.CategoryListResult
-import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.navigateActivity
-import timber.log.Timber
-import javax.inject.Inject
 
 /**
  *
@@ -34,6 +27,10 @@ class CategoryListFragment : BaseFragment(), CategoryListView {
 
     override fun hideProgress() {
         progress.visibility = View.GONE
+    }
+
+    override fun displayError(error: String) {
+        Snackbar.make(view!!, error, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun displayNoData() {

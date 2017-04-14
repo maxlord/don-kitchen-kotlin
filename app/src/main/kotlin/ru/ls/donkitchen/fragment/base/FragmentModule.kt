@@ -1,6 +1,6 @@
 package ru.ls.donkitchen.fragment.base
 
-import com.arellomobile.mvp.MvpAppCompatFragment
+import android.support.v4.app.Fragment
 import dagger.Module
 
 /**
@@ -10,7 +10,7 @@ import dagger.Module
  * @since 11.01.16
  */
 @Module
-class FragmentModule(private val fragment: MvpAppCompatFragment) {
+class FragmentModule(private val fragment: Fragment) {
 //    @Provides
 //    @PerFragment
 //    fun provideValidator(): Validator {

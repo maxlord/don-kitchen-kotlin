@@ -1,6 +1,6 @@
 package ru.ls.donkitchen.activity.categorylist
 
-import ru.ls.donkitchen.core.data.entity.CategoryEntity
+import ru.ls.donkitchen.core.domain.model.CategoryModel
 
 /**
  *
@@ -9,11 +9,11 @@ import ru.ls.donkitchen.core.data.entity.CategoryEntity
  * @since 10.04.17
  */
 interface CategoryViewItemConverter {
-    fun convert(item: CategoryEntity): CategoryViewItem
+    fun convert(item: CategoryModel): CategoryViewItem
 }
 
 class CategoryViewItemConverterImpl: CategoryViewItemConverter {
-    override fun convert(item: CategoryEntity): CategoryViewItem {
+    override fun convert(item: CategoryModel): CategoryViewItem {
         return CategoryViewItem(
                 id = item.id,
                 name = item.name,

@@ -1,7 +1,7 @@
 package ru.ls.donkitchen.activity.base
 
-import android.app.Fragment
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main_no_action_bar.*
@@ -45,10 +45,10 @@ abstract class BaseNoActionBarActivity: MvpAppCompatActivity() {
             fragment = loadFragment()
 
             if (fragment != null) {
-                fragmentManager.beginTransaction().replace(R.id.fragment, fragment, FRAGMENT_TAG).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment, fragment, FRAGMENT_TAG).commit()
             }
         } else {
-            fragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG)
+            fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG)
         }
 
         setSupportActionBar(toolbar)

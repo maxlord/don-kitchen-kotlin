@@ -1,7 +1,6 @@
 package ru.ls.donkitchen.activity.categorylist
 
 import com.arellomobile.mvp.MvpView
-import ru.ls.donkitchen.data.rest.response.CategoryListResult
 
 /**
  *
@@ -15,6 +14,8 @@ interface CategoryListView: MvpView {
     fun hideProgress()
 
     fun displayNoData()
+
+    fun displayError(error: String)
 
     fun displayCategories(categories: List<CategoryViewItem>)
 }

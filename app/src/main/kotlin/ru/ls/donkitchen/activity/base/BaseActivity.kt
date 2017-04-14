@@ -1,9 +1,10 @@
 package ru.ls.donkitchen.activity.base
 
-import android.app.Fragment
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.arellomobile.mvp.MvpAppCompatFragment
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.annotation.ConfigPrefs
 import ru.ls.donkitchen.app.DonKitchenApplication
@@ -66,10 +67,10 @@ abstract class BaseActivity : MvpAppCompatActivity() {
             fragment = loadFragment()
 
             if (fragment != null) {
-                fragmentManager.beginTransaction().replace(R.id.fragment, fragment, FRAGMENT_TAG).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment, fragment, FRAGMENT_TAG).commit()
             }
         } else {
-            fragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG)
+            fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as MvpAppCompatFragment
         }
 
 //        if (toolbar_title != null) {

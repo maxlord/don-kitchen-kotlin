@@ -3,6 +3,7 @@ package ru.ls.donkitchen.activity.splash
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import ru.ls.donkitchen.activity.base.SchedulersFactory
+import ru.ls.donkitchen.activity.base.SchedulersFactoryImpl
 import ru.ls.donkitchen.domain.storage.StorageInteractor
 import rx.lang.kotlin.subscribeWith
 import timber.log.Timber
@@ -20,6 +21,8 @@ class SplashPresenter : MvpPresenter<SplashView>() {
     @Inject lateinit var interactor: StorageInteractor
 
     fun start() {
+        val schedulers = SchedulersFactoryImpl()
+
         interactor.initialize()
                 .observeOn(schedulers.ui())
                 .subscribeOn(schedulers.io())

@@ -13,9 +13,9 @@ import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.ServiceSchedulersManager
 import ru.ls.donkitchen.activity.splash.Splash
 import ru.ls.donkitchen.app.DonKitchenApplication
-import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import ru.ls.donkitchen.data.rest.Api
 import ru.ls.donkitchen.data.rest.response.ReceiptDetailResult
+import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import ru.ls.donkitchen.service.base.ServiceModule
 import timber.log.Timber
 import javax.inject.Inject
@@ -54,7 +54,7 @@ class ReceiptFirebaseMessagingService : FirebaseMessagingService() {
 
         // Check if message contains a data payload.
         if (remoteMessage?.data != null) {
-            if (remoteMessage!!.data!!.size > 0) {
+            if (remoteMessage.data.isNotEmpty()) {
                 Timber.d("Message data payload: ${remoteMessage.data}")
 
                 val receiptId = remoteMessage.data["rid"]?.toInt()
@@ -119,7 +119,7 @@ class ReceiptFirebaseMessagingService : FirebaseMessagingService() {
 
         // Check if message contains a notification payload.
         if (remoteMessage?.notification != null) {
-            Timber.d("Message Notification Body: ${remoteMessage?.notification?.body}")
+            Timber.d("Message Notification Body: ${remoteMessage.notification.body}")
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM

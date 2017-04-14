@@ -5,10 +5,11 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.support.v13.app.FragmentPagerAdapter
+import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.view.View
+import com.arellomobile.mvp.MvpAppCompatFragment
 import com.bumptech.glide.Glide
 import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
@@ -194,7 +195,7 @@ class ReceiptDetailFragment : BaseFragment() {
 
     override fun loadData() {
         pager.adapter = object : FragmentPagerAdapter(fragmentManager) {
-            override fun getItem(position: Int): Fragment? {
+            override fun getItem(position: Int): MvpAppCompatFragment? {
                 when (position) {
                     0 -> return ReceiptDetailInfoFragment.newInstance(receiptId)
                     1 -> return ReceiptDetailReviewsFragment.newInstance(receiptId)

@@ -1,7 +1,7 @@
 package ru.ls.donkitchen.activity.receiptdetail
 
-import android.app.Fragment
 import android.os.Bundle
+import com.arellomobile.mvp.MvpAppCompatFragment
 import ru.ls.donkitchen.activity.base.BaseActivity
 
 /**
@@ -21,9 +21,7 @@ class ReceiptDetail: BaseActivity() {
     var receiptName: String = ""
     var receiptPhotoUrl: String = ""
 
-    override fun loadFragment(): Fragment {
-        return ReceiptDetailFragment.newInstance(receiptId, receiptName, receiptPhotoUrl)
-    }
+    override fun loadFragment() = ReceiptDetailFragment.newInstance(receiptId, receiptName, receiptPhotoUrl)
 
     override fun readArguments(args: Bundle) {
         receiptId = args.getInt(EXT_IN_RECEIPT_ID, 0)

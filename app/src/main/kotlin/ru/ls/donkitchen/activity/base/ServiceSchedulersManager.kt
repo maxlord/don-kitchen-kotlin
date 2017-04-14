@@ -12,6 +12,7 @@ import javax.inject.Inject
  * @author Lord (Kuleshov M.V.)
  * @since 21.03.16
  */
+@Deprecated("Use SchedulersFactory instead")
 class ServiceSchedulersManager
 @Inject
 constructor(@IOSched val io: Scheduler,
