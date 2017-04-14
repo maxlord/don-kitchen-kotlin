@@ -19,7 +19,7 @@ android {
 		versionName "1.4"
 
 		buildConfigField "int", "DATABASE_VERSION", "1";
-		buildConfigField "String", "API_URL", "\"http://dk.lord-services.ru/api/v1/\"";
+		buildConfigField "String", "API_URL", "\"http://dk.lord-services.ru/api/v1/\""
 		buildConfigField "String", "BUILD_TIME", "\"${buildTime()}\""
 		buildConfigField "String", "INSTAGRAM_PKG_ID", "\"com.instagram.android\""
 		buildConfigField "String", "FILE_PROVIDER_AUTHORITY", "\"ru.ls.donkitchen.fileprovider\""
@@ -108,7 +108,7 @@ dependencies {
 	compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 	compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 	// OkHttp
-	compile 'com.squareup.okhttp3:okhttp:3.4.1'
+	compile 'com.squareup.okhttp3:okhttp:3.6.0'
 	compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
 	// Anko
@@ -141,7 +141,7 @@ kapt {
 apply from: '../publishRelease.gradle'
 
 
-def buildTime() {
+static def buildTime() {
 	def df = new SimpleDateFormat("dd.MM.yyyy")
 	df.setTimeZone(TimeZone.getTimeZone("UTC"))
 

@@ -1,7 +1,8 @@
 buildscript {
-	ext.kotlin_version = '1.1.1'
+	ext.kotlin_version = '1.1.2-eap-69'
 	repositories {
 		jcenter()
+		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
 	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -63,10 +64,10 @@ dependencies {
 	compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 	compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 	// OkHttp
-	compile 'com.squareup.okhttp3:okhttp:3.4.1'
+	compile 'com.squareup.okhttp3:okhttp:3.6.0'
 	compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
-	compile 'com.android.support:appcompat-v7:25.2.0'
+	compile 'com.android.support:appcompat-v7:25.3.1'
 	testCompile 'junit:junit:4.12'
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }

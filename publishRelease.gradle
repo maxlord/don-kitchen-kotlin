@@ -3,7 +3,7 @@ publish.description "Copies release apk to custom directory"
 android.applicationVariants.all { variant ->
 	def releaseDir = project.RELEASE_DIR
 
-	if (variant.buildType.name.equals("release")) {
+	if (variant.buildType.name == "release") {
 		variant.outputs.each { output ->
 			if ( output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
 				def task = project.tasks.create("copyAndRename${variant.name}Apk", Copy)

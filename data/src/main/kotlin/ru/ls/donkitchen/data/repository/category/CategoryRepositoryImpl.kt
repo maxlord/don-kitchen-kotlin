@@ -1,6 +1,5 @@
 package ru.ls.donkitchen.data.repository.category
 
-import android.content.Context
 import com.j256.ormlite.dao.Dao
 import ru.ls.donkitchen.core.data.entity.CategoryEntity
 import ru.ls.donkitchen.core.data.repository.CategoryRepository
@@ -18,18 +17,16 @@ import java.sql.SQLException
  * @since 08.04.17
  */
 class CategoryRepositoryImpl(
-        private val context: Context,
         private val databaseHelper: DatabaseHelper,
-        private val api: Api,
-        private val converter: CategoryEntityConverter): CategoryRepository {
+        private val api: Api): CategoryRepository {
 
     override fun getCategories(): Single<List<CategoryEntity>> {
+        val converter: CategoryEntityConverter = CategoryEntityConverterImpl()
         // сеть
         val network = api.getCategories().map(CategoryListResult::categories)
         // сохранение/обновление в БД из сети
         val networkWithSave = network.doOnSuccess { data ->
 //            Timber.i("Сохраняем категории в БД")
-
             if (data != null && !data.isEmpty()) {
                 try {
                     val dao = databaseHelper.getDao<Dao<Category, Int>, Category>(Category::class.java)
@@ -80,24 +77,9 @@ class CategoryRepositoryImpl(
         }
 
         // Выполняем все запросы
-//        return Single.concat(db, networkWithSave).flatMap {
-//            it -> Single.create {
-//            return arrayListOf<CategoryEntity>()
-//        }
-//            val cats = it
-//
-//            cats?.let {
-//                Single.create<List<CategoryEntity>> {
-//                    val categories = arrayListOf<CategoryEntity>()
-//                    try {
-//                        cats.forEach { categories.add(converter.convert(it)) }
-//                        it.onSuccess(categories)
-//                    } catch (e: Exception) {
-//                        it.onError(e)
-//                    }
-//                }
-//            }
-
-        return Single.just(arrayListOf())
+        return Single.concat(db, networkWithSave)
+                .map {
+                    it?.map { converter.convert(it) } ?: arrayListOf()
+                }.toSingle()
     }
 }

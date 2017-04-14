@@ -3,13 +3,14 @@ package ru.ls.donkitchen.activity.base
 import rx.Scheduler
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import javax.inject.Inject
 
 interface SchedulersFactory {
     fun io(): Scheduler
     fun ui(): Scheduler
 }
 
-class SchedulersFactoryImpl: SchedulersFactory {
+class SchedulersFactoryImpl @Inject constructor() : SchedulersFactory {
     override fun io(): Scheduler {
         return Schedulers.io()
     }

@@ -15,6 +15,7 @@ import ru.ls.donkitchen.fragment.base.FragmentSubComponent
 interface ActivitySubComponent {
     @ConfigPrefs fun provideConfigPrefs(): SharedPreferences
     fun provideBus(): Bus
+//    fun provideSchedulersFactory(): SchedulersFactory
 
     operator fun plus(module: FragmentModule): FragmentSubComponent
     operator fun plus(module: SplashModule): SplashSubComponent
