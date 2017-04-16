@@ -72,7 +72,8 @@
     <orderEntry type="module" module-name="core" exported="" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="kotlin-stdlib-1.1.2-eap-69" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="annotations-13.0" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="rxkotlin-0.60.0" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="rxjava-1.1.5" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="rxjava-2.0.8" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="rxkotlin-2.0.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="reactive-streams-1.0.0" level="project" />
   </component>
 </module>

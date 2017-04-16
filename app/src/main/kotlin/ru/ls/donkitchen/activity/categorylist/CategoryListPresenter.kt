@@ -2,9 +2,9 @@ package ru.ls.donkitchen.activity.categorylist
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.domain.category.CategoryInteractor
-import rx.lang.kotlin.subscribeWith
 import javax.inject.Inject
 
 /**
@@ -19,26 +19,25 @@ class CategoryListPresenter : MvpPresenter<CategoryListView>() {
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: CategoryViewItemConverter
 
-    fun loadData() {
+    fun start() {
         viewState.showProgress()
 
         interactor.getCategories()
                 .observeOn(schedulers.ui())
                 .subscribeOn(schedulers.io())
-                .subscribeWith {
-                    onSuccess {
-                        viewState.hideProgress()
-                        if (it.isEmpty()) {
-                            viewState.displayNoData()
-                        } else {
-                            viewState.displayCategories(it.map(viewItemConverter::convert))
+                .subscribeBy(
+                        onSuccess = {
+                            viewState.hideProgress()
+                            if (it.isEmpty()) {
+                                viewState.displayNoData()
+                            } else {
+                                viewState.displayCategories(it.map(viewItemConverter::convert))
+                            }
+                        },
+                        onError = {
+                            viewState.hideProgress()
+                            viewState.displayError(it.localizedMessage)
                         }
-                    }
-
-                    onError {
-                        viewState.hideProgress()
-                        viewState.displayError(it.localizedMessage)
-                    }
-                }
+                )
     }
 }

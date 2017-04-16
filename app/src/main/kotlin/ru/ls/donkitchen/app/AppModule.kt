@@ -8,7 +8,7 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.activity.base.SchedulersFactory
@@ -54,7 +54,7 @@ class AppModule(private val application: DonKitchenApplication) {
 
         b.client(clientBuilder.build())
         b.addConverterFactory(GsonConverterFactory.create(gson))
-        b.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+        b.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 
         val retrofit = b.baseUrl(BuildConfig.API_URL).build()
 

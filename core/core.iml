@@ -59,8 +59,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/kotlin" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
@@ -68,8 +68,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="kotlin-stdlib-1.1.2-eap-69" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="rxkotlin-0.60.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="rxjava-2.0.8" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="rxkotlin-2.0.0" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="annotations-13.0" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="rxjava-1.1.5" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="reactive-streams-1.0.0" level="project" />
   </component>
 </module>

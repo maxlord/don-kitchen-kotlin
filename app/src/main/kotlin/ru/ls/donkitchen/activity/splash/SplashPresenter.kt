@@ -2,10 +2,10 @@ package ru.ls.donkitchen.activity.splash
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.activity.base.SchedulersFactoryImpl
 import ru.ls.donkitchen.domain.storage.StorageInteractor
-import rx.lang.kotlin.subscribeWith
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,14 +26,13 @@ class SplashPresenter : MvpPresenter<SplashView>() {
         interactor.initialize()
                 .observeOn(schedulers.ui())
                 .subscribeOn(schedulers.io())
-                .subscribeWith {
-                    onSuccess {
-                        viewState.startActivity()
-                    }
-
-                    onError {
-                        Timber.e(it, "Ошибка инициализации flyway")
-                    }
-                }
+                .subscribeBy(
+                        onSuccess = {
+                            viewState.startActivity()
+                        },
+                        onError = {
+                            Timber.e(it, "Ошибка инициализации flyway")
+                        }
+                )
     }
 }

@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_item_receipt.view.*
 import org.jetbrains.anko.onClick
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.data.rest.response.ReceiptListResult
 import timber.log.Timber
 import java.util.*
 
@@ -22,32 +21,32 @@ import java.util.*
  */
 class ReceiptAdapter(private val context: Context, private val callback: Callback) : RecyclerView.Adapter<ReceiptAdapter.ViewHolder>() {
     interface Callback {
-        fun onItemClick(item: ReceiptListResult.ReceiptItem)
+        fun onItemClick(item: ReceiptViewItem)
     }
 
     class ViewHolder(view: View, adapter: ReceiptAdapter) : RecyclerView.ViewHolder(view) {
         init {
             view.onClick {
-                adapter.callback.onItemClick(view.tag as ReceiptListResult.ReceiptItem)
+                adapter.callback.onItemClick(view.tag as ReceiptViewItem)
             }
         }
     }
 
-    private val items: MutableList<ReceiptListResult.ReceiptItem>?
+    private val items: MutableList<ReceiptViewItem>?
 
     init {
-        this.items = ArrayList<ReceiptListResult.ReceiptItem>()
+        this.items = ArrayList<ReceiptViewItem>()
     }
 
     fun clear() {
         this.items!!.clear()
     }
 
-    fun addAllItems(items: List<ReceiptListResult.ReceiptItem>) {
+    fun addAllItems(items: List<ReceiptViewItem>) {
         this.items!!.addAll(items)
     }
 
-    fun getItem(position: Int): ReceiptListResult.ReceiptItem? {
+    fun getItem(position: Int): ReceiptViewItem? {
         try {
             if (items != null && position < items.size) {
                 return items[position]
@@ -73,16 +72,11 @@ class ReceiptAdapter(private val context: Context, private val callback: Callbac
         Glide.with(context).load(item.imageLink).fitCenter().centerCrop().into(holder.itemView.photo)
 
         holder.itemView.title!!.text = item.name
-        holder.itemView.views!!.text = item.views.toString()
+        holder.itemView.views!!.text = "${item.viewsCount}"
         holder.itemView.rating!!.rating = item.rating.toFloat()
 
         val lp = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
-        if (position == itemCount - 1 && (position + 1) % 2 == 1) {
-            // если это последний элемент и он один, растягиваем его на всю строку
-            lp.isFullSpan = true
-        } else {
-            lp.isFullSpan = false
-        }
+        lp.isFullSpan = position == itemCount - 1 && (position + 1) % 2 == 1
         holder.itemView.layoutParams = lp
     }
 

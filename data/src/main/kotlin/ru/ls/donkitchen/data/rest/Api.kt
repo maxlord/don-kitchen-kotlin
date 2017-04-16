@@ -1,8 +1,10 @@
 package ru.ls.donkitchen.data.rest
 
+import io.reactivex.Single
 import retrofit2.http.GET
+import retrofit2.http.Query
 import ru.ls.donkitchen.data.rest.response.CategoryListResult
-import rx.Single
+import ru.ls.donkitchen.data.rest.response.ReceiptListResult
 
 /**
  * АПИ
@@ -14,8 +16,8 @@ interface Api {
     @GET("categories")
     fun getCategories(): Single<CategoryListResult>
 
-//    @GET("receipts/search")
-//    fun getReceipts(@Query("category_id") categoryId: Int): Observable<ReceiptListResult>
+    @GET("receipts/search")
+    fun getReceipts(@Query("category_id") categoryId: Int): Single<ReceiptListResult>
 //
 //    @GET("receipts/{id}")
 //    fun getReceiptDetail(@Path("id") receiptId: Int): Observable<ReceiptDetailResult>

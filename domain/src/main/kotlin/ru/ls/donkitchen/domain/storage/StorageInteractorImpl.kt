@@ -1,7 +1,7 @@
 package ru.ls.donkitchen.domain.storage
 
+import io.reactivex.Single
 import ru.ls.donkitchen.core.data.repository.StorageRepository
-import rx.Single
 
 /**
  *

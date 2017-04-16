@@ -1,8 +1,6 @@
-package ru.ls.donkitchen.activity.splash
+package ru.ls.donkitchen.activity.categorylist
 
 import dagger.Subcomponent
-import ru.ls.donkitchen.activity.categorylist.CategoryListModule
-import ru.ls.donkitchen.activity.categorylist.CategoryListPresenter
 import ru.ls.donkitchen.annotation.PerScreen
 
 /**

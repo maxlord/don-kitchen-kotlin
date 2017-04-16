@@ -1,7 +1,7 @@
 package ru.ls.donkitchen.domain.category
 
+import io.reactivex.Single
 import ru.ls.donkitchen.core.domain.model.CategoryModel
-import rx.Single
 
 /**
  *

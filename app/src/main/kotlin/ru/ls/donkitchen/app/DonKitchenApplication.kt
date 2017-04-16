@@ -1,11 +1,11 @@
 package ru.ls.donkitchen.app
 
-import android.app.Application
+import android.support.multidex.MultiDexApplication
 
 /**
  * Главный класс приложения
  */
-open class DonKitchenApplication : Application() {
+open class DonKitchenApplication : MultiDexApplication() {
 
     lateinit var component: AppComponent
         private set
