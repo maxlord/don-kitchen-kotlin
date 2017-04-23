@@ -4,13 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.arellomobile.mvp.MvpAppCompatActivity
-import com.j256.ormlite.android.apptools.OpenHelperManager
 import com.squareup.otto.Bus
 import dagger.Module
 import dagger.Provides
 import ru.ls.donkitchen.annotation.ConfigPrefs
 import ru.ls.donkitchen.annotation.PerActivity
-import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import ru.ls.donkitchen.util.AsyncBus
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -57,11 +55,5 @@ class ActivityModule(private val activity: MvpAppCompatActivity) {
     @PerActivity
     fun provideSchedulersManager() : SchedulersManager {
         return SchedulersManager(Schedulers.io(), AndroidSchedulers.mainThread())
-    }
-
-    @Provides
-    @PerActivity
-    fun provideDatabaseHelper(): DatabaseHelper {
-        return OpenHelperManager.getHelper(activity, DatabaseHelper::class.java)
     }
 }

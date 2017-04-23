@@ -5,8 +5,8 @@ import ru.ls.donkitchen.activity.categorylist.CategoryListFragment
 import ru.ls.donkitchen.activity.categorylist.CategoryListModule
 import ru.ls.donkitchen.activity.categorylist.CategoryListSubComponent
 import ru.ls.donkitchen.activity.receiptdetail.ReceiptDetailFragment
-import ru.ls.donkitchen.activity.receiptdetail.ReceiptDetailInfoFragment
-import ru.ls.donkitchen.activity.receiptdetail.ReceiptDetailReviewsFragment
+import ru.ls.donkitchen.activity.receiptdetail.info.ReceiptDetailInfoFragment
+import ru.ls.donkitchen.activity.receiptdetail.reviews.ReceiptDetailReviewsFragment
 import ru.ls.donkitchen.activity.receiptlist.ReceiptListFragment
 import ru.ls.donkitchen.activity.receiptlist.ReceiptListModule
 import ru.ls.donkitchen.activity.receiptlist.ReceiptListSubComponent

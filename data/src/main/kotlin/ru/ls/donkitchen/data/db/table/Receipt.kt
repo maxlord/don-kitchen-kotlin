@@ -3,7 +3,6 @@ package ru.ls.donkitchen.data.db.table
 import android.provider.BaseColumns
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-import ru.ls.donkitchen.data.db.table.Category
 
 /**
  *
@@ -28,13 +27,13 @@ class Receipt : BaseColumns {
     @DatabaseField(canBeNull = false, foreign = true, columnName = CATEGORY_ID, foreignColumnName = BaseColumns._ID, foreignAutoRefresh = true)
     var category: Category? = null
     @DatabaseField(canBeNull = false, columnName = NAME)
-    var name: String? = null
+    var name: String = ""
     @DatabaseField(canBeNull = false, columnName = IMAGE_LINK)
     var imageLink: String? = null
     @DatabaseField(columnName = INGREDIENTS)
     var ingredients: String? = null
     @DatabaseField(canBeNull = false, columnName = RECEIPT)
-    var receipt: String? = null
+    var receipt: String = ""
     @DatabaseField(columnName = VIEWS_COUNT)
     var viewsCount: Int = 0
     @DatabaseField(columnName = RATING)

@@ -6,11 +6,14 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_receipt_list.*
 import kotlinx.android.synthetic.main.widget_toolbar.*
 import org.jetbrains.anko.appcompat.v7.navigationIconResource
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.receiptdetail.ReceiptDetail
+import ru.ls.donkitchen.app.DonKitchenApplication
 import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.navigateActivity
 import timber.log.Timber
@@ -19,25 +22,17 @@ class ReceiptListFragment : BaseFragment(), ReceiptListView {
     @InjectPresenter lateinit var presenter: ReceiptListPresenter
     private lateinit var adapter: ReceiptAdapter
 
-    companion object {
-        fun newInstance(categoryId: Int, categoryName: String): ReceiptListFragment {
-            val args = Bundle()
-            args.putInt(ReceiptList.EXT_IN_CATEGORY_ID, categoryId)
-            args.putString(ReceiptList.EXT_IN_CATEGORY_NAME, categoryName)
+    @ProvidePresenter
+    fun providePresenter(): ReceiptListPresenter {
+        val categoryId = arguments.getInt(ReceiptList.EXT_IN_CATEGORY_ID, 0)
+        val categoryName = arguments.getString(ReceiptList.EXT_IN_CATEGORY_NAME)
 
-            val fragment = ReceiptListFragment()
-            fragment.arguments = args
-
-            return fragment
-        }
+        return ReceiptListPresenter(categoryId, categoryName,
+                DonKitchenApplication.instance().component().plus(ReceiptListModule()))
     }
 
     override fun getLayoutRes(): Int {
         return R.layout.fragment_receipt_list
-    }
-
-    override fun inject() {
-        getComponent().plus(ReceiptListModule()).inject(presenter)
     }
 
     override fun initControls(v: View?) {
@@ -50,29 +45,27 @@ class ReceiptListFragment : BaseFragment(), ReceiptListView {
 
         adapter = ReceiptAdapter(activity, object : ReceiptAdapter.Callback {
             override fun onItemClick(item: ReceiptViewItem) {
-                val b = Bundle()
-                b.putInt(ReceiptDetail.EXT_IN_RECEIPT_ID, item.id)
-                b.putString(ReceiptDetail.EXT_IN_RECEIPT_NAME, item.name)
-                b.putString(ReceiptDetail.EXT_IN_RECEIPT_PHOTO_URL, item.imageLink)
-
-                navigateActivity<ReceiptDetail>(false, b)
+                navigateActivity<ReceiptDetail>(false, Bundle(2).apply {
+                    putInt(ReceiptDetail.EXT_IN_RECEIPT_ID, item.id)
+                    putString(ReceiptDetail.EXT_IN_RECEIPT_NAME, item.name)
+                })
             }
         })
         list.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         list.adapter = adapter
         toolbar?.navigationIconResource = R.drawable.ic_arrow_back
-        toolbar?.setNavigationOnClickListener {
-            presenter.onBackAction()
-        }
     }
 
     override fun loadData() {
-        arguments ?: return
+        presenter.upClicks(upClicks())
+    }
 
-        with(arguments) {
-            presenter.start(
-                    categoryId = getInt(ReceiptList.EXT_IN_CATEGORY_ID, 0),
-                    categoryName = getString(ReceiptList.EXT_IN_CATEGORY_NAME))
+    private fun upClicks(): Observable<Unit> {
+        return Observable.create<Unit> { emitter ->
+            emitter.setCancellable { toolbar?.setNavigationOnClickListener(null) }
+            toolbar?.setNavigationOnClickListener {
+                emitter.onNext(Unit)
+            }
         }
     }
 
@@ -80,11 +73,11 @@ class ReceiptListFragment : BaseFragment(), ReceiptListView {
         toolbar?.title = title
     }
 
-    override fun showProgress() {
+    override fun showLoading() {
         progress.visibility = View.VISIBLE
     }
 
-    override fun hideProgress() {
+    override fun hideLoading() {
         progress.visibility = View.GONE
     }
 
@@ -111,5 +104,19 @@ class ReceiptListFragment : BaseFragment(), ReceiptListView {
 
     override fun leaveScreen() {
         activity.onBackPressed()
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(categoryId: Int, categoryName: String): ReceiptListFragment {
+            val args = Bundle()
+            args.putInt(ReceiptList.EXT_IN_CATEGORY_ID, categoryId)
+            args.putString(ReceiptList.EXT_IN_CATEGORY_NAME, categoryName)
+
+            val fragment = ReceiptListFragment()
+            fragment.arguments = args
+
+            return fragment
+        }
     }
 }

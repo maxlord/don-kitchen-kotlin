@@ -6,18 +6,17 @@ import android.support.multidex.MultiDexApplication
  * Главный класс приложения
  */
 open class DonKitchenApplication : MultiDexApplication() {
-
-    lateinit var component: AppComponent
-        private set
+    private lateinit var component: AppComponent
 
     override fun onCreate() {
         super.onCreate()
 
+        instance = this
         createComponent()
         component.inject(this)
     }
 
-    open fun createComponent(): AppComponent {
+    private fun createComponent(): AppComponent {
         component = DaggerAppComponent.builder().appModule(AppModule(this)).build()
 
         return component
@@ -25,5 +24,14 @@ open class DonKitchenApplication : MultiDexApplication() {
 
     fun component(): AppComponent {
         return component
+    }
+
+    companion object {
+        private lateinit var instance: DonKitchenApplication
+
+        @JvmStatic
+        fun instance(): DonKitchenApplication {
+            return instance
+        }
     }
 }

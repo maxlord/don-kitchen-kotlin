@@ -3,9 +3,9 @@ package ru.ls.donkitchen.activity.categorylist
 import com.arellomobile.mvp.MvpView
 
 interface CategoryListView: MvpView {
-    fun showProgress()
+    fun showLoading()
 
-    fun hideProgress()
+    fun hideLoading()
 
     fun displayNoData()
 

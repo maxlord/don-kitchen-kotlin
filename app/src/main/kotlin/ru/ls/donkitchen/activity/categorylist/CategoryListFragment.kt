@@ -5,9 +5,11 @@ import android.support.design.widget.Snackbar
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_category_list.*
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.receiptlist.ReceiptList
+import ru.ls.donkitchen.app.DonKitchenApplication
 import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.navigateActivity
 
@@ -15,12 +17,12 @@ class CategoryListFragment : BaseFragment(), CategoryListView {
     @InjectPresenter lateinit var presenter: CategoryListPresenter
     private var adapter: CategoryAdapter? = null
 
+    @ProvidePresenter
+    fun providePresenter() = CategoryListPresenter(
+            DonKitchenApplication.instance().component().plus(CategoryListModule()))
+
     override fun getLayoutRes(): Int {
         return R.layout.fragment_category_list
-    }
-
-    override fun inject() {
-        getComponent().plus(CategoryListModule()).inject(presenter)
     }
 
     override fun initControls(v: View?) {
@@ -28,11 +30,10 @@ class CategoryListFragment : BaseFragment(), CategoryListView {
 
         adapter = CategoryAdapter(activity, object : CategoryAdapter.Callback {
             override fun onItemClick(item: CategoryViewItem) {
-                val b = Bundle()
-                b.putInt(ReceiptList.EXT_IN_CATEGORY_ID, item.id)
-                b.putString(ReceiptList.EXT_IN_CATEGORY_NAME, item.name)
-
-                navigateActivity<ReceiptList>(false, b)
+                navigateActivity<ReceiptList>(false, Bundle().apply {
+                    putInt(ReceiptList.EXT_IN_CATEGORY_ID, item.id)
+                    putString(ReceiptList.EXT_IN_CATEGORY_NAME, item.name)
+                })
             }
         })
         list.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -40,14 +41,14 @@ class CategoryListFragment : BaseFragment(), CategoryListView {
     }
 
     override fun loadData() {
-        presenter.start()
+
     }
 
-    override fun showProgress() {
+    override fun showLoading() {
         progress.visibility = View.VISIBLE
     }
 
-    override fun hideProgress() {
+    override fun hideLoading() {
         progress.visibility = View.GONE
     }
 

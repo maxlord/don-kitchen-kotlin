@@ -10,7 +10,7 @@ import com.arellomobile.mvp.MvpView
  * @since 02.04.17
  */
 interface SplashView: MvpView {
-    fun showProgress()
+    fun showLoading()
 
     fun startActivity()
 }

@@ -19,5 +19,4 @@ interface ActivitySubComponent {
 
     fun inject(activity: BaseActivity)
     fun inject(activity: BaseNoActionBarActivity)
-//    fun inject(activity: Splash)
 }

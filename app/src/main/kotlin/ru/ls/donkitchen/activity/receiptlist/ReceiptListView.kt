@@ -11,9 +11,9 @@ import com.arellomobile.mvp.MvpView
 interface ReceiptListView: MvpView {
     fun setToolbarTitle(title: String)
 
-    fun showProgress()
+    fun showLoading()
 
-    fun hideProgress()
+    fun hideLoading()
 
     fun displayNoData()
 

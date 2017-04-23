@@ -7,21 +7,17 @@ import ru.ls.donkitchen.core.data.repository.ReceiptRepository
 import ru.ls.donkitchen.data.db.table.Category
 import ru.ls.donkitchen.data.db.table.Receipt
 import ru.ls.donkitchen.data.rest.Api
+import ru.ls.donkitchen.data.rest.request.ReceiptIncrementViews
 import ru.ls.donkitchen.data.rest.response.ReceiptListResult
 import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import timber.log.Timber
 import java.sql.SQLException
 
-/**
- *
- *
- * @author Lord (Kuleshov M.V.)
- * @since 15.04.17
- */
 class ReceiptRepositoryImpl(
         private val databaseHelper: DatabaseHelper,
         private val api: Api,
         private val converter: ReceiptEntityConverter) : ReceiptRepository {
+
     override fun getReceipts(categoryId: Int): Single<List<ReceiptEntity>> {
         return api.getReceipts(categoryId).map { it.receipts ?: listOf() }
                 .onErrorResumeNext { Single.just(readCategoryItemsFromDatabase(categoryId)) }
@@ -44,21 +40,7 @@ class ReceiptRepositoryImpl(
             val receipts = qb.query()
             if (!receipts.isEmpty()) {
                 // Выполняем перепаковку объектов
-                receipts.forEach { r ->
-                    val item = ReceiptListResult.ReceiptItem()
-
-                    item.id = r.id
-                    item.name = r.name
-                    item.ingredients = r.ingredients
-                    item.receipt = r.receipt
-                    item.views = r.viewsCount
-                    item.categoryId = r.category!!.id
-                    item.categoryName = r.category!!.name
-                    item.imageLink = r.imageLink
-                    item.rating = r.rating
-
-                    receiptItems.add(item)
-                }
+                receipts.forEach { receiptItems.add(converter.convertToReceiptItem(it)) }
             }
         } catch (e: SQLException) {
             Timber.e(e, "Ошибка при получении списка рецептов из БД")
@@ -78,7 +60,6 @@ class ReceiptRepositoryImpl(
                     data.forEach { ri ->
                         // Получаем категорию
                         val receiptCategory = categoryDao.queryForId(ri.categoryId)
-
                         val item = Receipt()
                         item.id = ri.id
                         item.name = ri.name
@@ -88,7 +69,6 @@ class ReceiptRepositoryImpl(
                         item.category = receiptCategory
                         item.viewsCount = ri.views
                         item.rating = ri.rating
-
                         receiptDao.createOrUpdate(item)
                     }
                     emitter.onSuccess(data)
@@ -99,4 +79,21 @@ class ReceiptRepositoryImpl(
             }
         }
     }
+
+    override fun getReceiptDetail(receiptId: Int): Single<ReceiptEntity> {
+        return Single.create { emitter ->
+            try {
+                val dao = databaseHelper.getDao<Dao<Receipt, Int>, Receipt>(Receipt::class.java)
+                val r = dao.queryForId(receiptId)
+                emitter.onSuccess(converter.convert(r))
+            } catch (e: SQLException) {
+                emitter.onError(e)
+            }
+        }
+    }
+
+    override fun incrementReceiptViews(receiptId: Int): Single<Unit> {
+        return api.incrementReceiptViews(receiptId, ReceiptIncrementViews())
+    }
+
 }

@@ -1,0 +1,43 @@
+/**
+ * Add custom properties file as map inside your project extensions
+ *
+ * How can i use it?
+ * apply from: "$rootDir/gradle/properties.gradle" //when you need it
+ * appendProperties("$rootDir/my_custom.properties", "foo")
+ *
+ * From now on you can access any property inside file as foo.my_property
+ * foo is visible anywhere in project scope after appendProperties() call
+ */
+ext.addPropertiesExtension = { file, ext ->
+	Properties props = new Properties()
+	props.load(new FileInputStream(file))
+	project.ext.set(ext, props)
+}
+
+/**
+ * add properties as if it was simple added to gradle.properties,
+ * replacing all excluding user home's
+ */
+ext.addOrReplaceProperties = { file ->
+	Properties props = new Properties()
+	props.load(new FileInputStream(file))
+
+	def userPropertiesPath = "${System.properties['user.home']}${File.separator}.gradle${File.separator}gradle.properties"
+
+	Properties userProperties = new Properties()
+	try {
+		userProperties.load(new FileInputStream(userPropertiesPath))
+	} catch (IOException e) {
+		logger.debug("user properties files not found. /ignore")
+	}
+
+	def commandLineProperties = gradle.startParameter.projectProperties
+
+	props.forEach { key, val ->
+
+		//do not override command line & user home properties
+		if (!commandLineProperties.containsKey(key) && !userProperties.stringPropertyNames().contains(key)) {
+			project.ext.set(key, val)
+		}
+	}
+}

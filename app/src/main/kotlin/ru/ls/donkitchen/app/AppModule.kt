@@ -3,6 +3,7 @@ package ru.ls.donkitchen.app
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.j256.ormlite.android.apptools.OpenHelperManager
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -16,6 +17,7 @@ import ru.ls.donkitchen.activity.base.SchedulersFactoryImpl
 import ru.ls.donkitchen.annotation.IOSched
 import ru.ls.donkitchen.annotation.UISched
 import ru.ls.donkitchen.data.rest.Api
+import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import ru.ls.donkitchen.rest.converter.DateTimeDeserializer
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.NavigatorHolder
@@ -85,10 +87,11 @@ class AppModule(private val application: DonKitchenApplication) {
         return cicerone.router
     }
 
-
-    @Provides
-    @Singleton
-    fun provideSchedulersFactory(): SchedulersFactory {
+    @Provides @Singleton fun provideSchedulersFactory(): SchedulersFactory {
         return SchedulersFactoryImpl()
+    }
+
+    @Provides @Singleton fun provideDatabaseHelper(): DatabaseHelper {
+        return OpenHelperManager.getHelper(application, DatabaseHelper::class.java)
     }
 }

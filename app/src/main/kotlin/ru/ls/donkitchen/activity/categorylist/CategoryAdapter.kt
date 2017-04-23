@@ -10,8 +10,6 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_item_category.view.*
 import org.jetbrains.anko.onClick
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.data.rest.response.CategoryListResult
-import java.util.*
 
 /**
  * Адаптер для отображения списка категорий
@@ -71,12 +69,7 @@ class CategoryAdapter(private val context: Context, private val callback: Callba
         Glide.with(context).load(item.imageLink).fitCenter().centerCrop().into(holder.itemView.photo)
 
         val lp = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
-        if (position == itemCount - 1 && (position + 1) % 2 == 1) {
-            // если это последний элемент и он один, растягиваем его на всю строку
-            lp.isFullSpan = true
-        } else {
-            lp.isFullSpan = false
-        }
+        lp.isFullSpan = position == itemCount - 1 && (position + 1) % 2 == 1
         holder.itemView.layoutParams = lp
     }
 

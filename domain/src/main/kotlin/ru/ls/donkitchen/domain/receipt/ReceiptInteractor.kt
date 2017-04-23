@@ -11,4 +11,6 @@ import ru.ls.donkitchen.core.domain.model.ReceiptModel
  */
 interface ReceiptInteractor {
     fun getReceipts(categoryId: Int): Single<List<ReceiptModel>>
+    fun getReceiptDetail(receiptId: Int): Single<ReceiptModel>
+    fun incrementReceiptViews(receiptId: Int): Single<Unit>
 }

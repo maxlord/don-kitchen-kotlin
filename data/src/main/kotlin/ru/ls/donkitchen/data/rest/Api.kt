@@ -1,10 +1,11 @@
 package ru.ls.donkitchen.data.rest
 
 import io.reactivex.Single
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
+import ru.ls.donkitchen.data.rest.request.ReceiptIncrementViews
 import ru.ls.donkitchen.data.rest.response.CategoryListResult
 import ru.ls.donkitchen.data.rest.response.ReceiptListResult
+import ru.ls.donkitchen.data.rest.response.ReviewListResult
 
 /**
  * АПИ
@@ -18,13 +19,13 @@ interface Api {
 
     @GET("receipts/search")
     fun getReceipts(@Query("category_id") categoryId: Int): Single<ReceiptListResult>
-//
+
 //    @GET("receipts/{id}")
 //    fun getReceiptDetail(@Path("id") receiptId: Int): Observable<ReceiptDetailResult>
-//
-//    @GET("reviews/receipt/{id}")
-//    fun getReviewsByReceipt(@Path("id") receiptId: Int): Observable<ReviewListResult>
-//
+
+    @GET("reviews/receipt/{id}")
+    fun getReviewsByReceipt(@Path("id") receiptId: Int): Single<ReviewListResult>
+
 //    @POST("reviews")
 //    @FormUrlEncoded
 //    fun addReview(@Field("receipt_id") receiptId: Int,
@@ -32,8 +33,8 @@ interface Api {
 //                                  @Field("user_name") userName: String,
 //                                  @Field("comments") comments: String): Observable<ReviewResult>
 //
-//    @POST("receipts/increment-views/{id}")
-//    fun incrementReceiptViews(@Path("id") receiptId: Int, @Body r: ReceiptIncrementViews): Observable<ReceiptDetailResult>
+    @POST("receipts/increment-views/{id}")
+    fun incrementReceiptViews(@Path("id") receiptId: Int, @Body r: ReceiptIncrementViews): Single<Unit>
 //
 //    @POST("fcm/register")
 //    @FormUrlEncoded

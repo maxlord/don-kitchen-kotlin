@@ -24,8 +24,11 @@ abstract class BaseFragment: MvpAppCompatFragment() {
 
     private var component: FragmentSubComponent? = null
 
-    fun getComponent(): FragmentSubComponent {
-        return component!!
+    fun getComponent(): FragmentSubComponent = component!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -35,16 +38,16 @@ abstract class BaseFragment: MvpAppCompatFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        activity.let { it ->
-            if (it is BaseActivity) {
-                this.component = it.getComponent().plus(FragmentModule(this))
-                inject()
-            } else if (it is BaseNoActionBarActivity) {
-                this.component = it.getComponent().plus(FragmentModule(this))
-
-                inject()
-            }
-        }
+//        activity.let { it ->
+//            if (it is BaseActivity) {
+//                this.component = it.getComponent().plus(FragmentModule(this))
+//                inject()
+//            } else if (it is BaseNoActionBarActivity) {
+//                this.component = it.getComponent().plus(FragmentModule(this))
+//
+//                inject()
+//            }
+//        }
 
         if (toolbar != null) {
             toolbar.title = activity.title
@@ -57,8 +60,6 @@ abstract class BaseFragment: MvpAppCompatFragment() {
      * @return
      */
     @LayoutRes protected abstract fun getLayoutRes(): Int
-
-    protected abstract fun inject()
 
     override fun onViewCreated(v: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(v, savedInstanceState)

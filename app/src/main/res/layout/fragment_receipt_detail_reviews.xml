@@ -1,39 +1,39 @@
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="4dp">
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/window_background"
+		android:padding="4dp">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-	        android:clipToPadding="false" />
-        <!--app:twowayview_layoutManager="ListLayoutManager"-->
+		<android.support.v7.widget.RecyclerView
+			android:id="@+id/list"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:clipToPadding="false"/>
 
-    </FrameLayout>
+	</FrameLayout>
 
-    <TextView
-        android:id="@+id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone"
-        android:text="@string/activity_receipt_detail_tab_reviews_no_data"
-        />
+	<TextView
+		android:id="@+id/empty"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center"
+		android:text="@string/activity_receipt_detail_tab_reviews_no_data"
+		android:visibility="gone"
+		/>
 
-    <com.rey.material.widget.ProgressView
-        android:id="@+id/progress"
-        android:layout_width="@dimen/progress_circular_size"
-        android:layout_height="@dimen/progress_circular_size"
-        android:layout_gravity="center"
-        app:pv_autostart="true"
-        app:pv_circular="true"
-        app:pv_progressMode="indeterminate" />
+	<com.rey.material.widget.ProgressView
+		android:id="@+id/progress"
+		android:layout_width="@dimen/progress_circular_size"
+		android:layout_height="@dimen/progress_circular_size"
+		android:layout_gravity="center"
+		app:pv_autostart="true"
+		app:pv_circular="true"
+		app:pv_progressMode="indeterminate"/>
 
 </FrameLayout>

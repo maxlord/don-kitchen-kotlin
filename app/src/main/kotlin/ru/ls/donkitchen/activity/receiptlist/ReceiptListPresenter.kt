@@ -2,6 +2,7 @@ package ru.ls.donkitchen.activity.receiptlist
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.activity.categorylist.ReceiptViewItemConverter
@@ -9,21 +10,28 @@ import ru.ls.donkitchen.domain.receipt.ReceiptInteractor
 import javax.inject.Inject
 
 @InjectViewState
-class ReceiptListPresenter: MvpPresenter<ReceiptListView>() {
+class ReceiptListPresenter(
+        private val categoryId: Int,
+        private val categoryName: String,
+        component: ReceiptListSubComponent) : MvpPresenter<ReceiptListView>() {
     @Inject lateinit var interactor: ReceiptInteractor
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: ReceiptViewItemConverter
 
-    fun start(categoryId: Int, categoryName: String) {
+    init {
+        component.inject(this)
+    }
+
+    override fun onFirstViewAttach() {
         viewState.setToolbarTitle(categoryName)
-        viewState.showProgress()
+        viewState.showLoading()
 
         interactor.getReceipts(categoryId)
                 .observeOn(schedulers.ui())
                 .subscribeOn(schedulers.io())
                 .subscribeBy(
                         onSuccess = {
-                            viewState.hideProgress()
+                            viewState.hideLoading()
                             if (it.isEmpty()) {
                                 viewState.displayNoData()
                             } else {
@@ -33,13 +41,21 @@ class ReceiptListPresenter: MvpPresenter<ReceiptListView>() {
                             }
                         },
                         onError = {
-                            viewState.hideProgress()
+                            viewState.hideLoading()
                             viewState.displayError(it.localizedMessage)
                         }
                 )
     }
 
-    fun onBackAction() {
-        viewState.leaveScreen()
+    fun upClicks(observable: Observable<Unit>) {
+        observable
+                .subscribeBy(
+                        onNext = {
+                            viewState.leaveScreen()
+                        },
+                        onError = {
+
+                        }
+                )
     }
 }

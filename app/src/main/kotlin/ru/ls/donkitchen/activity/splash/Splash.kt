@@ -46,7 +46,7 @@ class Splash: MvpAppCompatActivity(), SplashView {
 
     }
 
-    override fun showProgress() {
+    override fun showLoading() {
 
     }
 
