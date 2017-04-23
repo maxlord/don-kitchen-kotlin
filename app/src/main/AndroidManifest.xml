@@ -23,7 +23,7 @@
 			android:value="@integer/google_play_services_version"/>
 
 		<activity
-			android:name=".activity.splash.Splash"
+			android:name="ru.ls.donkitchen.ui.splash.Splash"
 			android:label="@string/app_name"
 			android:screenOrientation="portrait"
 			android:theme="@style/SplashTheme"
@@ -36,17 +36,17 @@
 		</activity>
 
 		<activity
-			android:name=".activity.categorylist.CategoryList"
+			android:name="ru.ls.donkitchen.ui.categorylist.CategoryList"
 			android:label="@string/app_name"
 			/>
 
 		<activity
-			android:name=".activity.receiptlist.ReceiptList"
+			android:name="ru.ls.donkitchen.ui.receiptlist.ReceiptList"
 			android:label="@string/app_name"
 			/>
 
 		<activity
-			android:name=".activity.receiptdetail.ReceiptDetail"
+			android:name="ru.ls.donkitchen.ui.receiptdetail.ReceiptDetail"
 			android:label="@string/activity_receipt_detail_title"
 			/>
 

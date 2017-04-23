@@ -9,15 +9,21 @@ import android.os.Bundle
 import android.support.v7.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.j256.ormlite.android.apptools.OpenHelperManager
+import com.j256.ormlite.dao.Dao
+import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.activity.base.ServiceSchedulersManager
-import ru.ls.donkitchen.activity.splash.Splash
+import ru.ls.donkitchen.activity.base.SchedulersFactory
+import ru.ls.donkitchen.ui.splash.Splash
 import ru.ls.donkitchen.app.DonKitchenApplication
+import ru.ls.donkitchen.data.db.table.Category
+import ru.ls.donkitchen.data.db.table.Receipt
 import ru.ls.donkitchen.data.rest.Api
 import ru.ls.donkitchen.data.rest.response.ReceiptDetailResult
 import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import ru.ls.donkitchen.service.base.ServiceModule
 import timber.log.Timber
+import java.sql.SQLException
 import javax.inject.Inject
 
 /**
@@ -34,7 +40,7 @@ class ReceiptFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     @Inject lateinit var api: Api
-    @Inject lateinit var schedulersManager: ServiceSchedulersManager
+    @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var databaseHelper: DatabaseHelper
 
     override fun onCreate() {
@@ -48,8 +54,6 @@ class ReceiptFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         super.onMessageReceived(remoteMessage)
 
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Timber.d("From: ${remoteMessage?.from}")
 
         // Check if message contains a data payload.
@@ -60,59 +64,58 @@ class ReceiptFirebaseMessagingService : FirebaseMessagingService() {
                 val receiptId = remoteMessage.data["rid"]?.toInt()
 
                 if (receiptId != null) {
-//                    api.getReceiptDetail(receiptId)
-//                            .compose(schedulersManager.applySchedulers<ReceiptDetailResult>())
-//                            .subscribeWith {
-//                                onNext {
-//                                    if (it != null) {
-//                                        // Сохраняем в БД
-//                                        // Сохраняем в БД
-//                                        try {
-//                                            val categoryDao: Dao<Category, Int> = databaseHelper.getDao(Category::class.java)
-//                                            val receiptDao: Dao<Receipt, Int> = databaseHelper.getDao(Receipt::class.java)
-//
-//                                            // Сохраняем категорию, если она новая
-//                                            var cat = categoryDao.queryForId(it.categoryId)
-//                                            if (cat == null) {
-//                                                cat = Category()
-//                                                cat.id = it.categoryId
-//                                                cat.name = it.categoryName
-//                                                cat.imageLink = null
-//                                                cat.receiptCount = 1
-//                                                cat.priority = 0
-//
-//                                                categoryDao.createOrUpdate(cat)
-//                                            }
-//
-//                                            // Сохраняем рецепт
-//                                            var r: Receipt? = receiptDao.queryForId(it.id)
-//                                            if (r == null) {
-//                                                r = Receipt()
-//                                                r.id = it.id
-//                                                r.category = cat
-//                                                r.name = it.name
-//                                                r.imageLink = it.imageLink
-//                                                r.ingredients = it.ingredients
-//                                                r.receipt = it.receipt
-//                                                r.viewsCount = it.views
-//                                                r.rating = it.rating
-//
-//                                                receiptDao.createOrUpdate(r)
-//                                            }
-//                                        } catch (e: SQLException) {
-//                                            Timber.e(e, "[Уведомления] Ошибка сохранения рецепта в БД")
-//                                        } finally {
-//                                            OpenHelperManager.releaseHelper()
-//                                        }
-//
-//                                        generateAlarmNotification(it)
-//                                    }
-//                                }
-//
-//                                onError {
-//                                    Timber.e(it, "Ошибка при получении рецепта из push-уведомления")
-//                                }
-//                            }
+                    api.getReceiptDetail(receiptId)
+                            .subscribeOn(schedulers.io())
+                            .observeOn(schedulers.ui())
+                            .subscribeBy(
+                                    onSuccess = {
+                                        if (it != null) {
+                                            // Сохраняем в БД
+                                            try {
+                                                val categoryDao: Dao<Category, Int> = databaseHelper.getDao(Category::class.java)
+                                                val receiptDao: Dao<Receipt, Int> = databaseHelper.getDao(Receipt::class.java)
+
+                                                // Сохраняем категорию, если она новая
+                                                var cat = categoryDao.queryForId(it.categoryId)
+                                                if (cat == null) {
+                                                    cat = Category()
+                                                    cat.id = it.categoryId
+                                                    cat.name = it.categoryName
+                                                    cat.imageLink = null
+                                                    cat.receiptCount = 1
+                                                    cat.priority = 0
+
+                                                    categoryDao.createOrUpdate(cat)
+                                                }
+
+                                                // Сохраняем рецепт
+                                                var r: Receipt? = receiptDao.queryForId(it.id)
+                                                if (r == null) {
+                                                    r = Receipt()
+                                                    r.id = it.id
+                                                    r.category = cat
+                                                    r.name = it.name
+                                                    r.imageLink = it.imageLink
+                                                    r.ingredients = it.ingredients
+                                                    r.receipt = it.receipt
+                                                    r.viewsCount = it.views
+                                                    r.rating = it.rating
+
+                                                    receiptDao.createOrUpdate(r)
+                                                }
+                                            } catch (e: SQLException) {
+                                                Timber.e(e, "[Уведомления] Ошибка сохранения рецепта в БД")
+                                            } finally {
+                                                OpenHelperManager.releaseHelper()
+                                            }
+
+                                            generateAlarmNotification(it)
+                                        }
+                                    },
+                                    onError = {
+                                        Timber.e(it, "Ошибка при получении рецепта из push-уведомления")
+                                    }
+                            )
                 }
             }
         }

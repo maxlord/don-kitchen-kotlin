@@ -6,9 +6,10 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.preference.PreferenceManager
 import com.google.firebase.iid.FirebaseInstanceId
+import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.activity.base.ServiceSchedulersManager
+import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.app.DonKitchenApplication
 import ru.ls.donkitchen.data.rest.Api
 import ru.ls.donkitchen.service.base.ServiceModule
@@ -24,12 +25,8 @@ import javax.inject.Inject
  */
 class FcmRegistrationIntentService : IntentService("") {
     @Inject lateinit var api: Api
-    @Inject lateinit var schedulersManager: ServiceSchedulersManager
+    @Inject lateinit var schedulers: SchedulersFactory
     lateinit var prefs: SharedPreferences
-//    @Inject
-//    fun setSharedPreferences(@ConfigPrefs prefs: SharedPreferences) {
-//        this.prefs = prefs
-//    }
 
     override fun onCreate() {
         super.onCreate()
@@ -48,16 +45,15 @@ class FcmRegistrationIntentService : IntentService("") {
         val deviceName = Build.VERSION.RELEASE
         val appName = "${getString(R.string.app_name)} ${BuildConfig.VERSION_NAME}"
 
-//        api.registerFcm("$token", deviceName, appName)
-//                .compose(schedulersManager.applySchedulers<FcmRegisterResult>())
-//                .subscribeWith {
-//                    onNext {
-//                        Timber.i("Токен зарегистрирован")
-//                    }
-//
-//                    onError {
-//                        Timber.e(it, "Ошибка при регистрации токена")
-//                    }
-//                }
+        api.registerFcm("$token", deviceName, appName)
+                .subscribeOn(schedulers.io())
+                .observeOn(schedulers.ui())
+                .subscribeBy(
+                        onSuccess = {
+                            Timber.i("Токен зарегистрирован")
+                        },
+                        onError = {
+                            Timber.e(it, "Ошибка при регистрации токена")
+                        })
     }
 }

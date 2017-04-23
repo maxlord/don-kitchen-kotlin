@@ -1,15 +1,11 @@
 package ru.ls.donkitchen.activity.base
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.MvpAppCompatFragment
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.annotation.ConfigPrefs
 import ru.ls.donkitchen.app.DonKitchenApplication
-import ru.ls.donkitchen.data.rest.Api
-import javax.inject.Inject
 
 /**
  *
@@ -18,20 +14,8 @@ import javax.inject.Inject
  */
 abstract class BaseActivity : MvpAppCompatActivity() {
     val FRAGMENT_TAG = "fragment_main"
-
-    @Inject lateinit var app: DonKitchenApplication
-    @Inject lateinit var api: Api
-    @Inject lateinit var schedulersManager: SchedulersManager
-    lateinit var prefs: SharedPreferences
-    @Inject
-    fun setSharedPreferences(@ConfigPrefs prefs: SharedPreferences) {
-        this.prefs = prefs
-    }
-
     protected var fragment: Fragment? = null
-
     private lateinit var component: ActivitySubComponent
-
     fun getComponent(): ActivitySubComponent {
         return component
     }

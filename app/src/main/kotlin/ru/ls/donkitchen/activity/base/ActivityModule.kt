@@ -10,8 +10,6 @@ import dagger.Provides
 import ru.ls.donkitchen.annotation.ConfigPrefs
 import ru.ls.donkitchen.annotation.PerActivity
 import ru.ls.donkitchen.util.AsyncBus
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 
 /**
  *
@@ -51,9 +49,4 @@ class ActivityModule(private val activity: MvpAppCompatActivity) {
         return AsyncBus(com.squareup.otto.ThreadEnforcer.ANY, "default")
     }
 
-    @Provides
-    @PerActivity
-    fun provideSchedulersManager() : SchedulersManager {
-        return SchedulersManager(Schedulers.io(), AndroidSchedulers.mainThread())
-    }
 }

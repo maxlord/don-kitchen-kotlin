@@ -24,13 +24,13 @@ class ReceiptDetailResult {
     @SerializedName("categoryId")
     var categoryId: Int = 0
     @SerializedName("name")
-    var name: String? = null
+    var name: String = ""
     @SerializedName("imageLink")
     var imageLink: String? = null
     @SerializedName("ingredients")
     var ingredients: String? = null
     @SerializedName("receipt")
-    var receipt: String? = null
+    var receipt: String = ""
     @SerializedName("categoryName")
     var categoryName: String? = null
     @SerializedName("views")

@@ -13,4 +13,8 @@ class ReviewInteractorImpl(private var repository: ReviewRepository,
         return repository.getReviews(receiptId).map { it.map(converter::convert) }
     }
 
+    override fun addReview(receiptId: Int, rating: Int, userName: String, comments: String): Single<Unit> {
+        return repository.addReview(receiptId, rating, userName, comments)
+    }
+
 }

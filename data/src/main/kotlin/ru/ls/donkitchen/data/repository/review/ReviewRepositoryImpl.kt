@@ -16,4 +16,8 @@ class ReviewRepositoryImpl(
                 }
     }
 
+    override fun addReview(receiptId: Int, rating: Int, userName: String, comments: String): Single<Unit> {
+        return api.addReview(receiptId, rating, userName, comments).map { Unit }
+    }
+
 }
