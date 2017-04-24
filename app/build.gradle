@@ -15,8 +15,8 @@ android {
 		targetSdkVersion Integer.parseInt(ver.targetSdk)
 
 		applicationId "ru.ls.donkitchen"
-		versionCode 140
-		versionName "1.4"
+		versionCode 150
+		versionName "1.5"
 		multiDexEnabled true
 
 		buildConfigField "int", "DATABASE_VERSION", "1";
@@ -32,10 +32,10 @@ android {
 		}
 
 		release {
-			// storeFile file(System.getenv("LS_APP_PRIVATE_KEY"))
-			// keyAlias System.getenv("LS_APP_ALIAS")
-			// storePassword System.getenv("LS_APP_STORE_PW")
-			// keyPassword System.getenv("LS_APP_PW")
+			 storeFile file(System.getenv("LS_APP_PRIVATE_KEY"))
+			 keyAlias System.getenv("LS_APP_ALIAS")
+			 storePassword System.getenv("LS_APP_STORE_PW")
+			 keyPassword System.getenv("LS_APP_PW")
 		}
 	}
 
