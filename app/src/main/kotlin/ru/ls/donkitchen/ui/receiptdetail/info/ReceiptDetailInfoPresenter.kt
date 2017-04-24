@@ -1,12 +1,13 @@
 package ru.ls.donkitchen.ui.receiptdetail.info
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.domain.receipt.ReceiptInteractor
+import ru.ls.donkitchen.mvp.BasePresenter
 import ru.ls.donkitchen.ui.categorylist.ReceiptViewItemConverter
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailSubComponent
 import ru.ls.donkitchen.ui.receiptdetail.RxBus
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class ReceiptDetailInfoPresenter(private val receiptId: Int,
-                                 component: ReceiptDetailSubComponent) : MvpPresenter<ReceiptDetailInfoView>() {
+                                 component: ReceiptDetailSubComponent) : BasePresenter<ReceiptDetailInfoView>() {
     @Inject lateinit var interactor: ReceiptInteractor
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: ReceiptViewItemConverter
@@ -28,7 +29,7 @@ class ReceiptDetailInfoPresenter(private val receiptId: Int,
 
     override fun onFirstViewAttach() {
         viewState.showLoading()
-        interactor.getReceiptDetail(receiptId)
+        disposables += interactor.getReceiptDetail(receiptId)
                 .subscribeOn(schedulers.io())
                 .observeOn(schedulers.ui())
                 .subscribeBy(
@@ -53,7 +54,7 @@ class ReceiptDetailInfoPresenter(private val receiptId: Int,
     }
 
     fun rateClicks(observable: Observable<Unit>) {
-        observable.observeOn(schedulers.ui())
+        disposables += observable.observeOn(schedulers.ui())
                 .subscribeBy(
                         onNext = {
                             bus.postCreateEvent()
@@ -62,7 +63,7 @@ class ReceiptDetailInfoPresenter(private val receiptId: Int,
     }
 
     fun errorLoadingDialogClicks(single: Single<Unit>) {
-        single.observeOn(schedulers.ui())
+        disposables += single.observeOn(schedulers.ui())
                 .subscribeBy(onSuccess = {
                     viewState.leaveScreen()
                 })

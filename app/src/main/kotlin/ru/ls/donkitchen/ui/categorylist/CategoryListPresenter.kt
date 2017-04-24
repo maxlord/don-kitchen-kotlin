@@ -1,14 +1,15 @@
 package ru.ls.donkitchen.ui.categorylist
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.domain.category.CategoryInteractor
+import ru.ls.donkitchen.mvp.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class CategoryListPresenter(component: CategoryListSubComponent) : MvpPresenter<CategoryListView>() {
+class CategoryListPresenter(component: CategoryListSubComponent) : BasePresenter<CategoryListView>() {
     @Inject lateinit var interactor: CategoryInteractor
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: CategoryViewItemConverter
@@ -20,7 +21,7 @@ class CategoryListPresenter(component: CategoryListSubComponent) : MvpPresenter<
     override fun onFirstViewAttach() {
         viewState.showLoading()
 
-        interactor.getCategories()
+        disposables += interactor.getCategories()
                 .observeOn(schedulers.ui())
                 .subscribeOn(schedulers.io())
                 .subscribeBy(

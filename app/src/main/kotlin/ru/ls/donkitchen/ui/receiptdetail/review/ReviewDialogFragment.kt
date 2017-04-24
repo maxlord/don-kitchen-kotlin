@@ -10,7 +10,6 @@ import com.jakewharton.rxbinding2.widget.RxRatingBar
 import com.jakewharton.rxbinding2.widget.textChanges
 import kotlinx.android.synthetic.main.dialog_new_review.*
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.app.DonKitchenApplication
 import ru.ls.donkitchen.fragment.base.BaseDialogFragment
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetail
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailModule
@@ -23,7 +22,7 @@ class ReviewDialogFragment : BaseDialogFragment(), ReviewView {
         val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
 
         return ReviewPresenter(receiptId,
-                DonKitchenApplication.instance().component().plus(ReceiptDetailModule()))
+                (activity as ReceiptDetail).component().plus(ReceiptDetailModule()))
     }
 
     override fun getLayoutRes() = R.layout.dialog_new_review

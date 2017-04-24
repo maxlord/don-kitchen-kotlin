@@ -7,8 +7,8 @@ import ru.ls.donkitchen.service.base.ServiceModule
 import ru.ls.donkitchen.service.base.ServiceSubComponent
 import ru.ls.donkitchen.ui.categorylist.CategoryListModule
 import ru.ls.donkitchen.ui.categorylist.CategoryListSubComponent
-import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailModule
-import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailSubComponent
+import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailActivityModule
+import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailActivitySubComponent
 import ru.ls.donkitchen.ui.receiptlist.ReceiptListModule
 import ru.ls.donkitchen.ui.receiptlist.ReceiptListSubComponent
 import ru.ls.donkitchen.ui.splash.SplashModule
@@ -24,5 +24,5 @@ import javax.inject.Singleton
     operator fun plus(module: SplashModule): SplashSubComponent
     operator fun plus(module: CategoryListModule): CategoryListSubComponent
     operator fun plus(module: ReceiptListModule): ReceiptListSubComponent
-    operator fun plus(module: ReceiptDetailModule): ReceiptDetailSubComponent
+    operator fun plus(module: ReceiptDetailActivityModule): ReceiptDetailActivitySubComponent
 }

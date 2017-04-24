@@ -1,21 +1,25 @@
 package ru.ls.donkitchen.ui.receiptdetail.review
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import com.jakewharton.rxbinding2.InitialValueObservable
 import com.jakewharton.rxbinding2.widget.RatingBarChangeEvent
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.domain.review.ReviewInteractor
+import ru.ls.donkitchen.mvp.BasePresenter
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailSubComponent
+import ru.ls.donkitchen.ui.receiptdetail.RxBus
 import javax.inject.Inject
 
 @InjectViewState
-class ReviewPresenter(private val receiptId: Int, component: ReceiptDetailSubComponent) : MvpPresenter<ReviewView>() {
+class ReviewPresenter(private val receiptId: Int, component: ReceiptDetailSubComponent) : BasePresenter<ReviewView>() {
     @Inject lateinit var interactor: ReviewInteractor
     @Inject lateinit var schedulers: SchedulersFactory
+    @Inject lateinit var bus: RxBus
+
     private var ratingValue: Float = 5F
     private var userName: String = ""
     private var comments: String = ""
@@ -30,36 +34,37 @@ class ReviewPresenter(private val receiptId: Int, component: ReceiptDetailSubCom
     }
 
     fun ratingChanges(observable: InitialValueObservable<RatingBarChangeEvent>) {
-        observable.observeOn(schedulers.ui())
+        disposables += observable.observeOn(schedulers.ui())
                 .subscribeBy(onNext = {
                     ratingValue = it.rating()
                 })
     }
 
     fun userNameChanges(observable: InitialValueObservable<CharSequence>) {
-        observable.observeOn(schedulers.ui())
+        disposables += observable.observeOn(schedulers.ui())
                 .subscribeBy(onNext = {
                     userName = it.toString()
                 })
     }
 
     fun commentChanges(observable: InitialValueObservable<CharSequence>) {
-        observable.observeOn(schedulers.ui())
+        disposables += observable.observeOn(schedulers.ui())
                 .subscribeBy(onNext = {
                     comments = it.toString()
                 })
     }
 
     fun positiveClicks(clicks: Observable<Unit>) {
-        clicks.observeOn(schedulers.ui())
+        disposables += clicks.observeOn(schedulers.ui())
                 .subscribeBy(onNext = {
-                    interactor.addReview(receiptId, ratingValue.toInt(), userName, comments)
+                    disposables += interactor.addReview(receiptId, ratingValue.toInt(), userName, comments)
                             .subscribeOn(schedulers.io())
                             .observeOn(schedulers.ui())
                             .subscribeBy(
                                     onSuccess = {
                                         viewState.displayReviewSuccessMessage()
                                         viewState.dismissDialog()
+                                        bus.postSaveEvent()
                                     },
                                     onError = {
 
@@ -69,7 +74,7 @@ class ReviewPresenter(private val receiptId: Int, component: ReceiptDetailSubCom
     }
 
     fun negativeClicks(clicks: Observable<Unit>) {
-        clicks.observeOn(schedulers.ui())
+        disposables += clicks.observeOn(schedulers.ui())
                 .subscribeBy(onNext = {
                     viewState.dismissDialog()
                 })

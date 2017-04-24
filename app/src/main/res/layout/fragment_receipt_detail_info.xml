@@ -143,6 +143,7 @@
                 android:id="@+id/rate_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:layout_marginTop="@dimen/recycler_vertical_margin"
                 android:text="@string/activity_receipt_detail_rate_button" />
 

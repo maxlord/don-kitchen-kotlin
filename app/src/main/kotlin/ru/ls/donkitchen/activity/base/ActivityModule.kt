@@ -4,12 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.arellomobile.mvp.MvpAppCompatActivity
-import com.squareup.otto.Bus
 import dagger.Module
 import dagger.Provides
 import ru.ls.donkitchen.annotation.ConfigPrefs
 import ru.ls.donkitchen.annotation.PerActivity
-import ru.ls.donkitchen.util.AsyncBus
 
 /**
  *
@@ -42,11 +40,4 @@ class ActivityModule(private val activity: MvpAppCompatActivity) {
     fun provideConfigPrefs(): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(activity)
     }
-
-    @Provides
-    @PerActivity
-    fun provideBus(): Bus {
-        return AsyncBus(com.squareup.otto.ThreadEnforcer.ANY, "default")
-    }
-
 }

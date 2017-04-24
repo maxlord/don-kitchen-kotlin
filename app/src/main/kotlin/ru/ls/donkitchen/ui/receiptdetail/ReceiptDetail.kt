@@ -1,8 +1,8 @@
 package ru.ls.donkitchen.ui.receiptdetail
 
 import android.os.Bundle
-import com.arellomobile.mvp.MvpAppCompatFragment
 import ru.ls.donkitchen.activity.base.BaseActivity
+import ru.ls.donkitchen.app.DonKitchenApplication
 
 /**
  *  Просмотр рецепта
@@ -16,8 +16,16 @@ class ReceiptDetail: BaseActivity() {
         const val EXT_IN_RECEIPT_NAME = "receipt_name"
     }
 
-    var receiptId: Int = 0
-    var receiptName: String = ""
+    private var receiptId: Int = 0
+    private var receiptName: String = ""
+    private lateinit var component: ReceiptDetailActivitySubComponent
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val app = application as DonKitchenApplication
+        component = app.component().plus(ReceiptDetailActivityModule(this))
+    }
 
     override fun loadFragment() = ReceiptDetailFragment.newInstance(receiptId, receiptName)
 
@@ -25,4 +33,9 @@ class ReceiptDetail: BaseActivity() {
         receiptId = args.getInt(EXT_IN_RECEIPT_ID, 0)
         receiptName = args.getString(EXT_IN_RECEIPT_NAME)
     }
+
+    fun component(): ReceiptDetailActivitySubComponent {
+        return component
+    }
+
 }

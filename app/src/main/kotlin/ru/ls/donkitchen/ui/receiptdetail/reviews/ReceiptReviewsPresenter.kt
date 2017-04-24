@@ -1,11 +1,13 @@
 package ru.ls.donkitchen.ui.receiptdetail.reviews
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.domain.review.ReviewInteractor
+import ru.ls.donkitchen.mvp.BasePresenter
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailSubComponent
+import ru.ls.donkitchen.ui.receiptdetail.RxBus
 import javax.inject.Inject
 
 
@@ -13,19 +15,29 @@ import javax.inject.Inject
 class ReceiptReviewsPresenter(
         private val receiptId: Int,
         component: ReceiptDetailSubComponent
-) : MvpPresenter<ReceiptReviewsView>() {
+) : BasePresenter<ReceiptReviewsView>() {
 
     @Inject lateinit var interactor: ReviewInteractor
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: ReviewViewItemConverter
+    @Inject lateinit var bus: RxBus
 
     init {
         component.inject(this)
     }
 
     override fun onFirstViewAttach() {
+        loadReviews()
+        disposables += bus.reviewSaveEvents()
+                .observeOn(schedulers.ui())
+                .subscribeBy(onNext = {
+                    loadReviews()
+                })
+    }
+
+    private fun loadReviews() {
         viewState.showLoading()
-        interactor.getReviews(receiptId)
+        disposables += interactor.getReviews(receiptId)
                 .subscribeOn(schedulers.io())
                 .observeOn(schedulers.ui())
                 .subscribeBy(

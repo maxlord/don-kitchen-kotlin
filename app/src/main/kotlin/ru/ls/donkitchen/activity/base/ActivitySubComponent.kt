@@ -11,7 +11,6 @@ import ru.ls.donkitchen.ui.splash.SplashSubComponent
 @Subcomponent(modules = arrayOf(ActivityModule::class))
 interface ActivitySubComponent {
 //    @ConfigPrefs fun provideConfigPrefs(): SharedPreferences
-//    fun provideBus(): Bus
 //    fun provideSchedulersFactory(): SchedulersFactory
 
     operator fun plus(module: FragmentModule): FragmentSubComponent

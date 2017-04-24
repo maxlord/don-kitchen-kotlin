@@ -1,19 +1,20 @@
 package ru.ls.donkitchen.ui.receiptlist
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
-import ru.ls.donkitchen.ui.categorylist.ReceiptViewItemConverter
 import ru.ls.donkitchen.domain.receipt.ReceiptInteractor
+import ru.ls.donkitchen.mvp.BasePresenter
+import ru.ls.donkitchen.ui.categorylist.ReceiptViewItemConverter
 import javax.inject.Inject
 
 @InjectViewState
 class ReceiptListPresenter(
         private val categoryId: Int,
         private val categoryName: String,
-        component: ReceiptListSubComponent) : MvpPresenter<ReceiptListView>() {
+        component: ReceiptListSubComponent) : BasePresenter<ReceiptListView>() {
     @Inject lateinit var interactor: ReceiptInteractor
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: ReceiptViewItemConverter
@@ -26,7 +27,7 @@ class ReceiptListPresenter(
         viewState.setToolbarTitle(categoryName)
         viewState.showLoading()
 
-        interactor.getReceipts(categoryId)
+        disposables += interactor.getReceipts(categoryId)
                 .observeOn(schedulers.ui())
                 .subscribeOn(schedulers.io())
                 .subscribeBy(

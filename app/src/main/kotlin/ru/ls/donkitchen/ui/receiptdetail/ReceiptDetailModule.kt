@@ -25,7 +25,6 @@ import ru.ls.donkitchen.ui.categorylist.ReceiptViewItemConverter
 import ru.ls.donkitchen.ui.categorylist.ReceiptViewItemConverterImpl
 import ru.ls.donkitchen.ui.receiptdetail.reviews.ReviewViewItemConverter
 import ru.ls.donkitchen.ui.receiptdetail.reviews.ReviewViewItemConverterImpl
-import timber.log.Timber
 
 @Module
 class ReceiptDetailModule {
@@ -87,14 +86,6 @@ class ReceiptDetailModule {
     @Provides
     fun provideReviewViewItemConverter(): ReviewViewItemConverter {
         return ReviewViewItemConverterImpl()
-    }
-
-    @PerScreen
-    @Provides
-    fun provideBus(): RxBus {
-        Timber.d("вызван provideBus")
-
-        return RxBus()
     }
 
 }

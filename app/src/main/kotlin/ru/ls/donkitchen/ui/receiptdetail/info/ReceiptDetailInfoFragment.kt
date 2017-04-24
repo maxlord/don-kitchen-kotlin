@@ -11,10 +11,9 @@ import io.reactivex.Single
 import jp.wasabeef.glide.transformations.CropCircleTransformation
 import kotlinx.android.synthetic.main.fragment_receipt_detail_info.*
 import ru.ls.donkitchen.R
+import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetail
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailModule
-import ru.ls.donkitchen.app.DonKitchenApplication
-import ru.ls.donkitchen.fragment.base.BaseFragment
 
 class ReceiptDetailInfoFragment : BaseFragment(), ReceiptDetailInfoView {
     @InjectPresenter lateinit var presenter: ReceiptDetailInfoPresenter
@@ -24,7 +23,7 @@ class ReceiptDetailInfoFragment : BaseFragment(), ReceiptDetailInfoView {
         val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
 
         return ReceiptDetailInfoPresenter(receiptId,
-                DonKitchenApplication.instance().component().plus(ReceiptDetailModule()))
+                (activity as ReceiptDetail).component().plus(ReceiptDetailModule()))
     }
 
     override fun showLoading() {

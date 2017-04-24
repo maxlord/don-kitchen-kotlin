@@ -1,13 +1,14 @@
 package ru.ls.donkitchen.ui.receiptdetail
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.domain.receipt.ReceiptInteractor
+import ru.ls.donkitchen.mvp.BasePresenter
 import ru.ls.donkitchen.ui.categorylist.ReceiptViewItemConverter
 import javax.inject.Inject
 
@@ -15,7 +16,7 @@ import javax.inject.Inject
 class ReceiptDetailPresenter(
         private val receiptId: Int,
         component: ReceiptDetailSubComponent
-) : MvpPresenter<ReceiptDetailView>() {
+) : BasePresenter<ReceiptDetailView>() {
     @Inject lateinit var interactor: ReceiptInteractor
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: ReceiptViewItemConverter
@@ -28,13 +29,13 @@ class ReceiptDetailPresenter(
     override fun onFirstViewAttach() {
         viewState.setToolbarTitle("")
         if (!BuildConfig.DEBUG) {
-            interactor.incrementReceiptViews(receiptId)
+            disposables += interactor.incrementReceiptViews(receiptId)
                     .observeOn(schedulers.ui())
                     .subscribeOn(schedulers.io())
                     .subscribeBy()
         }
         viewState.initPager(receiptId)
-        bus.reviewCreateEvents()
+        disposables += bus.reviewCreateEvents()
                 .observeOn(schedulers.ui())
                 .subscribeBy(onNext = {
                     addReview()
@@ -42,7 +43,7 @@ class ReceiptDetailPresenter(
     }
 
     fun upClicks(observable: Observable<Unit>) {
-        observable.subscribeBy(
+        disposables += observable.subscribeBy(
                 onNext = {
                     viewState.leaveScreen()
                 }
@@ -50,7 +51,7 @@ class ReceiptDetailPresenter(
     }
 
     fun toolbarClicks(observable: Observable<Int>) {
-        observable.subscribeBy(
+        disposables += observable.subscribeBy(
                 onNext = {
                     when (it) {
                         R.id.action_rate -> addReview()

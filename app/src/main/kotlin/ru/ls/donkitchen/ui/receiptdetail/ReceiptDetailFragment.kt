@@ -10,7 +10,6 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_receipt_detail.*
 import kotlinx.android.synthetic.main.widget_toolbar.*
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.app.DonKitchenApplication
 import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.ui.receiptdetail.info.ReceiptDetailInfoFragment
 import ru.ls.donkitchen.ui.receiptdetail.review.ReviewDialogFragment
@@ -30,7 +29,7 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
     fun providePresenter(): ReceiptDetailPresenter {
         val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
         return ReceiptDetailPresenter(receiptId,
-                DonKitchenApplication.instance().component().plus(ReceiptDetailModule()))
+                (activity as ReceiptDetail).component().plus(ReceiptDetailModule()))
     }
 
     override fun initPager(receiptId: Int) {

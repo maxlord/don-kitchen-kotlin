@@ -50,8 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/ok_button"
             android:layout_toStartOf="@+id/ok_button"
-            android:text="@string/common_cancel"
-            android:textColor="@color/colorAccent" />
+            android:text="@string/common_cancel" />
 
         <Button
             android:id="@+id/ok_button"
@@ -61,8 +60,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:text="@string/common_ok"
-            android:textColor="@color/colorAccent" />
+            android:text="@string/common_ok" />
 
 
     </RelativeLayout>

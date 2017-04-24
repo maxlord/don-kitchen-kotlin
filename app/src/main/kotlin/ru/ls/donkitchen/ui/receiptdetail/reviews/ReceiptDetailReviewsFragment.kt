@@ -23,7 +23,7 @@ class ReceiptDetailReviewsFragment : BaseFragment(), ReceiptReviewsView {
         val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
 
         return ReceiptReviewsPresenter(receiptId,
-                DonKitchenApplication.instance().component().plus(ReceiptDetailModule()))
+                (activity as ReceiptDetail).component().plus(ReceiptDetailModule()))
     }
 
     override fun getLayoutRes(): Int {
