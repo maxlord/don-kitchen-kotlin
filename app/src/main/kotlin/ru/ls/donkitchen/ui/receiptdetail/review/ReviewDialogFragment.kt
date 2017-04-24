@@ -13,7 +13,7 @@ import ru.ls.donkitchen.R
 import ru.ls.donkitchen.app.DonKitchenApplication
 import ru.ls.donkitchen.fragment.base.BaseDialogFragment
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetail
-import ru.ls.donkitchen.ui.receiptdetail.reviews.ReviewModule
+import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailModule
 
 class ReviewDialogFragment : BaseDialogFragment(), ReviewView {
     @InjectPresenter lateinit var presenter: ReviewPresenter
@@ -23,7 +23,7 @@ class ReviewDialogFragment : BaseDialogFragment(), ReviewView {
         val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
 
         return ReviewPresenter(receiptId,
-                DonKitchenApplication.instance().component().plus(ReviewModule()))
+                DonKitchenApplication.instance().component().plus(ReceiptDetailModule()))
     }
 
     override fun getLayoutRes() = R.layout.dialog_new_review

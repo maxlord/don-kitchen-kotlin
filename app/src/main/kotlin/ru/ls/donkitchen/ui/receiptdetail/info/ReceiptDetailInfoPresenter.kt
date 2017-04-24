@@ -6,10 +6,11 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
+import ru.ls.donkitchen.domain.receipt.ReceiptInteractor
 import ru.ls.donkitchen.ui.categorylist.ReceiptViewItemConverter
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailSubComponent
+import ru.ls.donkitchen.ui.receiptdetail.RxBus
 import ru.ls.donkitchen.ui.receiptlist.ReceiptViewItem
-import ru.ls.donkitchen.domain.receipt.ReceiptInteractor
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ class ReceiptDetailInfoPresenter(private val receiptId: Int,
     @Inject lateinit var interactor: ReceiptInteractor
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: ReceiptViewItemConverter
+    @Inject lateinit var bus: RxBus
 
     init {
         component.inject(this)
@@ -54,7 +56,7 @@ class ReceiptDetailInfoPresenter(private val receiptId: Int,
         observable.observeOn(schedulers.ui())
                 .subscribeBy(
                         onNext = {
-                            // TODO вызвать диалог добавления отзыва
+                            bus.postCreateEvent()
                         }
                 )
     }

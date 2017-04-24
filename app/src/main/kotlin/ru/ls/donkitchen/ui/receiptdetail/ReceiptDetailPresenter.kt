@@ -19,6 +19,7 @@ class ReceiptDetailPresenter(
     @Inject lateinit var interactor: ReceiptInteractor
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: ReceiptViewItemConverter
+    @Inject lateinit var bus: RxBus
 
     init {
         component.inject(this)
@@ -33,6 +34,11 @@ class ReceiptDetailPresenter(
                     .subscribeBy()
         }
         viewState.initPager(receiptId)
+        bus.reviewCreateEvents()
+                .observeOn(schedulers.ui())
+                .subscribeBy(onNext = {
+                    addReview()
+                })
     }
 
     fun upClicks(observable: Observable<Unit>) {

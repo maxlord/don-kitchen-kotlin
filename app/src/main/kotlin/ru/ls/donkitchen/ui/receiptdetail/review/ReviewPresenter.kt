@@ -9,10 +9,11 @@ import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.domain.review.ReviewInteractor
+import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailSubComponent
 import javax.inject.Inject
 
 @InjectViewState
-class ReviewPresenter(private val receiptId: Int, component: ReviewSubComponent) : MvpPresenter<ReviewView>() {
+class ReviewPresenter(private val receiptId: Int, component: ReceiptDetailSubComponent) : MvpPresenter<ReviewView>() {
     @Inject lateinit var interactor: ReviewInteractor
     @Inject lateinit var schedulers: SchedulersFactory
     private var ratingValue: Float = 5F

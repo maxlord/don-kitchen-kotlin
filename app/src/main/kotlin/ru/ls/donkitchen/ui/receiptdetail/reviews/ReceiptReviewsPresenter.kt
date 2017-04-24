@@ -5,13 +5,14 @@ import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.domain.review.ReviewInteractor
+import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailSubComponent
 import javax.inject.Inject
 
 
 @InjectViewState
 class ReceiptReviewsPresenter(
         private val receiptId: Int,
-        component: ReceiptReviewsSubComponent
+        component: ReceiptDetailSubComponent
 ) : MvpPresenter<ReceiptReviewsView>() {
 
     @Inject lateinit var interactor: ReviewInteractor

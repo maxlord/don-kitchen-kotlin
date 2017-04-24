@@ -42,6 +42,7 @@
 					android:layout_height="wrap_content"
 					android:textAllCaps="true"
 					android:textColor="@color/white"
+					android:lineSpacingExtra="2sp"
 					/>
 			</LinearLayout>
 
