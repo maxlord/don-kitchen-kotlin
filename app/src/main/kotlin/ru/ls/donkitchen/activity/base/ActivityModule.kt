@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Module
 import dagger.Provides
 import ru.ls.donkitchen.annotation.ConfigPrefs
@@ -39,5 +40,11 @@ class ActivityModule(private val activity: MvpAppCompatActivity) {
     @PerActivity
     fun provideConfigPrefs(): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(activity)
+    }
+
+    @Provides
+    @PerActivity
+    fun provideFirebaseAnalytics(): FirebaseAnalytics {
+        return FirebaseAnalytics.getInstance(activity)
     }
 }

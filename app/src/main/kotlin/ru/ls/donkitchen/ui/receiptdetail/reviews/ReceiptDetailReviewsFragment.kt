@@ -8,7 +8,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_receipt_detail_reviews.*
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.app.DonKitchenApplication
 import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetail
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailModule
@@ -23,7 +22,7 @@ class ReceiptDetailReviewsFragment : BaseFragment(), ReceiptReviewsView {
         val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
 
         return ReceiptReviewsPresenter(receiptId,
-                (activity as ReceiptDetail).component().plus(ReceiptDetailModule()))
+                (activity as ReceiptDetail).componentCustom().plus(ReceiptDetailModule()))
     }
 
     override fun getLayoutRes(): Int {

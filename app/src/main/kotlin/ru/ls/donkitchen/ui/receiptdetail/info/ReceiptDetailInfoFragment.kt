@@ -23,7 +23,7 @@ class ReceiptDetailInfoFragment : BaseFragment(), ReceiptDetailInfoView {
         val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
 
         return ReceiptDetailInfoPresenter(receiptId,
-                (activity as ReceiptDetail).component().plus(ReceiptDetailModule()))
+                (activity as ReceiptDetail).componentCustom().plus(ReceiptDetailModule()))
     }
 
     override fun showLoading() {

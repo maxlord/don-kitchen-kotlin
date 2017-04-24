@@ -1,10 +1,13 @@
 package ru.ls.donkitchen.ui.receiptlist
 
+import android.os.Bundle
 import com.arellomobile.mvp.InjectViewState
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
+import ru.ls.donkitchen.analytics.ANALYTICS_ACTION_CATEGORY_OPENED
 import ru.ls.donkitchen.domain.receipt.ReceiptInteractor
 import ru.ls.donkitchen.mvp.BasePresenter
 import ru.ls.donkitchen.ui.categorylist.ReceiptViewItemConverter
@@ -18,12 +21,17 @@ class ReceiptListPresenter(
     @Inject lateinit var interactor: ReceiptInteractor
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: ReceiptViewItemConverter
+    @Inject lateinit var analytics: FirebaseAnalytics
 
     init {
         component.inject(this)
     }
 
     override fun onFirstViewAttach() {
+        analytics.logEvent(ANALYTICS_ACTION_CATEGORY_OPENED, Bundle(2).apply {
+            putString(FirebaseAnalytics.Param.ITEM_ID, "$categoryId")
+            putString(FirebaseAnalytics.Param.ITEM_NAME, categoryName)
+        })
         viewState.setToolbarTitle(categoryName)
         viewState.showLoading()
 

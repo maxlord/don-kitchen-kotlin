@@ -22,7 +22,7 @@ class ReviewDialogFragment : BaseDialogFragment(), ReviewView {
         val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
 
         return ReviewPresenter(receiptId,
-                (activity as ReceiptDetail).component().plus(ReceiptDetailModule()))
+                (activity as ReceiptDetail).componentCustom().plus(ReceiptDetailModule()))
     }
 
     override fun getLayoutRes() = R.layout.dialog_new_review

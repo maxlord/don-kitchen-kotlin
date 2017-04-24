@@ -1,11 +1,14 @@
 package ru.ls.donkitchen.ui.receiptdetail.info
 
+import android.os.Bundle
 import com.arellomobile.mvp.InjectViewState
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
+import ru.ls.donkitchen.analytics.ANALYTICS_ACTION_ADD_RATE_BUTTON
 import ru.ls.donkitchen.domain.receipt.ReceiptInteractor
 import ru.ls.donkitchen.mvp.BasePresenter
 import ru.ls.donkitchen.ui.categorylist.ReceiptViewItemConverter
@@ -15,6 +18,7 @@ import ru.ls.donkitchen.ui.receiptlist.ReceiptViewItem
 import timber.log.Timber
 import javax.inject.Inject
 
+
 @InjectViewState
 class ReceiptDetailInfoPresenter(private val receiptId: Int,
                                  component: ReceiptDetailSubComponent) : BasePresenter<ReceiptDetailInfoView>() {
@@ -22,6 +26,9 @@ class ReceiptDetailInfoPresenter(private val receiptId: Int,
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: ReceiptViewItemConverter
     @Inject lateinit var bus: RxBus
+    @Inject lateinit var analytics: FirebaseAnalytics
+
+    private var receiptName: String = ""
 
     init {
         component.inject(this)
@@ -35,6 +42,7 @@ class ReceiptDetailInfoPresenter(private val receiptId: Int,
                 .subscribeBy(
                         onSuccess = {
                             viewState.hideLoading()
+                            receiptName = it.name
                             renderReceipt(viewItemConverter.convert(it))
                         },
                         onError = {
@@ -58,6 +66,10 @@ class ReceiptDetailInfoPresenter(private val receiptId: Int,
                 .subscribeBy(
                         onNext = {
                             bus.postCreateEvent()
+                            analytics.logEvent(ANALYTICS_ACTION_ADD_RATE_BUTTON, Bundle().apply {
+                                putString(FirebaseAnalytics.Param.ITEM_ID, "$receiptId")
+                                putString(FirebaseAnalytics.Param.ITEM_NAME, receiptName)
+                            })
                         }
                 )
     }

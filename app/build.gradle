@@ -91,6 +91,7 @@ dependencies {
 //	compile googlePlayServices.location
 //	compile googlePlayServices.maps
 	compile googlePlayServices.fcm
+	compile 'com.google.firebase:firebase-core:10.2.1'
 
 	compile "org.jetbrains.kotlin:kotlin-stdlib:$ver.kotlin"
 	compile "com.google.dagger:dagger:$ver.dagger"

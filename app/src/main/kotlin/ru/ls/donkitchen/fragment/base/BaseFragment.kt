@@ -40,10 +40,10 @@ abstract class BaseFragment: MvpAppCompatFragment() {
 
 //        activity.let { it ->
 //            if (it is BaseActivity) {
-//                this.component = it.getComponent().plus(FragmentModule(this))
+//                this.component = it.component().plus(FragmentModule(this))
 //                inject()
 //            } else if (it is BaseNoActionBarActivity) {
-//                this.component = it.getComponent().plus(FragmentModule(this))
+//                this.component = it.component().plus(FragmentModule(this))
 //
 //                inject()
 //            }

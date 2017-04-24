@@ -8,10 +8,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_category_list.*
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.ui.receiptlist.ReceiptList
-import ru.ls.donkitchen.app.DonKitchenApplication
+import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.navigateActivity
+import ru.ls.donkitchen.ui.receiptlist.ReceiptList
 
 class CategoryListFragment : BaseFragment(), CategoryListView {
     @InjectPresenter lateinit var presenter: CategoryListPresenter
@@ -19,7 +19,7 @@ class CategoryListFragment : BaseFragment(), CategoryListView {
 
     @ProvidePresenter
     fun providePresenter() = CategoryListPresenter(
-            DonKitchenApplication.instance().component().plus(CategoryListModule()))
+            (activity as BaseActivity).component().plus(CategoryListModule()))
 
     override fun getLayoutRes(): Int {
         return R.layout.fragment_category_list

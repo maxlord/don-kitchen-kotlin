@@ -1,26 +1,29 @@
 package ru.ls.donkitchen.ui.receiptdetail
 
+import android.os.Bundle
 import com.arellomobile.mvp.InjectViewState
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.SchedulersFactory
+import ru.ls.donkitchen.analytics.ANALYTICS_ACTION_ADD_RATE_MENU
 import ru.ls.donkitchen.domain.receipt.ReceiptInteractor
 import ru.ls.donkitchen.mvp.BasePresenter
-import ru.ls.donkitchen.ui.categorylist.ReceiptViewItemConverter
 import javax.inject.Inject
 
 @InjectViewState
 class ReceiptDetailPresenter(
         private val receiptId: Int,
+        private val receiptName: String,
         component: ReceiptDetailSubComponent
 ) : BasePresenter<ReceiptDetailView>() {
     @Inject lateinit var interactor: ReceiptInteractor
     @Inject lateinit var schedulers: SchedulersFactory
-    @Inject lateinit var viewItemConverter: ReceiptViewItemConverter
     @Inject lateinit var bus: RxBus
+    @Inject lateinit var analytics: FirebaseAnalytics
 
     init {
         component.inject(this)
@@ -34,10 +37,14 @@ class ReceiptDetailPresenter(
                     .subscribeOn(schedulers.io())
                     .subscribeBy()
         }
-        viewState.initPager(receiptId)
+        viewState.initPager(receiptId, receiptName)
         disposables += bus.reviewCreateEvents()
                 .observeOn(schedulers.ui())
                 .subscribeBy(onNext = {
+                    analytics.logEvent(ANALYTICS_ACTION_ADD_RATE_MENU, Bundle().apply {
+                        putString(FirebaseAnalytics.Param.ITEM_ID, "$receiptId")
+                        putString(FirebaseAnalytics.Param.ITEM_NAME, receiptName)
+                    })
                     addReview()
                 })
     }

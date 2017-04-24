@@ -6,7 +6,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 interface ReceiptDetailView: MvpView {
 
-    fun initPager(receiptId: Int)
+    fun initPager(receiptId: Int, receiptName: String)
 
     fun setToolbarTitle(title: String)
 

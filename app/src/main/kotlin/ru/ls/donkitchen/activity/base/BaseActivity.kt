@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.MvpAppCompatFragment
+import com.google.firebase.analytics.FirebaseAnalytics
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.app.DonKitchenApplication
+import javax.inject.Inject
 
 /**
  *
@@ -16,9 +18,11 @@ abstract class BaseActivity : MvpAppCompatActivity() {
     val FRAGMENT_TAG = "fragment_main"
     protected var fragment: Fragment? = null
     private lateinit var component: ActivitySubComponent
-    fun getComponent(): ActivitySubComponent {
+    fun component(): ActivitySubComponent {
         return component
     }
+
+    @Inject lateinit var analytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

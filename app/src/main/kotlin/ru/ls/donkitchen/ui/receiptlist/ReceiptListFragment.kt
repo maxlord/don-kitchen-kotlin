@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_receipt_list.*
 import kotlinx.android.synthetic.main.widget_toolbar.*
 import org.jetbrains.anko.appcompat.v7.navigationIconResource
 import ru.ls.donkitchen.R
+import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetail
 import ru.ls.donkitchen.app.DonKitchenApplication
 import ru.ls.donkitchen.fragment.base.BaseFragment
@@ -28,7 +29,7 @@ class ReceiptListFragment : BaseFragment(), ReceiptListView {
         val categoryName = arguments.getString(ReceiptList.EXT_IN_CATEGORY_NAME)
 
         return ReceiptListPresenter(categoryId, categoryName,
-                DonKitchenApplication.instance().component().plus(ReceiptListModule()))
+                (activity as BaseActivity).component().plus(ReceiptListModule()))
     }
 
     override fun getLayoutRes(): Int {

@@ -18,13 +18,13 @@ class ReceiptDetail: BaseActivity() {
 
     private var receiptId: Int = 0
     private var receiptName: String = ""
-    private lateinit var component: ReceiptDetailActivitySubComponent
+    private lateinit var componentCustom: ReceiptDetailActivitySubComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val app = application as DonKitchenApplication
-        component = app.component().plus(ReceiptDetailActivityModule(this))
+        componentCustom = app.component().plus(ReceiptDetailActivityModule(this))
     }
 
     override fun loadFragment() = ReceiptDetailFragment.newInstance(receiptId, receiptName)
@@ -34,8 +34,8 @@ class ReceiptDetail: BaseActivity() {
         receiptName = args.getString(EXT_IN_RECEIPT_NAME)
     }
 
-    fun component(): ReceiptDetailActivitySubComponent {
-        return component
+    fun componentCustom(): ReceiptDetailActivitySubComponent {
+        return componentCustom
     }
 
 }

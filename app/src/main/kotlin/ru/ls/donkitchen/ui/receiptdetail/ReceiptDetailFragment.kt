@@ -2,14 +2,18 @@ package ru.ls.donkitchen.ui.receiptdetail
 
 import android.os.Bundle
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.ViewPager
 import android.view.View
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_receipt_detail.*
 import kotlinx.android.synthetic.main.widget_toolbar.*
 import ru.ls.donkitchen.R
+import ru.ls.donkitchen.activity.base.BaseActivity
+import ru.ls.donkitchen.analytics.ANALYTICS_ACTION_SHOW_REVIEWS
 import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.ui.receiptdetail.info.ReceiptDetailInfoFragment
 import ru.ls.donkitchen.ui.receiptdetail.review.ReviewDialogFragment
@@ -28,11 +32,12 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
     @ProvidePresenter
     fun providePresenter(): ReceiptDetailPresenter {
         val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
-        return ReceiptDetailPresenter(receiptId,
-                (activity as ReceiptDetail).component().plus(ReceiptDetailModule()))
+        val receiptName = arguments.getString(ReceiptDetail.EXT_IN_RECEIPT_NAME)
+        return ReceiptDetailPresenter(receiptId, receiptName,
+                (activity as ReceiptDetail).componentCustom().plus(ReceiptDetailModule()))
     }
 
-    override fun initPager(receiptId: Int) {
+    override fun initPager(receiptId: Int, receiptName: String) {
         pager.adapter = object : FragmentPagerAdapter(fragmentManager) {
             override fun getItem(position: Int): MvpAppCompatFragment? {
                 when (position) {
@@ -57,6 +62,25 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
                 return 2
             }
         }
+        pager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+            }
+            override fun onPageSelected(position: Int) {
+                if (position == 1) {
+                    (activity as BaseActivity).analytics.logEvent(ANALYTICS_ACTION_SHOW_REVIEWS, Bundle(2).apply {
+                        putString(FirebaseAnalytics.Param.ITEM_ID, "$receiptId")
+                        putString(FirebaseAnalytics.Param.ITEM_NAME, receiptName)
+                    })
+
+                }
+            }
+
+        })
         tablayout.setupWithViewPager(pager)
     }
 
