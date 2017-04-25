@@ -142,7 +142,7 @@ class ReceiptFirebaseMessagingService : FirebaseMessagingService() {
         val notification = NotificationCompat.Builder(application)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setContentTitle(getString(R.string.app_name))
-                .setContentText("Добавлен рецепт '${receipt.name}'")
+                .setContentText("Новый рецепт '${receipt.name}'")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

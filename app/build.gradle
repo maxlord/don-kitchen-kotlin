@@ -15,8 +15,8 @@ android {
 		targetSdkVersion Integer.parseInt(ver.targetSdk)
 
 		applicationId "ru.ls.donkitchen"
-		versionCode 150
-		versionName "1.5"
+		versionCode 1501
+		versionName "1.5.1"
 		multiDexEnabled true
 
 		buildConfigField "int", "DATABASE_VERSION", "1";
