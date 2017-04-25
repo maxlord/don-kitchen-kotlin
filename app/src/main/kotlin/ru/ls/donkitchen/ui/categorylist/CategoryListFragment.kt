@@ -10,8 +10,6 @@ import kotlinx.android.synthetic.main.fragment_category_list.*
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.fragment.base.BaseFragment
-import ru.ls.donkitchen.navigateActivity
-import ru.ls.donkitchen.ui.receiptlist.ReceiptList
 
 class CategoryListFragment : BaseFragment(), CategoryListView {
     @InjectPresenter lateinit var presenter: CategoryListPresenter
@@ -30,10 +28,7 @@ class CategoryListFragment : BaseFragment(), CategoryListView {
 
         adapter = CategoryAdapter(activity, object : CategoryAdapter.Callback {
             override fun onItemClick(item: CategoryViewItem) {
-                navigateActivity<ReceiptList>(false, Bundle().apply {
-                    putInt(ReceiptList.EXT_IN_CATEGORY_ID, item.id)
-                    putString(ReceiptList.EXT_IN_CATEGORY_NAME, item.name)
-                })
+                presenter.onCategoryClick(item.id, item.name)
             }
         })
         list.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -41,7 +36,7 @@ class CategoryListFragment : BaseFragment(), CategoryListView {
     }
 
     override fun loadData() {
-
+        (activity as BaseActivity).component().inject(this)
     }
 
     override fun showLoading() {

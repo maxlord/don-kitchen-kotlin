@@ -9,6 +9,10 @@ import com.arellomobile.mvp.MvpAppCompatFragment
 import kotlinx.android.synthetic.main.widget_toolbar.*
 import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.activity.base.BaseNoActionBarActivity
+import ru.ls.donkitchen.nav.ActivityNavigator
+import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
 /**
  *
@@ -16,20 +20,8 @@ import ru.ls.donkitchen.activity.base.BaseNoActionBarActivity
  * @since 11.01.16
  */
 abstract class BaseFragment: MvpAppCompatFragment() {
-//    lateinit var prefs: SharedPreferences
-//    @Inject
-//    fun setSharedPreferences(@ConfigPrefs prefs: SharedPreferences) {
-//        this.prefs = prefs
-//    }
-
-    private var component: FragmentSubComponent? = null
-
-    fun getComponent(): FragmentSubComponent = component!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    @Inject lateinit var router: Router
+    @Inject lateinit var navigatorHolder: NavigatorHolder
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(getLayoutRes(), container, false)
@@ -38,16 +30,13 @@ abstract class BaseFragment: MvpAppCompatFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-//        activity.let { it ->
-//            if (it is BaseActivity) {
-//                this.component = it.component().plus(FragmentModule(this))
-//                inject()
-//            } else if (it is BaseNoActionBarActivity) {
-//                this.component = it.component().plus(FragmentModule(this))
-//
-//                inject()
-//            }
-//        }
+        activity.let { it ->
+            if (it is BaseActivity) {
+                it.component().inject(this)
+            } else if (it is BaseNoActionBarActivity) {
+                it.component().inject(this)
+            }
+        }
 
         if (toolbar != null) {
             toolbar.title = activity.title
@@ -60,6 +49,16 @@ abstract class BaseFragment: MvpAppCompatFragment() {
      * @return
      */
     @LayoutRes protected abstract fun getLayoutRes(): Int
+
+    override fun onPause() {
+        navigatorHolder.removeNavigator()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        navigatorHolder.setNavigator(ActivityNavigator(activity))
+    }
 
     override fun onViewCreated(v: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(v, savedInstanceState)

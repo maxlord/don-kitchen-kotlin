@@ -16,12 +16,9 @@ import ru.ls.donkitchen.app.DonKitchenApplication
  */
 abstract class BaseNoActionBarActivity: MvpAppCompatActivity() {
     val FRAGMENT_TAG = "fragment_main"
-
     protected var fragment: Fragment? = null
-
     private lateinit var component: ActivitySubComponent
-
-    fun getComponent(): ActivitySubComponent {
+    fun component(): ActivitySubComponent {
         return component
     }
 

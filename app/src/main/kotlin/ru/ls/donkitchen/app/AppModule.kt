@@ -14,17 +14,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.activity.base.SchedulersFactoryImpl
-import ru.ls.donkitchen.annotation.IOSched
-import ru.ls.donkitchen.annotation.UISched
 import ru.ls.donkitchen.data.rest.Api
 import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import ru.ls.donkitchen.rest.converter.DateTimeDeserializer
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
-import rx.Scheduler
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import timber.log.Timber
 import java.util.*
 import javax.inject.Singleton
@@ -70,10 +65,6 @@ class AppModule(private val application: DonKitchenApplication) {
                 .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
                 .create()
     }
-
-    @Provides @Singleton @IOSched fun provideIoScheduler(): Scheduler = Schedulers.io()
-
-    @Provides @Singleton @UISched fun provideUiScheduler(): Scheduler = AndroidSchedulers.mainThread()
 
     @Provides @Singleton fun provideCicerone(): Cicerone<Router> {
         return Cicerone.create()

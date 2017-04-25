@@ -1,6 +1,5 @@
 package ru.ls.donkitchen.ui.splash
 
-import android.support.annotation.StringRes
 import com.arellomobile.mvp.MvpView
 
 /**
@@ -11,6 +10,5 @@ import com.arellomobile.mvp.MvpView
  */
 interface SplashView: MvpView {
     fun showLoading()
-
-    fun startActivity()
+    fun hideLoading()
 }

@@ -7,6 +7,8 @@ import ru.ls.donkitchen.service.base.ServiceModule
 import ru.ls.donkitchen.service.base.ServiceSubComponent
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailActivityModule
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailActivitySubComponent
+import ru.ls.donkitchen.ui.splash.SplashModule
+import ru.ls.donkitchen.ui.splash.SplashSubComponent
 import javax.inject.Singleton
 
 @Singleton
@@ -15,6 +17,6 @@ import javax.inject.Singleton
 
     operator fun plus(module: ActivityModule): ActivitySubComponent
     operator fun plus(module: ServiceModule): ServiceSubComponent
-//    operator fun plus(module: SplashModule): SplashSubComponent
+    operator fun plus(module: SplashModule): SplashSubComponent
     operator fun plus(module: ReceiptDetailActivityModule): ReceiptDetailActivitySubComponent
 }

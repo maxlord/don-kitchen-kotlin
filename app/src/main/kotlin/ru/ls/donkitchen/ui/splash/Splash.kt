@@ -3,14 +3,16 @@ package ru.ls.donkitchen.ui.splash
 import android.os.Bundle
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.activity.base.ActivityModule
-import ru.ls.donkitchen.ui.categorylist.CategoryList
-import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetail
 import ru.ls.donkitchen.app.DonKitchenApplication
-import ru.ls.donkitchen.navigate
+import ru.ls.donkitchen.nav.ActivityNavigator
+import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
 /**
  * Сплеш-скрин
@@ -19,7 +21,14 @@ import ru.ls.donkitchen.navigate
  * @since 11.01.16
  */
 class Splash: MvpAppCompatActivity(), SplashView {
+    @Inject lateinit var router: Router
+    @Inject lateinit var navigatorHolder: NavigatorHolder
     @InjectPresenter lateinit var presenter: SplashPresenter
+
+    @ProvidePresenter
+    fun providePresenter(): SplashPresenter {
+        return SplashPresenter(intent.extras, DonKitchenApplication.instance().component().plus(SplashModule(this)))
+    }
 
     companion object {
         val EXT_IN_DISPLAY_RECEIPT_ID = "display_receipt_id"
@@ -28,18 +37,22 @@ class Splash: MvpAppCompatActivity(), SplashView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val component = (application as DonKitchenApplication)
-                .component()
-                .plus(ActivityModule(this))
-                .plus(SplashModule(this))
-        component.inject(presenter)
+        DonKitchenApplication.instance().component().plus(ActivityModule(this)).inject(this)
 
         // Crashlytics
         if (!BuildConfig.DEBUG) {
             Fabric.with(application, Crashlytics())
         }
-        presenter.start()
+    }
+
+    override fun onPause() {
+        navigatorHolder.removeNavigator()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        navigatorHolder.setNavigator(ActivityNavigator(this))
     }
 
     override fun onBackPressed() {
@@ -50,27 +63,7 @@ class Splash: MvpAppCompatActivity(), SplashView {
 
     }
 
-    override fun startActivity() {
-        var displayReceiptId = 0
-        var displayReceiptName = ""
-        if (intent != null) {
-            if (intent.hasExtra(EXT_IN_DISPLAY_RECEIPT_ID)) {
-                displayReceiptId = intent.getIntExtra(EXT_IN_DISPLAY_RECEIPT_ID, 0)
-            }
-            if (intent.hasExtra(EXT_IN_DISPLAY_RECEIPT_NAME)) {
-                displayReceiptName = intent.getStringExtra(EXT_IN_DISPLAY_RECEIPT_NAME)
-            }
-        }
-        if (displayReceiptId > 0) {
-            val b = Bundle()
-            b.apply {
-                putInt(ReceiptDetail.EXT_IN_RECEIPT_ID, displayReceiptId)
-                putString(ReceiptDetail.EXT_IN_RECEIPT_NAME, displayReceiptName)
-            }
-            navigate<ReceiptDetail>(true, b)
-        } else {
-            // Запускаем главный экран
-            navigate<CategoryList>(true)
-        }
+    override fun hideLoading() {
+
     }
 }

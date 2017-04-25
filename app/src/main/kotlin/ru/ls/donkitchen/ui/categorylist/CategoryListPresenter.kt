@@ -1,11 +1,15 @@
 package ru.ls.donkitchen.ui.categorylist
 
+import android.os.Bundle
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.domain.category.CategoryInteractor
 import ru.ls.donkitchen.mvp.BasePresenter
+import ru.ls.donkitchen.ui.Screens
+import ru.ls.donkitchen.ui.receiptlist.ReceiptList
+import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
 @InjectViewState
@@ -13,6 +17,7 @@ class CategoryListPresenter(component: CategoryListSubComponent) : BasePresenter
     @Inject lateinit var interactor: CategoryInteractor
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var viewItemConverter: CategoryViewItemConverter
+    @Inject lateinit var router: Router
 
     init {
         component.inject(this)
@@ -38,5 +43,12 @@ class CategoryListPresenter(component: CategoryListSubComponent) : BasePresenter
                             viewState.displayError(it.localizedMessage)
                         }
                 )
+    }
+
+    fun onCategoryClick(categoryId: Int, categoryName: String) {
+        router.navigateTo(Screens.RECEIPTS, Bundle(2).apply {
+            putInt(ReceiptList.EXT_IN_CATEGORY_ID, categoryId)
+            putString(ReceiptList.EXT_IN_CATEGORY_NAME, categoryName)
+        })
     }
 }

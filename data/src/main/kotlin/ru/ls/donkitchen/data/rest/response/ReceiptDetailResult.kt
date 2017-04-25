@@ -32,7 +32,7 @@ class ReceiptDetailResult {
     @SerializedName("receipt")
     var receipt: String = ""
     @SerializedName("categoryName")
-    var categoryName: String? = null
+    var categoryName: String = ""
     @SerializedName("views")
     var views: Int = 0
     @SerializedName("rating")

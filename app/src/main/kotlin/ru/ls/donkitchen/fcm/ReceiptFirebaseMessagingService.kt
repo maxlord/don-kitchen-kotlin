@@ -14,7 +14,6 @@ import com.j256.ormlite.dao.Dao
 import io.reactivex.rxkotlin.subscribeBy
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.SchedulersFactory
-import ru.ls.donkitchen.ui.splash.Splash
 import ru.ls.donkitchen.app.DonKitchenApplication
 import ru.ls.donkitchen.data.db.table.Category
 import ru.ls.donkitchen.data.db.table.Receipt
@@ -22,6 +21,7 @@ import ru.ls.donkitchen.data.rest.Api
 import ru.ls.donkitchen.data.rest.response.ReceiptDetailResult
 import ru.ls.donkitchen.data.storage.ormlite.DatabaseHelper
 import ru.ls.donkitchen.service.base.ServiceModule
+import ru.ls.donkitchen.ui.splash.Splash
 import timber.log.Timber
 import java.sql.SQLException
 import javax.inject.Inject
@@ -81,7 +81,7 @@ class ReceiptFirebaseMessagingService : FirebaseMessagingService() {
                                                     cat = Category()
                                                     cat.id = it.categoryId
                                                     cat.name = it.categoryName
-                                                    cat.imageLink = null
+                                                    cat.imageLink = ""
                                                     cat.receiptCount = 1
                                                     cat.priority = 0
 

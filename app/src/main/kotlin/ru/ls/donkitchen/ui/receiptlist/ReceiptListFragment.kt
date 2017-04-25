@@ -46,10 +46,7 @@ class ReceiptListFragment : BaseFragment(), ReceiptListView {
 
         adapter = ReceiptAdapter(activity, object : ReceiptAdapter.Callback {
             override fun onItemClick(item: ReceiptViewItem) {
-                navigateActivity<ReceiptDetail>(false, Bundle(2).apply {
-                    putInt(ReceiptDetail.EXT_IN_RECEIPT_ID, item.id)
-                    putString(ReceiptDetail.EXT_IN_RECEIPT_NAME, item.name)
-                })
+                presenter.onReceiptClick(item.id, item.name)
             }
         })
         list.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)

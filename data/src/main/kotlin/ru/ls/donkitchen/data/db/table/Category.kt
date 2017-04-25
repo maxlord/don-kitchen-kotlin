@@ -15,9 +15,9 @@ class Category : BaseColumns {
     @DatabaseField(id = true, canBeNull = false, columnName = BaseColumns._ID)
     var id: Int = 0
     @DatabaseField(canBeNull = false, columnName = NAME)
-    var name: String? = null
+    var name: String = ""
     @DatabaseField(canBeNull = false, columnName = IMAGE_LINK)
-    var imageLink: String? = null
+    var imageLink: String = ""
     @DatabaseField(columnName = RECEIPT_COUNT)
     var receiptCount: Int = 0
     @DatabaseField(columnName = PRIORITY)

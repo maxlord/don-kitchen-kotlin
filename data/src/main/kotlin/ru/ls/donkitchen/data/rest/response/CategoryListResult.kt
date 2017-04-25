@@ -45,10 +45,10 @@ class CategoryListResult {
         @SerializedName("id")
         var id: Int = 0
         @SerializedName("name")
-        var name: String? = null
+        var name: String = ""
         @SerializedName("priority")
         var priority: Int = 0
         @SerializedName("imageLink")
-        var imageLink: String? = null
+        var imageLink: String = ""
     }
 }
