@@ -136,6 +136,7 @@ dependencies {
 	compile "ru.terrakok.cicerone:cicerone:$ver.cicerone"
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$ver.kotlin"
 	compile 'jp.wasabeef:glide-transformations:2.0.2'
+	testCompile 'org.mockito:mockito-core:2.2.6'
 }
 
 kapt {

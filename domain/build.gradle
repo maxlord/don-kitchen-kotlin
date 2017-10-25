@@ -1,12 +1,12 @@
-buildscript {
-	repositories {
-		jcenter()
-		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
-	}
-	dependencies {
-		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$ver.kotlin"
-	}
-}
+//buildscript {
+//	repositories {
+//		jcenter()
+//		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
+//	}
+//	dependencies {
+//		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$ver.kotlin"
+//	}
+//}
 
 apply plugin: 'java'
 apply plugin: 'kotlin'

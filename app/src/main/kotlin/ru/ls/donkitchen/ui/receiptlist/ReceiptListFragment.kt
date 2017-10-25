@@ -9,7 +9,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_receipt_list.*
-import kotlinx.android.synthetic.main.widget_toolbar.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.appcompat.v7.navigationIconResource
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.BaseActivity

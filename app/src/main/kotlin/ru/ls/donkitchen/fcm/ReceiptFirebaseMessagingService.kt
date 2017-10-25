@@ -109,7 +109,7 @@ class ReceiptFirebaseMessagingService : FirebaseMessagingService() {
                                                 OpenHelperManager.releaseHelper()
                                             }
 
-                                            generateAlarmNotification(it)
+//                                            generateAlarmNotification(it)
                                         }
                                     },
                                     onError = {

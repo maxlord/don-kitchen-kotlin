@@ -4,20 +4,21 @@ buildscript {
 	apply from: "$rootDir/gradle/properties.gradle"
 	addPropertiesExtension("$rootDir/ver.properties", "ver")
 	repositories {
+		google()
 		jcenter()
 		maven { url 'https://maven.fabric.io/public' }
 		maven { url 'https://dl.bintray.com/drummer-aidan/maven' }
-		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
+//		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
 	}
 	dependencies {
-		classpath 'com.android.tools.build:gradle:2.4.0-alpha6'
+		classpath "com.android.tools.build:gradle:$ver.androidGradlePlugin"
 
 		// NOTE: Do not place your application dependencies here; they belong
 		// in the individual module build.gradle files
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$ver.kotlin"
 		classpath "org.jetbrains.kotlin:kotlin-android-extensions:$ver.kotlin"
 		classpath "io.fabric.tools:gradle:$ver.fabricGradlePlugin"
-		classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.0'
+//		classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.0'
 		classpath 'com.google.gms:google-services:3.0.0'
 	}
 }
@@ -28,16 +29,16 @@ apply plugin: 'kotlin'
 
 allprojects {
 	repositories {
+		google()
 		jcenter()
 
-		mavenLocal()
 		maven { url 'https://maven.fabric.io/public' }
 		maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
 	}
 
 	tasks.withType(JavaCompile) { 
-	    sourceCompatibility = "1.7"
-	    targetCompatibility = "1.7" 
+	    sourceCompatibility = JavaVersion.VERSION_1_8
+	    targetCompatibility = JavaVersion.VERSION_1_8
 	}
 }

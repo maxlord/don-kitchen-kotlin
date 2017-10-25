@@ -4,17 +4,17 @@ android.applicationVariants.all { variant ->
 	def releaseDir = project.RELEASE_DIR
 
 	if (variant.buildType.name == "release") {
-		variant.outputs.each { output ->
-			if ( output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
+		variant.outputs.all { output ->
+			if (output.outputFileName.endsWith('.apk')) {
 				def task = project.tasks.create("copyAndRename${variant.name}Apk", Copy)
 
-				def outputFile = output.outputFile
+				def outputFileName = output.outputFileName
 				println "Creating " + rootProject.name + "-v${versionName}.apk" + " from " + project.name + "-${variant.name}.apk"
-				def fileName = outputFile.name.replace(project.name + "-${variant.name}.apk", rootProject.name +"-v${versionName}.apk")
-				output.outputFile = new File(outputFile.parent, fileName)
+				def fileName = outputFileName.replace(project.name + "-${variant.name}.apk", rootProject.name +"-v${versionName}.apk")
+				output.outputFileName = fileName // new File(outputFileName.parent, fileName)
 
 				println "Copying "+ rootProject.name + "-v${versionName}.apk" + " to apk directory..."
-				task.from(output.outputFile)
+				task.from(output.outputFileName)
 				task.into(releaseDir)
 				println "Done"
 

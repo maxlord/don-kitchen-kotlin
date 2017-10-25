@@ -8,9 +8,10 @@ import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.jakewharton.rxbinding2.support.v7.widget.navigationClicks
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_receipt_detail.*
-import kotlinx.android.synthetic.main.widget_toolbar.*
+import kotlinx.android.synthetic.main.toolbar.*
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.analytics.ANALYTICS_ACTION_SHOW_REVIEWS
@@ -111,12 +112,13 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
     }
 
     private fun upClicks(): Observable<Unit> {
-        return Observable.create<Unit> { emitter ->
-            emitter.setCancellable { toolbar?.setNavigationOnClickListener(null) }
-            toolbar?.setNavigationOnClickListener {
-                emitter.onNext(Unit)
-            }
-        }
+        return toolbar.navigationClicks()
+//        return Observable.create<Unit> { emitter ->
+//            emitter.setCancellable { toolbar?.setNavigationOnClickListener(null) }
+//            toolbar?.setNavigationOnClickListener {
+//                emitter.onNext(Unit)
+//            }
+//        }
     }
 
     private fun toolbarClicks(): Observable<Int> {

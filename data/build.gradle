@@ -1,24 +1,24 @@
-buildscript {
-	ext.kotlin_version = '1.1.2-eap-69'
-	repositories {
-		jcenter()
-		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
-	}
-	dependencies {
-		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$ver.kotlin"
-	}
-}
+//buildscript {
+//	ext.kotlin_version = '1.1.2-eap-69'
+//	repositories {
+//		jcenter()
+//		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
+//	}
+//	dependencies {
+//		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$ver.kotlin"
+//	}
+//}
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-	compileSdkVersion 25
-	buildToolsVersion "25.0.2"
+	compileSdkVersion Integer.parseInt(ver.compileSdk)
+	buildToolsVersion ver.buildTools
 
 	defaultConfig {
-		minSdkVersion 15
-		targetSdkVersion 25
+		minSdkVersion Integer.parseInt(ver.minSdk)
+		targetSdkVersion Integer.parseInt(ver.targetSdk)
 		versionCode 1
 		versionName "1.0"
 
@@ -73,7 +73,4 @@ dependencies {
 	compile "com.android.support:appcompat-v7:$ver.support"
 	testCompile "junit:junit:$ver.junit"
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$ver.kotlin"
-}
-repositories {
-	mavenCentral()
 }

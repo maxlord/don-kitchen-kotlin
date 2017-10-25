@@ -1,0 +1,12 @@
+apply plugin: "kotlin"
+
+dependencies {
+    compile "io.reactivex.rxjava2:rxjava:$ver.rxJava"
+    compile "com.squareup.retrofit2:retrofit:$ver.retrofit"
+    compile "com.google.code.gson:gson:$ver.gson"
+    compile "uk.co.jemos.podam:podam:$ver.podam"
+    compile "org.unitils:unitils-core:$ver.unitils"
+    compile "org.mockito:mockito-core:$ver.mockito"
+    compile "com.nhaarman:mockito-kotlin:$ver.mockitoKotlin"
+    compile "org.hamcrest:hamcrest-library:$ver.hamcrest"
+}
