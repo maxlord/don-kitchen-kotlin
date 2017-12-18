@@ -2,14 +2,40 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<group android:checkableBehavior="single">
-		<item
-			android:id="@+id/nav_home"
-			android:icon="@drawable/ic_menu_home"
-			android:title="@string/drawer_menu_item_home" />
 
 		<item
-			android:id="@+id/nav_exit"
-			android:icon="@drawable/ic_menu_exit"
-			android:title="@string/drawer_menu_item_exit" />
+			android:id="@+id/nav_categories"
+			android:icon="@drawable/ic_menu_home"
+			android:title="@string/drawer_menu_item_categories" />
+
+		<item
+			android:id="@+id/nav_favorites"
+			android:icon="@drawable/ic_menu_favorites"
+			android:title="@string/drawer_menu_item_favorites" />
+
+		<item
+			android:id="@+id/nav_popular_receipts"
+			android:icon="@drawable/ic_menu_popular"
+			android:title="@string/drawer_menu_item_popular_receipts" />
+
+		<item
+			android:id="@+id/nav_search"
+			android:icon="@drawable/ic_menu_search"
+			android:title="@string/drawer_menu_item_search" />
+
+		<item
+			android:id="@+id/nav_random_receipt"
+			android:icon="@drawable/ic_menu_today"
+			android:title="@string/drawer_menu_item_random_receipt" />
+
+		<item
+			android:id="@+id/nav_mark_app"
+			android:icon="@drawable/ic_menu_mark"
+			android:title="@string/drawer_menu_item_mark" />
+
+		<!--<item-->
+			<!--android:id="@+id/nav_exit"-->
+			<!--android:icon="@drawable/ic_menu_exit"-->
+			<!--android:title="@string/drawer_menu_item_exit" />-->
 	</group>
 </menu>

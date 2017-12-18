@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
-import kotlinx.android.synthetic.main.activity_main_no_action_bar.*
+import com.google.firebase.analytics.FirebaseAnalytics
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.app.DonKitchenApplication
+import javax.inject.Inject
 
 
 /**
@@ -21,6 +22,8 @@ abstract class BaseNoActionBarActivity: MvpAppCompatActivity() {
     fun component(): ActivitySubComponent {
         return component
     }
+
+    @Inject lateinit var analytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +50,6 @@ abstract class BaseNoActionBarActivity: MvpAppCompatActivity() {
         } else {
             fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG)
         }
-
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     protected open fun initControls() {
@@ -85,10 +84,4 @@ abstract class BaseNoActionBarActivity: MvpAppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // освобождаем ресурсы хелпера БД
-        //		OpenHelperManager.releaseHelper();
-    }
 }

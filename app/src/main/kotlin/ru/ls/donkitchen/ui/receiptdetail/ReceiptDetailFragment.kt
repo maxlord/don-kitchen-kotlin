@@ -13,7 +13,7 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_receipt_detail.*
 import kotlinx.android.synthetic.main.toolbar.*
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.activity.base.BaseActivity
+import ru.ls.donkitchen.activity.base.BaseNoActionBarActivity
 import ru.ls.donkitchen.analytics.ANALYTICS_ACTION_SHOW_REVIEWS
 import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.ui.receiptdetail.info.ReceiptDetailInfoFragment
@@ -32,8 +32,8 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
 
     @ProvidePresenter
     fun providePresenter(): ReceiptDetailPresenter {
-        val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
-        val receiptName = arguments.getString(ReceiptDetail.EXT_IN_RECEIPT_NAME)
+        val receiptId = arguments?.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0) ?: 0
+        val receiptName = arguments?.getString(ReceiptDetail.EXT_IN_RECEIPT_NAME) ?: ""
         return ReceiptDetailPresenter(receiptId, receiptName,
                 (activity as ReceiptDetail).componentCustom().plus(ReceiptDetailModule()))
     }
@@ -49,7 +49,7 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
                 return null
             }
 
-            override fun getPageTitle(position: Int): CharSequence {
+            override fun getPageTitle(position: Int): CharSequence? {
                 when (position) {
                     0 -> return resources.getString(R.string.activity_receipt_detail_tab_info)
 
@@ -73,7 +73,7 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
             }
             override fun onPageSelected(position: Int) {
                 if (position == 1) {
-                    (activity as BaseActivity).analytics.logEvent(ANALYTICS_ACTION_SHOW_REVIEWS, Bundle(2).apply {
+                    (activity as BaseNoActionBarActivity).analytics.logEvent(ANALYTICS_ACTION_SHOW_REVIEWS, Bundle(2).apply {
                         putString(FirebaseAnalytics.Param.ITEM_ID, "$receiptId")
                         putString(FirebaseAnalytics.Param.ITEM_NAME, receiptName)
                     })
@@ -93,7 +93,9 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
         ReviewDialogFragment.newInstance(receiptId).show(fragmentManager, "review_dialog")
     }
 
-    override fun leaveScreen() = activity.finish()
+    override fun leaveScreen() {
+        activity?.finish()
+    }
 
     override fun getLayoutRes(): Int {
         return R.layout.fragment_receipt_detail

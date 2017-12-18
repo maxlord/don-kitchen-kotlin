@@ -26,7 +26,7 @@ class CategoryListFragment : BaseFragment(), CategoryListView {
     override fun initControls(v: View?) {
         list.setHasFixedSize(true)
 
-        adapter = CategoryAdapter(activity, object : CategoryAdapter.Callback {
+        adapter = CategoryAdapter(activity!!, object : CategoryAdapter.Callback {
             override fun onItemClick(item: CategoryViewItem) {
                 presenter.onCategoryClick(item.id, item.name)
             }
@@ -78,5 +78,7 @@ class CategoryListFragment : BaseFragment(), CategoryListView {
 
             return fragment
         }
+
     }
+
 }

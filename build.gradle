@@ -8,7 +8,6 @@ buildscript {
 		jcenter()
 		maven { url 'https://maven.fabric.io/public' }
 		maven { url 'https://dl.bintray.com/drummer-aidan/maven' }
-//		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
 	}
 	dependencies {
 		classpath "com.android.tools.build:gradle:$ver.androidGradlePlugin"
@@ -37,7 +36,7 @@ allprojects {
 		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
 	}
 
-	tasks.withType(JavaCompile) { 
+	tasks.withType(JavaCompile) {
 	    sourceCompatibility = JavaVersion.VERSION_1_8
 	    targetCompatibility = JavaVersion.VERSION_1_8
 	}

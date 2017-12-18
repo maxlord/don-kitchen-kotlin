@@ -12,5 +12,5 @@
 	<dimen name="preview_width">80dp</dimen>
 	<dimen name="preview_height">60dp</dimen>
 
-	<dimen name="nav_header_height">80dp</dimen>
+	<dimen name="nav_header_height">140dp</dimen>
 </resources>

@@ -38,7 +38,7 @@ abstract class BaseDialogFragment: MvpAppCompatDialogFragment() {
      */
     @LayoutRes protected abstract fun getLayoutRes(): Int
 
-    override fun onViewCreated(v: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         super.onViewCreated(v, savedInstanceState)
 
         initControls(v)

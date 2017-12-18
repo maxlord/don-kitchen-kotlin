@@ -6,7 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.NotificationCompat
+import android.support.v4.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.j256.ormlite.android.apptools.OpenHelperManager
@@ -139,7 +139,7 @@ class ReceiptFirebaseMessagingService : FirebaseMessagingService() {
         notificationIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         val intent = PendingIntent.getActivity(application, REQUEST_INTENT_NOTIFICATION, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val notification = NotificationCompat.Builder(application)
+        val notification = NotificationCompat.Builder(application, "channelId")
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText("Новый рецепт '${receipt.name}'")

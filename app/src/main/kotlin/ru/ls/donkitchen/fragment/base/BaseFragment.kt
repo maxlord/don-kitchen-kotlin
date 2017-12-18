@@ -39,7 +39,7 @@ abstract class BaseFragment: MvpAppCompatFragment() {
         }
 
         if (toolbar != null) {
-            toolbar.title = activity.title
+            toolbar.title = activity?.title
         }
 
         loadData()
@@ -57,10 +57,10 @@ abstract class BaseFragment: MvpAppCompatFragment() {
 
     override fun onResume() {
         super.onResume()
-        navigatorHolder.setNavigator(ActivityNavigator(activity))
+        navigatorHolder.setNavigator(ActivityNavigator(activity!!))
     }
 
-    override fun onViewCreated(v: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         super.onViewCreated(v, savedInstanceState)
 
         initControls(v)

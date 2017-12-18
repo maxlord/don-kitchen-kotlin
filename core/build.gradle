@@ -1,14 +1,3 @@
-//buildscript {
-//	ext.kotlin_version = '1.1.2-eap-69'
-//	repositories {
-//		jcenter()
-//		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
-//	}
-//	dependencies {
-//		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$ver.kotlin"
-//	}
-//}
-//
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
@@ -17,10 +6,6 @@ dependencies {
 	compile "org.jetbrains.kotlin:kotlin-stdlib:$ver.kotlin"
 	compile "io.reactivex.rxjava2:rxjava:$ver.rxJava"
 	compile "io.reactivex.rxjava2:rxkotlin:$ver.rxKotlin"
-}
-
-repositories {
-	jcenter()
 }
 
 sourceSets {

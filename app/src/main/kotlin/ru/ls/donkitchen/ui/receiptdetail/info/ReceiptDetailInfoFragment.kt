@@ -20,7 +20,7 @@ class ReceiptDetailInfoFragment : BaseFragment(), ReceiptDetailInfoView {
 
     @ProvidePresenter
     fun providePresenter(): ReceiptDetailInfoPresenter {
-        val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
+        val receiptId = arguments?.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0) ?: 0
 
         return ReceiptDetailInfoPresenter(receiptId,
                 (activity as ReceiptDetail).componentCustom().plus(ReceiptDetailModule()))
@@ -76,7 +76,7 @@ class ReceiptDetailInfoFragment : BaseFragment(), ReceiptDetailInfoView {
 
     private fun errorLoadingDialogClicks(): Single<Unit> {
         return Single.create { emitter ->
-            AlertDialog.Builder(activity)
+            AlertDialog.Builder(activity!!)
                     .setTitle(R.string.common_info)
                     .setMessage(R.string.activity_receipt_detail_dialog_error_loading_receipt)
                     .setPositiveButton(R.string.common_ok, { _, _ ->
@@ -89,7 +89,7 @@ class ReceiptDetailInfoFragment : BaseFragment(), ReceiptDetailInfoView {
     }
 
     override fun leaveScreen() {
-        activity.finish()
+        activity?.finish()
     }
 
     override fun getLayoutRes(): Int {

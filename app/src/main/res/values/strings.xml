@@ -21,8 +21,15 @@
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>
 
-	<string name="drawer_menu_item_home">Главная</string>
-	<string name="drawer_menu_item_exit">Выход</string>
+	<string name="drawer_menu_item_categories">Рецепты</string>
+	<string name="drawer_menu_item_favorites">Избранное</string>
+	<string name="drawer_menu_item_popular_receipts">Популярные рецепты</string>
+	<string name="drawer_menu_item_search">Поиск</string>
+	<string name="drawer_menu_item_random_receipt">Случайный рецепт</string>
+	<!--<string name="drawer_menu_item_home">Социальные сети</string>-->
+	<!--<string name="drawer_menu_item_home">Поделиться</string>-->
+	<string name="drawer_menu_item_mark">Оценить приложение</string>
+	<!--<string name="drawer_menu_item_exit">Выход</string>-->
 
 	<string name="common_warning">Внимание</string>
 	<string name="common_info">Информация</string>

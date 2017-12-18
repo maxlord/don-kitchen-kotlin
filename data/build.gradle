@@ -1,16 +1,6 @@
-//buildscript {
-//	ext.kotlin_version = '1.1.2-eap-69'
-//	repositories {
-//		jcenter()
-//		maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
-//	}
-//	dependencies {
-//		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$ver.kotlin"
-//	}
-//}
-
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
 	compileSdkVersion Integer.parseInt(ver.compileSdk)
@@ -45,6 +35,9 @@ dependencies {
 	})
 	compile project(path: ":core")
 
+	compile "android.arch.persistence.room:runtime:$ver.arch"
+	kapt "android.arch.persistence.room:compiler:$ver.arch"
+
 	// OrmLite
 	compile 'com.j256.ormlite:ormlite-core:5.0'
 	compile 'com.j256.ormlite:ormlite-android:5.0'
@@ -54,7 +47,7 @@ dependencies {
 	// Rx
 //	compile 'io.reactivex.rxjava2:rxjava:2.0.8'
 	compile "io.reactivex.rxjava2:rxkotlin:$ver.rxKotlin"
-	compile "io.reactivex.rxjava2:rxandroid:$ver.rxKotlin"
+	compile "io.reactivex.rxjava2:rxandroid:$ver.rxAndroid"
 //	compile 'com.trello:rxlifecycle:0.8.0'
 //	compile 'com.trello:rxlifecycle-components:0.8.0'
 //	compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'

@@ -1,7 +1,7 @@
 package ru.ls.donkitchen.ui.receiptdetail
 
 import android.os.Bundle
-import ru.ls.donkitchen.activity.base.BaseActivity
+import ru.ls.donkitchen.activity.base.BaseNoActionBarActivity
 import ru.ls.donkitchen.app.DonKitchenApplication
 
 /**
@@ -10,7 +10,7 @@ import ru.ls.donkitchen.app.DonKitchenApplication
  * @author Lord (Kuleshov M.V.)
  * @since 17.10.16
  */
-class ReceiptDetail: BaseActivity() {
+class ReceiptDetail: BaseNoActionBarActivity() {
     companion object {
         const val EXT_IN_RECEIPT_ID = "receipt_id"
         const val EXT_IN_RECEIPT_NAME = "receipt_name"

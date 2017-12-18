@@ -19,7 +19,7 @@ class ReviewDialogFragment : BaseDialogFragment(), ReviewView {
 
     @ProvidePresenter
     fun providePresenter(): ReviewPresenter {
-        val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
+        val receiptId = arguments?.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0) ?: 0
 
         return ReviewPresenter(receiptId,
                 (activity as ReceiptDetail).componentCustom().plus(ReceiptDetailModule()))
@@ -48,7 +48,7 @@ class ReviewDialogFragment : BaseDialogFragment(), ReviewView {
     }
 
     override fun displayReviewSuccessMessage() {
-        AlertDialog.Builder(activity)
+        AlertDialog.Builder(activity!!)
                 .setTitle(R.string.activity_receipt_detail_dialog_title_review_added_success)
                 .setMessage(R.string.activity_receipt_detail_dialog_review_added_success)
                 .setPositiveButton(R.string.common_ok, null)

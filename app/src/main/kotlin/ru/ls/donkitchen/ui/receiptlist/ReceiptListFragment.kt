@@ -12,11 +12,8 @@ import kotlinx.android.synthetic.main.fragment_receipt_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.appcompat.v7.navigationIconResource
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.activity.base.BaseActivity
-import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetail
-import ru.ls.donkitchen.app.DonKitchenApplication
+import ru.ls.donkitchen.activity.base.BaseNoActionBarActivity
 import ru.ls.donkitchen.fragment.base.BaseFragment
-import ru.ls.donkitchen.navigateActivity
 import timber.log.Timber
 
 class ReceiptListFragment : BaseFragment(), ReceiptListView {
@@ -25,11 +22,11 @@ class ReceiptListFragment : BaseFragment(), ReceiptListView {
 
     @ProvidePresenter
     fun providePresenter(): ReceiptListPresenter {
-        val categoryId = arguments.getInt(ReceiptList.EXT_IN_CATEGORY_ID, 0)
-        val categoryName = arguments.getString(ReceiptList.EXT_IN_CATEGORY_NAME)
+        val categoryId = arguments?.getInt(ReceiptList.EXT_IN_CATEGORY_ID, 0) ?: 0
+        val categoryName = arguments?.getString(ReceiptList.EXT_IN_CATEGORY_NAME) ?: ""
 
         return ReceiptListPresenter(categoryId, categoryName,
-                (activity as BaseActivity).component().plus(ReceiptListModule()))
+                (activity as BaseNoActionBarActivity).component().plus(ReceiptListModule()))
     }
 
     override fun getLayoutRes(): Int {
@@ -44,7 +41,7 @@ class ReceiptListFragment : BaseFragment(), ReceiptListView {
         list.recycledViewPool = recycledViewPool
         list.setHasFixedSize(true)
 
-        adapter = ReceiptAdapter(activity, object : ReceiptAdapter.Callback {
+        adapter = ReceiptAdapter(activity!!, object : ReceiptAdapter.Callback {
             override fun onItemClick(item: ReceiptViewItem) {
                 presenter.onReceiptClick(item.id, item.name)
             }
@@ -101,7 +98,7 @@ class ReceiptListFragment : BaseFragment(), ReceiptListView {
     }
 
     override fun leaveScreen() {
-        activity.onBackPressed()
+        activity?.onBackPressed()
     }
 
     companion object {

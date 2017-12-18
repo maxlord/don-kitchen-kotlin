@@ -19,7 +19,7 @@ class ReceiptDetailReviewsFragment : BaseFragment(), ReceiptReviewsView {
 
     @ProvidePresenter
     fun providePresenter(): ReceiptReviewsPresenter {
-        val receiptId = arguments.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0)
+        val receiptId = arguments?.getInt(ReceiptDetail.EXT_IN_RECEIPT_ID, 0) ?: 0
 
         return ReceiptReviewsPresenter(receiptId,
                 (activity as ReceiptDetail).componentCustom().plus(ReceiptDetailModule()))
@@ -60,7 +60,7 @@ class ReceiptDetailReviewsFragment : BaseFragment(), ReceiptReviewsView {
     override fun initControls(v: View?) {
         setHasOptionsMenu(true)
         list.setHasFixedSize(true)
-        adapter = ReviewAdapter(activity)
+        adapter = ReviewAdapter(activity!!)
         list.layoutManager = LinearLayoutManager(activity)
         list.adapter = adapter
     }

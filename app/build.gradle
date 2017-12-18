@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 // apply plugin: 'com.getkeepsafe.dexcount'
+apply plugin: 'kotlin-kapt'
 
 android {
 	compileSdkVersion Integer.parseInt(ver.compileSdk)
@@ -22,8 +23,6 @@ android {
 		buildConfigField "int", "DATABASE_VERSION", "1";
 		buildConfigField "String", "API_URL", "\"http://dk.lord-services.ru/api/v1/\""
 		buildConfigField "String", "BUILD_TIME", "\"${buildTime()}\""
-		buildConfigField "String", "INSTAGRAM_PKG_ID", "\"com.instagram.android\""
-		buildConfigField "String", "FILE_PROVIDER_AUTHORITY", "\"ru.ls.donkitchen.fileprovider\""
 	}
 
 	signingConfigs {
@@ -69,92 +68,81 @@ android {
 }
 
 dependencies {
-	compile fileTree(dir: 'libs', include: ['*.jar'])
-	androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+	androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
 		exclude group: 'com.android.support', module: 'support-annotations'
 	})
-	testCompile "junit:junit:$ver.junit"
+	testImplementation "junit:junit:$ver.junit"
 
-	compile project(":core")
-	compile project(":data")
-	compile project(":domain")
+	implementation project(":core")
+	implementation project(":data")
+	implementation project(":domain")
 
-	compile "com.android.support:multidex:$ver.multiDex"
-	compile supportDependencies.appCompat
-	compile supportDependencies.supportV4
-	compile supportDependencies.supportV13
-	compile supportDependencies.recyclerView
-	compile supportDependencies.cardView
-	compile supportDependencies.design
+	implementation "com.android.support:multidex:$ver.multiDex"
+	implementation supportDependencies.appCompat
+	implementation supportDependencies.supportV4
+	implementation supportDependencies.supportV13
+	implementation supportDependencies.recyclerView
+	implementation supportDependencies.cardView
+	implementation supportDependencies.design
 
-	compile googlePlayServices.base
-//	compile googlePlayServices.location
-//	compile googlePlayServices.maps
-	compile googlePlayServices.fcm
-	compile 'com.google.firebase:firebase-core:10.2.1'
+	implementation googlePlayServices.base
+	implementation googlePlayServices.fcm
+	implementation "com.google.firebase:firebase-core:$ver.playServices"
 
-	compile "org.jetbrains.kotlin:kotlin-stdlib:$ver.kotlin"
-	compile "com.google.dagger:dagger:$ver.dagger"
+	implementation "org.jetbrains.kotlin:kotlin-stdlib:$ver.kotlin"
+	implementation "com.google.dagger:dagger:$ver.dagger"
 	kapt "com.google.dagger:dagger-compiler:$ver.dagger"
 //	provided 'org.glassfish:javax.annotation:10.0-b28'
 //	 javax.annotation:javax.annotation-api:1.2
-	compile "com.jakewharton.timber:timber:$ver.timber"
+	implementation "com.jakewharton.timber:timber:$ver.timber"
 
 	// Rx
-	compile "io.reactivex.rxjava2:rxkotlin:$ver.rxKotlin"
-	compile "io.reactivex.rxjava2:rxandroid:$ver.rxAndroid"
-	compile 'com.trello:rxlifecycle:0.8.0'
-	compile 'com.trello:rxlifecycle-components:0.8.0'
-	compile "com.jakewharton.rxbinding2:rxbinding-kotlin:$ver.rxBinding"
-	compile "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$ver.rxBinding"
+	implementation "io.reactivex.rxjava2:rxkotlin:$ver.rxKotlin"
+	implementation "io.reactivex.rxjava2:rxandroid:$ver.rxAndroid"
+	implementation 'com.trello:rxlifecycle:0.8.0'
+	implementation 'com.trello:rxlifecycle-components:0.8.0'
+	implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$ver.rxBinding"
+	implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$ver.rxBinding"
 
 	// Retrofit
-	compile "com.squareup.retrofit2:retrofit:$ver.retrofit"
-	compile "com.squareup.retrofit2:converter-gson:$ver.retrofit"
-	compile "com.squareup.retrofit2:adapter-rxjava2:$ver.retrofit"
+	implementation "com.squareup.retrofit2:retrofit:$ver.retrofit"
+	implementation "com.squareup.retrofit2:converter-gson:$ver.retrofit"
+	implementation "com.squareup.retrofit2:adapter-rxjava2:$ver.retrofit"
 	// OkHttp
-	compile "com.squareup.okhttp3:okhttp:$ver.okHttp"
-	compile "com.squareup.okhttp3:logging-interceptor:$ver.okHttpInterceptor"
+	implementation "com.squareup.okhttp3:okhttp:$ver.okHttp"
+	implementation "com.squareup.okhttp3:logging-interceptor:$ver.okHttpInterceptor"
 
 	// Anko
-	compile 'org.jetbrains.anko:anko-sdk15:0.9' // sdk19, sdk21, sdk23 are also available
-	compile 'org.jetbrains.anko:anko-appcompat-v7:0.9' // For appcompat-v7 bindings
+	implementation 'org.jetbrains.anko:anko-sdk15:0.9' // sdk19, sdk21, sdk23 are also available
+	implementation 'org.jetbrains.anko:anko-appcompat-v7:0.9' // For appcompat-v7 bindings
 
-	compile("com.crashlytics.sdk.android:crashlytics:$ver.crashlytics@aar") {
+	implementation("com.crashlytics.sdk.android:crashlytics:$ver.crashlytics@aar") {
 		transitive = true
 	}
 
-	compile 'com.github.rey5137:material:1.2.2'
+	implementation 'com.github.rey5137:material:1.2.2'
 
 	// Glide
-	compile "com.github.bumptech.glide:glide:$ver.glide"
+	implementation "com.github.bumptech.glide:glide:$ver.glide"
 
-	compile "com.arello-mobile:moxy:$ver.moxy"
+	implementation "com.arello-mobile:moxy:$ver.moxy"
 	kapt "com.arello-mobile:moxy-compiler:$ver.moxy"
-	compile "com.arello-mobile:moxy-app-compat:$ver.moxy"
+	implementation "com.arello-mobile:moxy-app-compat:$ver.moxy"
 
-	compile "ru.terrakok.cicerone:cicerone:$ver.cicerone"
-	compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$ver.kotlin"
-	compile 'jp.wasabeef:glide-transformations:2.0.2'
-	testCompile 'org.mockito:mockito-core:2.2.6'
-}
-
-kapt {
-	generateStubs = true
+	implementation "ru.terrakok.cicerone:cicerone:$ver.cicerone"
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$ver.kotlin"
+	implementation 'jp.wasabeef:glide-transformations:2.0.2'
+	testImplementation 'org.mockito:mockito-core:2.2.29'
 }
 
 apply from: '../publishRelease.gradle'
-
 
 static def buildTime() {
 	def df = new SimpleDateFormat("dd.MM.yyyy")
 	df.setTimeZone(TimeZone.getTimeZone("UTC"))
 
 	return df.format(new Date())
-}
-
-repositories {
-	mavenCentral()
 }
 
 apply plugin: 'com.google.gms.google-services'
