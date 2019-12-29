@@ -68,7 +68,7 @@
 		<service android:name=".fcm.FcmRegistrationIntentService"/>
 
 		<provider
-			android:name="android.support.v4.content.FileProvider"
+			android:name="androidx.core.content.FileProvider"
 			android:authorities="ru.ls.donkitchen.fileprovider"
 			android:exported="false"
 			android:grantUriPermissions="true">

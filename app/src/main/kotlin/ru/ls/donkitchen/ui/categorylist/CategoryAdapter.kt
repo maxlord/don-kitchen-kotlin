@@ -1,8 +1,8 @@
 package ru.ls.donkitchen.ui.categorylist
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +18,12 @@ import ru.ls.donkitchen.R
  * @author Lord (Kuleshov M.V.)
  * @since 16.10.16
  */
-class CategoryAdapter(private val context: Context, private val callback: Callback) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter(private val context: Context, private val callback: Callback) : androidx.recyclerview.widget.RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
     interface Callback {
         fun onItemClick(item: CategoryViewItem)
     }
 
-    class ViewHolder(view: View, adapter: CategoryAdapter) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, adapter: CategoryAdapter) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         init {
             view.onClick {
                 adapter.callback.onItemClick(it?.tag as CategoryViewItem)
@@ -73,7 +73,7 @@ class CategoryAdapter(private val context: Context, private val callback: Callba
                 .centerCrop()
                 .into(holder.itemView.photo)
 
-        val lp = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
+        val lp = holder.itemView.layoutParams as androidx.recyclerview.widget.StaggeredGridLayoutManager.LayoutParams
         lp.isFullSpan = position == itemCount - 1 && (position + 1) % 2 == 1
         holder.itemView.layoutParams = lp
     }

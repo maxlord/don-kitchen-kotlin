@@ -2,7 +2,7 @@ package ru.ls.donkitchen.nav
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import com.google.android.material.snackbar.Snackbar
 import android.view.View
 import org.jetbrains.anko.contentView
 import ru.ls.donkitchen.navigate

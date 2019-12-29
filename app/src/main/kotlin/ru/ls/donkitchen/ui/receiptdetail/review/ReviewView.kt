@@ -1,6 +1,6 @@
 package ru.ls.donkitchen.ui.receiptdetail.review
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.arellomobile.mvp.MvpView
 
 interface ReviewView : MvpView {

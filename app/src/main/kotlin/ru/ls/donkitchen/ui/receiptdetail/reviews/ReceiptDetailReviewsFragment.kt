@@ -1,8 +1,8 @@
 package ru.ls.donkitchen.ui.receiptdetail.reviews
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -61,7 +61,8 @@ class ReceiptDetailReviewsFragment : BaseFragment(), ReceiptReviewsView {
         setHasOptionsMenu(true)
         list.setHasFixedSize(true)
         adapter = ReviewAdapter(activity!!)
-        list.layoutManager = LinearLayoutManager(activity)
+        list.layoutManager =
+	        androidx.recyclerview.widget.LinearLayoutManager(activity)
         list.adapter = adapter
     }
 

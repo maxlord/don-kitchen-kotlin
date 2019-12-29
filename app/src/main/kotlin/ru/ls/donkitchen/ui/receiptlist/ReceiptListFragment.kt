@@ -1,9 +1,9 @@
 package ru.ls.donkitchen.ui.receiptlist
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -36,7 +36,7 @@ class ReceiptListFragment : BaseFragment(), ReceiptListView {
     override fun initControls(v: View?) {
         setHasOptionsMenu(true)
 
-        val recycledViewPool = RecyclerView.RecycledViewPool()
+        val recycledViewPool = androidx.recyclerview.widget.RecyclerView.RecycledViewPool()
         recycledViewPool.setMaxRecycledViews(1, 10)
         list.recycledViewPool = recycledViewPool
         list.setHasFixedSize(true)
@@ -46,7 +46,11 @@ class ReceiptListFragment : BaseFragment(), ReceiptListView {
                 presenter.onReceiptClick(item.id, item.name)
             }
         })
-        list.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        list.layoutManager =
+	        androidx.recyclerview.widget.StaggeredGridLayoutManager(
+		        2,
+		        androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
+	        )
         list.adapter = adapter
         toolbar?.navigationIconResource = R.drawable.ic_arrow_back
     }

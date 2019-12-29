@@ -1,7 +1,7 @@
 package ru.ls.donkitchen.activity.base
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -17,7 +17,7 @@ import javax.inject.Inject
  */
 abstract class BaseNoActionBarActivity: MvpAppCompatActivity() {
     val FRAGMENT_TAG = "fragment_main"
-    protected var fragment: Fragment? = null
+    protected var fragment: androidx.fragment.app.Fragment? = null
     private lateinit var component: ActivitySubComponent
     fun component(): ActivitySubComponent {
         return component
@@ -62,7 +62,7 @@ abstract class BaseNoActionBarActivity: MvpAppCompatActivity() {
 
      * @return
      */
-    protected abstract fun loadFragment(): Fragment
+    protected abstract fun loadFragment(): androidx.fragment.app.Fragment
 
     /**
      * Используя этот метод нужно инициализироваь аргументы переданнные в активити, через

@@ -43,7 +43,9 @@ class ReceiptDetailInfoPresenter(private val receiptId: Int,
                         onSuccess = {
                             viewState.hideLoading()
                             receiptName = it.name
-                            renderReceipt(viewItemConverter.convert(it))
+                            val receipt = viewItemConverter.convert(it)
+                            renderReceipt(receipt)
+                            bus.postReceiptEvent(receipt)
                         },
                         onError = {
                             Timber.e(it, "Ошибка при получении информации о рецепте")

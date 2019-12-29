@@ -1,6 +1,6 @@
 package ru.ls.donkitchen.fragment.base
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import dagger.Module
 
 /**
@@ -10,7 +10,7 @@ import dagger.Module
  * @since 11.01.16
  */
 @Module
-class FragmentModule(private val fragment: Fragment) {
+class FragmentModule(private val fragment: androidx.fragment.app.Fragment) {
 //    @Provides
 //    @PerFragment
 //    fun provideValidator(): Validator {

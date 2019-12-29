@@ -3,10 +3,10 @@ package ru.ls.donkitchen.activity.base
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
+import com.google.android.material.navigation.NavigationView
+import androidx.fragment.app.Fragment
+import androidx.core.view.GravityCompat
+import androidx.appcompat.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.MvpAppCompatFragment
@@ -38,7 +38,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), NavigationView.OnNavigatio
     }
 
     val FRAGMENT_TAG = "fragment_main"
-    protected var fragment: Fragment? = null
+    protected var fragment: androidx.fragment.app.Fragment? = null
     private lateinit var component: ActivitySubComponent
     fun component(): ActivitySubComponent {
         return component
@@ -98,7 +98,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), NavigationView.OnNavigatio
 
      * @return
      */
-    protected abstract fun loadFragment(): Fragment
+    protected abstract fun loadFragment(): androidx.fragment.app.Fragment
 
     /**
      * Используя этот метод нужно инициализироваь аргументы переданнные в активити, через

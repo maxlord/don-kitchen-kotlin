@@ -2,10 +2,10 @@ apply plugin: 'java'
 apply plugin: 'kotlin'
 
 dependencies {
-	compile fileTree(dir: 'libs', include: ['*.jar'])
-	compile "org.jetbrains.kotlin:kotlin-stdlib:$ver.kotlin"
-	compile "io.reactivex.rxjava2:rxjava:$ver.rxJava"
-	compile "io.reactivex.rxjava2:rxkotlin:$ver.rxKotlin"
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+	api "org.jetbrains.kotlin:kotlin-stdlib:$ver.kotlin"
+	api "io.reactivex.rxjava2:rxjava:$ver.rxJava"
+	api "io.reactivex.rxjava2:rxkotlin:$ver.rxKotlin"
 }
 
 sourceSets {

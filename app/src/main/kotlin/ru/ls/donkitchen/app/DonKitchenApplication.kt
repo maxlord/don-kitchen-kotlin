@@ -1,6 +1,6 @@
 package ru.ls.donkitchen.app
 
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 
 /**
  * Главный класс приложения

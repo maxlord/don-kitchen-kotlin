@@ -15,4 +15,6 @@ interface ReceiptDetailView: MvpView {
     @StateStrategyType(SkipStrategy::class)
     fun displayNewRatingDialog(receiptId: Int)
 
+    fun displayShareReceipt(receiptContent: String)
+
 }

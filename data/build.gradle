@@ -4,7 +4,6 @@ apply plugin: 'kotlin-kapt'
 
 android {
 	compileSdkVersion Integer.parseInt(ver.compileSdk)
-	buildToolsVersion ver.buildTools
 
 	defaultConfig {
 		minSdkVersion Integer.parseInt(ver.minSdk)
@@ -12,7 +11,7 @@ android {
 		versionCode 1
 		versionName "1.0"
 
-		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
 	}
 	buildTypes {
@@ -29,41 +28,41 @@ android {
 }
 
 dependencies {
-	compile fileTree(dir: 'libs', include: ['*.jar'])
-	androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+	androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
 		exclude group: 'com.android.support', module: 'support-annotations'
 	})
-	compile project(path: ":core")
+	implementation project(path: ":core")
 
-	compile "android.arch.persistence.room:runtime:$ver.arch"
-	kapt "android.arch.persistence.room:compiler:$ver.arch"
+	implementation "androidx.room:room-runtime:2.0.0"
+	kapt "androidx.room:room-compiler:2.0.0"
 
 	// OrmLite
-	compile 'com.j256.ormlite:ormlite-core:5.0'
-	compile 'com.j256.ormlite:ormlite-android:5.0'
-	compile 'org.flywaydb:flyway-core:4.0'
-	compile 'org.sqldroid:sqldroid:1.0.3'
+	implementation 'com.j256.ormlite:ormlite-core:5.0'
+	implementation 'com.j256.ormlite:ormlite-android:5.0'
+	implementation 'org.flywaydb:flyway-core:4.0'
+	implementation 'org.sqldroid:sqldroid:1.0.3'
 
 	// Rx
-//	compile 'io.reactivex.rxjava2:rxjava:2.0.8'
-	compile "io.reactivex.rxjava2:rxkotlin:$ver.rxKotlin"
-	compile "io.reactivex.rxjava2:rxandroid:$ver.rxAndroid"
-//	compile 'com.trello:rxlifecycle:0.8.0'
-//	compile 'com.trello:rxlifecycle-components:0.8.0'
-//	compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
-//	compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:0.4.0'
+//	implementation 'io.reactivex.rxjava2:rxjava:2.0.8'
+	implementation "io.reactivex.rxjava2:rxkotlin:$ver.rxKotlin"
+	implementation "io.reactivex.rxjava2:rxandroid:$ver.rxAndroid"
+//	implementation 'com.trello:rxlifecycle:0.8.0'
+//	implementation 'com.trello:rxlifecycle-components:0.8.0'
+//	implementation 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
+//	implementation 'com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:0.4.0'
 
 	// Retrofit
-	compile "com.squareup.retrofit2:retrofit:$ver.retrofit"
-	compile "com.squareup.retrofit2:converter-gson:$ver.retrofit"
-	compile "com.squareup.retrofit2:adapter-rxjava:$ver.retrofit"
+	implementation "com.squareup.retrofit2:retrofit:$ver.retrofit"
+	implementation "com.squareup.retrofit2:converter-gson:$ver.retrofit"
+	implementation "com.squareup.retrofit2:adapter-rxjava:$ver.retrofit"
 	// OkHttp
-	compile "com.squareup.okhttp3:okhttp:$ver.okHttp"
-	compile "com.squareup.okhttp3:logging-interceptor:$ver.okHttpInterceptor"
+	implementation "com.squareup.okhttp3:okhttp:$ver.okHttp"
+	implementation "com.squareup.okhttp3:logging-interceptor:$ver.okHttpInterceptor"
 
-	compile "com.jakewharton.timber:timber:$ver.timber"
+	implementation "com.jakewharton.timber:timber:$ver.timber"
 
-	compile "com.android.support:appcompat-v7:$ver.support"
-	testCompile "junit:junit:$ver.junit"
-	compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$ver.kotlin"
+	implementation "androidx.appcompat:appcompat:1.0.0"
+	testImplementation "junit:junit:$ver.junit"
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$ver.kotlin"
 }

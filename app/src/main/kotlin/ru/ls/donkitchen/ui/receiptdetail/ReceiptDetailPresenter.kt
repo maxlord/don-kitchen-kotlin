@@ -12,6 +12,7 @@ import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.analytics.ANALYTICS_ACTION_ADD_RATE_MENU
 import ru.ls.donkitchen.domain.receipt.ReceiptInteractor
 import ru.ls.donkitchen.mvp.BasePresenter
+import ru.ls.donkitchen.ui.receiptlist.ReceiptViewItem
 import javax.inject.Inject
 
 @InjectViewState
@@ -24,6 +25,7 @@ class ReceiptDetailPresenter(
     @Inject lateinit var schedulers: SchedulersFactory
     @Inject lateinit var bus: RxBus
     @Inject lateinit var analytics: FirebaseAnalytics
+    private var receipt: ReceiptViewItem? = null
 
     init {
         component.inject(this)
@@ -47,6 +49,16 @@ class ReceiptDetailPresenter(
                     })
                     addReview()
                 })
+        disposables += bus.receiptEvents()
+                .observeOn(schedulers.ui())
+                .subscribeBy(onNext = {
+                    receipt = it
+                })
+    }
+
+    private fun buildReceiptContent(receipt: ReceiptViewItem): String {
+        return "${receipt.name}\n\nИнгредиенты:\n${receipt.ingredients}\n\nРецепт:\n${receipt.receipt}" +
+                "\n${BuildConfig.GOOGLE_PLAY_APP_URL}${BuildConfig.APPLICATION_ID}"
     }
 
     fun upClicks(observable: Observable<Unit>) {
@@ -73,6 +85,11 @@ class ReceiptDetailPresenter(
     }
 
     private fun shareReceipt() {
+        receipt?.let {
+            val receiptContent = buildReceiptContent(it)
+            viewState.displayShareReceipt(receiptContent)
+        }
+
 //        var intent = activity.packageManager.getLaunchIntentForPackage(BuildConfig.INSTAGRAM_PKG_ID)
 //        if (intent != null) {
 //            var imageUri: Uri? = null

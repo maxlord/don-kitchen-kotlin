@@ -1,8 +1,8 @@
 package ru.ls.donkitchen.ui.receiptlist
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +19,12 @@ import java.util.*
  * @author Lord (Kuleshov M.V.)
  * @since 17.10.16
  */
-class ReceiptAdapter(private val context: Context, private val callback: Callback) : RecyclerView.Adapter<ReceiptAdapter.ViewHolder>() {
+class ReceiptAdapter(private val context: Context, private val callback: Callback) : androidx.recyclerview.widget.RecyclerView.Adapter<ReceiptAdapter.ViewHolder>() {
     interface Callback {
         fun onItemClick(item: ReceiptViewItem)
     }
 
-    class ViewHolder(view: View, adapter: ReceiptAdapter) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, adapter: ReceiptAdapter) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         init {
             view.onClick {
                 adapter.callback.onItemClick(view.tag as ReceiptViewItem)
@@ -75,7 +75,7 @@ class ReceiptAdapter(private val context: Context, private val callback: Callbac
         holder.itemView.views!!.text = "${item.viewsCount}"
         holder.itemView.rating!!.rating = item.rating.toFloat()
 
-        val lp = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
+        val lp = holder.itemView.layoutParams as androidx.recyclerview.widget.StaggeredGridLayoutManager.LayoutParams
         lp.isFullSpan = position == itemCount - 1 && (position + 1) % 2 == 1
         holder.itemView.layoutParams = lp
     }

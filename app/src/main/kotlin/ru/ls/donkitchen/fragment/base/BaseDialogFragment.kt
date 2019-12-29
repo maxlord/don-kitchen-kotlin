@@ -2,7 +2,7 @@ package ru.ls.donkitchen.fragment.base
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.annotation.LayoutRes
+import androidx.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

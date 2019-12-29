@@ -1,7 +1,7 @@
 package ru.ls.donkitchen.data.db
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import ru.ls.donkitchen.data.db.entity.Category
 
 @Database(entities = arrayOf(Category::class), version = 1)

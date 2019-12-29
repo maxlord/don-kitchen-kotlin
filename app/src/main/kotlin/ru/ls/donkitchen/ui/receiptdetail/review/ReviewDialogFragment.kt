@@ -1,8 +1,8 @@
 package ru.ls.donkitchen.ui.receiptdetail.review
 
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.v7.app.AlertDialog
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.clicks

@@ -1,13 +1,14 @@
 package ru.ls.donkitchen.ui.categorylist
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_category_list.*
 import ru.ls.donkitchen.R
+import ru.ls.donkitchen.R.id.*
 import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.fragment.base.BaseFragment
 
@@ -31,7 +32,11 @@ class CategoryListFragment : BaseFragment(), CategoryListView {
                 presenter.onCategoryClick(item.id, item.name)
             }
         })
-        list.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        list.layoutManager =
+	        androidx.recyclerview.widget.StaggeredGridLayoutManager(
+		        2,
+		        androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
+	        )
         list.adapter = adapter
     }
 

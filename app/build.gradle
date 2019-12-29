@@ -9,20 +9,20 @@ apply plugin: 'kotlin-kapt'
 
 android {
 	compileSdkVersion Integer.parseInt(ver.compileSdk)
-	buildToolsVersion ver.buildTools
 
 	defaultConfig {
 		minSdkVersion Integer.parseInt(ver.minSdk)
 		targetSdkVersion Integer.parseInt(ver.targetSdk)
 
 		applicationId "ru.ls.donkitchen"
-		versionCode 1501
-		versionName "1.5.1"
+		versionCode 1600
+		versionName "1.6.0"
 		multiDexEnabled true
 
 		buildConfigField "int", "DATABASE_VERSION", "1";
 		buildConfigField "String", "API_URL", "\"http://dk.lord-services.ru/api/v1/\""
 		buildConfigField "String", "BUILD_TIME", "\"${buildTime()}\""
+		buildConfigField "String", "GOOGLE_PLAY_APP_URL", "\"https://play.google.com/store/apps/details?id=\""
 	}
 
 	signingConfigs {
@@ -69,7 +69,7 @@ android {
 
 dependencies {
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
-	androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+	androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
 		exclude group: 'com.android.support', module: 'support-annotations'
 	})
 	testImplementation "junit:junit:$ver.junit"
@@ -78,7 +78,7 @@ dependencies {
 	implementation project(":data")
 	implementation project(":domain")
 
-	implementation "com.android.support:multidex:$ver.multiDex"
+	implementation "androidx.multidex:multidex:2.0.0"
 	implementation supportDependencies.appCompat
 	implementation supportDependencies.supportV4
 	implementation supportDependencies.supportV13
@@ -115,7 +115,7 @@ dependencies {
 
 	// Anko
 	implementation 'org.jetbrains.anko:anko-sdk15:0.9' // sdk19, sdk21, sdk23 are also available
-	implementation 'org.jetbrains.anko:anko-appcompat-v7:0.9' // For appcompat-v7 bindings
+	implementation 'org.jetbrains.anko:anko-appcompat-v7:0.10.7' // For appcompat-v7 bindings
 
 	implementation("com.crashlytics.sdk.android:crashlytics:$ver.crashlytics@aar") {
 		transitive = true
@@ -131,12 +131,12 @@ dependencies {
 	implementation "com.arello-mobile:moxy-app-compat:$ver.moxy"
 
 	implementation "ru.terrakok.cicerone:cicerone:$ver.cicerone"
-	implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$ver.kotlin"
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$ver.kotlin"
 	implementation 'jp.wasabeef:glide-transformations:2.0.2'
-	testImplementation 'org.mockito:mockito-core:2.2.29'
+	testImplementation 'org.mockito:mockito-core:2.23.0'
 }
 
-apply from: '../publishRelease.gradle'
+//apply from: '../publishRelease.gradle'
 
 static def buildTime() {
 	def df = new SimpleDateFormat("dd.MM.yyyy")

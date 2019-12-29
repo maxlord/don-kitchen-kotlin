@@ -1,8 +1,9 @@
 package ru.ls.donkitchen.ui.receiptdetail
 
+import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import android.view.View
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -19,6 +20,7 @@ import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.ui.receiptdetail.info.ReceiptDetailInfoFragment
 import ru.ls.donkitchen.ui.receiptdetail.review.ReviewDialogFragment
 import ru.ls.donkitchen.ui.receiptdetail.reviews.ReceiptDetailReviewsFragment
+import timber.log.Timber
 
 /**
  * Просмотр рецепта
@@ -39,7 +41,7 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
     }
 
     override fun initPager(receiptId: Int, receiptName: String) {
-        pager.adapter = object : FragmentPagerAdapter(fragmentManager) {
+        pager.adapter = object : androidx.fragment.app.FragmentPagerAdapter(fragmentManager) {
             override fun getItem(position: Int): MvpAppCompatFragment? {
                 when (position) {
                     0 -> return ReceiptDetailInfoFragment.newInstance(receiptId)
@@ -63,7 +65,7 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
                 return 2
             }
         }
-        pager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
+        pager.addOnPageChangeListener(object: androidx.viewpager.widget.ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
 
             }
@@ -102,8 +104,6 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
     }
 
     override fun initControls(v: View?) {
-        super.initControls(v)
-
         toolbar?.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar?.inflateMenu(R.menu.menu_receipt_detail)
     }
@@ -115,12 +115,6 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
 
     private fun upClicks(): Observable<Unit> {
         return toolbar.navigationClicks()
-//        return Observable.create<Unit> { emitter ->
-//            emitter.setCancellable { toolbar?.setNavigationOnClickListener(null) }
-//            toolbar?.setNavigationOnClickListener {
-//                emitter.onNext(Unit)
-//            }
-//        }
     }
 
     private fun toolbarClicks(): Observable<Int> {
@@ -131,6 +125,19 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
                 true
             }
         }
+    }
+
+    override fun displayShareReceipt(receiptContent: String) {
+        val intent = buildShareIntent(receiptContent)
+        startActivity(Intent.createChooser(intent, "Отправить рецепт"))
+    }
+
+    private fun buildShareIntent(receiptContent: String): Intent {
+        Timber.d("receiptContent: $receiptContent")
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_TEXT, receiptContent)
+        return shareIntent
     }
 
     companion object {
