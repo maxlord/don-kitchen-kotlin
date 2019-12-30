@@ -3,19 +3,20 @@ package ru.ls.donkitchen.ui.receiptdetail.review
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.RxRatingBar
 import com.jakewharton.rxbinding2.widget.textChanges
 import kotlinx.android.synthetic.main.dialog_new_review.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.fragment.base.BaseDialogFragment
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetail
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailModule
 
 class ReviewDialogFragment : BaseDialogFragment(), ReviewView {
-    @InjectPresenter lateinit var presenter: ReviewPresenter
+    @InjectPresenter
+    lateinit var presenter: ReviewPresenter
 
     @ProvidePresenter
     fun providePresenter(): ReviewPresenter {
@@ -36,7 +37,7 @@ class ReviewDialogFragment : BaseDialogFragment(), ReviewView {
     }
 
     override fun showTitle(@StringRes titleId: Int) {
-        dialog.setTitle(titleId)
+        dialog?.setTitle(titleId)
     }
 
     override fun showRating(ratingValue: Float) {

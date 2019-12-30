@@ -1,14 +1,14 @@
 package ru.ls.donkitchen.ui.splash
 
-import com.arellomobile.mvp.MvpView
+import moxy.MvpView
+import moxy.viewstate.strategy.AddToEndSingleStrategy
+import moxy.viewstate.strategy.StateStrategyType
 
-/**
- *
- *
- * @author Lord (Kuleshov M.V.)
- * @since 02.04.17
- */
-interface SplashView: MvpView {
-    fun showLoading()
-    fun hideLoading()
+interface SplashView : MvpView {
+
+	@StateStrategyType(AddToEndSingleStrategy::class)
+	fun showLoading()
+
+	@StateStrategyType(AddToEndSingleStrategy::class)
+	fun hideLoading()
 }

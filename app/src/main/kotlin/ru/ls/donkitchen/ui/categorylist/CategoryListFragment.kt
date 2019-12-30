@@ -1,19 +1,19 @@
 package ru.ls.donkitchen.ui.categorylist
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_category_list.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import ru.ls.donkitchen.R
-import ru.ls.donkitchen.R.id.*
 import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.fragment.base.BaseFragment
 
 class CategoryListFragment : BaseFragment(), CategoryListView {
-    @InjectPresenter lateinit var presenter: CategoryListPresenter
+    @InjectPresenter
+    lateinit var presenter: CategoryListPresenter
     private var adapter: CategoryAdapter? = null
 
     @ProvidePresenter
@@ -33,9 +33,9 @@ class CategoryListFragment : BaseFragment(), CategoryListView {
             }
         })
         list.layoutManager =
-	        androidx.recyclerview.widget.StaggeredGridLayoutManager(
+	        StaggeredGridLayoutManager(
 		        2,
-		        androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
+		        StaggeredGridLayoutManager.VERTICAL
 	        )
         list.adapter = adapter
     }

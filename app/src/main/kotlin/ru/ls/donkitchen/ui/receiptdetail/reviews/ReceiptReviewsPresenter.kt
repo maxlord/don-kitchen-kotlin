@@ -1,8 +1,8 @@
 package ru.ls.donkitchen.ui.receiptdetail.reviews
 
-import com.arellomobile.mvp.InjectViewState
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
+import moxy.InjectViewState
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.domain.review.ReviewInteractor
 import ru.ls.donkitchen.mvp.BasePresenter

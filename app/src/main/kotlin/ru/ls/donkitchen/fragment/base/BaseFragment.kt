@@ -5,8 +5,8 @@ import androidx.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.arellomobile.mvp.MvpAppCompatFragment
 import kotlinx.android.synthetic.main.toolbar.*
+import moxy.MvpAppCompatFragment
 import ru.ls.donkitchen.activity.base.BaseActivity
 import ru.ls.donkitchen.activity.base.BaseNoActionBarActivity
 import ru.ls.donkitchen.nav.ActivityNavigator
@@ -14,11 +14,6 @@ import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
-/**
- *
- * @author Lord (Kuleshov M.V.)
- * @since 11.01.16
- */
 abstract class BaseFragment: MvpAppCompatFragment() {
     @Inject lateinit var router: Router
     @Inject lateinit var navigatorHolder: NavigatorHolder

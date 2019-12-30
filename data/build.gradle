@@ -34,14 +34,14 @@ dependencies {
 	})
 	implementation project(path: ":core")
 
-	implementation "androidx.room:room-runtime:2.0.0"
-	kapt "androidx.room:room-compiler:2.0.0"
+	implementation "androidx.room:room-runtime:2.2.3"
+	kapt "androidx.room:room-compiler:2.2.3"
 
 	// OrmLite
-	implementation 'com.j256.ormlite:ormlite-core:5.0'
-	implementation 'com.j256.ormlite:ormlite-android:5.0'
-	implementation 'org.flywaydb:flyway-core:4.0'
-	implementation 'org.sqldroid:sqldroid:1.0.3'
+	api 'com.j256.ormlite:ormlite-core:5.0'
+	api 'com.j256.ormlite:ormlite-android:5.0'
+	api 'org.flywaydb:flyway-core:4.0'
+	api 'org.sqldroid:sqldroid:1.0.3'
 
 	// Rx
 //	implementation 'io.reactivex.rxjava2:rxjava:2.0.8'

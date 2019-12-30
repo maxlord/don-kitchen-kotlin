@@ -1,12 +1,12 @@
 package ru.ls.donkitchen.ui.receiptdetail.info
 
 import android.os.Bundle
-import com.arellomobile.mvp.InjectViewState
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
+import moxy.InjectViewState
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.analytics.ANALYTICS_ACTION_ADD_RATE_BUTTON
 import ru.ls.donkitchen.domain.receipt.ReceiptInteractor

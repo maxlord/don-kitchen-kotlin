@@ -2,17 +2,16 @@ package ru.ls.donkitchen.ui.receiptdetail
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
 import android.view.View
-import com.arellomobile.mvp.MvpAppCompatFragment
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.jakewharton.rxbinding2.support.v7.widget.navigationClicks
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_receipt_detail.*
 import kotlinx.android.synthetic.main.toolbar.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.BaseNoActionBarActivity
 import ru.ls.donkitchen.analytics.ANALYTICS_ACTION_SHOW_REVIEWS
@@ -30,7 +29,8 @@ import timber.log.Timber
  */
 class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
 
-    @InjectPresenter lateinit var presenter: ReceiptDetailPresenter
+    @InjectPresenter
+    lateinit var presenter: ReceiptDetailPresenter
 
     @ProvidePresenter
     fun providePresenter(): ReceiptDetailPresenter {
@@ -41,14 +41,13 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
     }
 
     override fun initPager(receiptId: Int, receiptName: String) {
-        pager.adapter = object : androidx.fragment.app.FragmentPagerAdapter(fragmentManager) {
-            override fun getItem(position: Int): MvpAppCompatFragment? {
+        pager.adapter = object : androidx.fragment.app.FragmentPagerAdapter(requireFragmentManager()) {
+            override fun getItem(position: Int): Fragment {
                 when (position) {
                     0 -> return ReceiptDetailInfoFragment.newInstance(receiptId)
                     1 -> return ReceiptDetailReviewsFragment.newInstance(receiptId)
+                    else -> return ReceiptDetailInfoFragment.newInstance(receiptId)
                 }
-
-                return null
             }
 
             override fun getPageTitle(position: Int): CharSequence? {
@@ -65,7 +64,7 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
                 return 2
             }
         }
-        pager.addOnPageChangeListener(object: androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+        pager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
 
             }
@@ -92,7 +91,7 @@ class ReceiptDetailFragment : BaseFragment(), ReceiptDetailView {
     }
 
     override fun displayNewRatingDialog(receiptId: Int) {
-        ReviewDialogFragment.newInstance(receiptId).show(fragmentManager, "review_dialog")
+        ReviewDialogFragment.newInstance(receiptId).show(fragmentManager!!, "review_dialog")
     }
 
     override fun leaveScreen() {

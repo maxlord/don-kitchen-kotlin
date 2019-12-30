@@ -1,11 +1,11 @@
 package ru.ls.donkitchen.ui.receiptdetail.review
 
-import com.arellomobile.mvp.InjectViewState
 import com.jakewharton.rxbinding2.InitialValueObservable
 import com.jakewharton.rxbinding2.widget.RatingBarChangeEvent
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
+import moxy.InjectViewState
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.SchedulersFactory
 import ru.ls.donkitchen.domain.review.ReviewInteractor

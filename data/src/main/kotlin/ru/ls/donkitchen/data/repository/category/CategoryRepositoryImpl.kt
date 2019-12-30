@@ -27,7 +27,7 @@ class CategoryRepositoryImpl(
                 .onErrorResumeNext { Single.just(readCategoryItemsFromDatabase()) }
                 .flatMap(this::writeCategoryItemsToDatabase)
                 .map {
-                    it?.map { converter.convert(it) } ?: listOf()
+                    it.map { converter.convert(it) }
                 }
     }
 

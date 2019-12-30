@@ -23,7 +23,7 @@ class ReceiptRepositoryImpl(
                 .onErrorResumeNext { Single.just(readCategoryItemsFromDatabase(categoryId)) }
                 .flatMap(this::writeCategoryItemsToDatabase)
                 .map {
-                    it?.map { converter.convert(it) } ?: listOf()
+                    it.map { converter.convert(it) }
                 }
     }
 

@@ -1,22 +1,23 @@
 package ru.ls.donkitchen.ui.receiptdetail.info
 
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.Single
 import jp.wasabeef.glide.transformations.CropCircleTransformation
 import kotlinx.android.synthetic.main.fragment_receipt_detail_info.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetail
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailModule
 
 class ReceiptDetailInfoFragment : BaseFragment(), ReceiptDetailInfoView {
-    @InjectPresenter lateinit var presenter: ReceiptDetailInfoPresenter
+    @InjectPresenter
+    lateinit var presenter: ReceiptDetailInfoPresenter
 
     @ProvidePresenter
     fun providePresenter(): ReceiptDetailInfoPresenter {
@@ -37,7 +38,7 @@ class ReceiptDetailInfoFragment : BaseFragment(), ReceiptDetailInfoView {
     }
 
     override fun showImage(imageLink: String) {
-        Glide.with(this)
+        Glide.with(requireActivity())
                 .load(imageLink)
                 .bitmapTransform(CropCircleTransformation(context))
                 .fitCenter()
@@ -79,10 +80,10 @@ class ReceiptDetailInfoFragment : BaseFragment(), ReceiptDetailInfoView {
             AlertDialog.Builder(activity!!)
                     .setTitle(R.string.common_info)
                     .setMessage(R.string.activity_receipt_detail_dialog_error_loading_receipt)
-                    .setPositiveButton(R.string.common_ok, { _, _ ->
+                    .setPositiveButton(R.string.common_ok) { _, _ ->
                         emitter.onSuccess(Unit)
-                    })
-                    .setCancelable(false)
+                    }
+                .setCancelable(false)
                     .create()
                     .show()
         }

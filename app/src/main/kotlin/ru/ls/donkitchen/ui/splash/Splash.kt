@@ -1,11 +1,11 @@
 package ru.ls.donkitchen.ui.splash
 
 import android.os.Bundle
-import com.arellomobile.mvp.MvpAppCompatActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
+import moxy.MvpAppCompatActivity
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.activity.base.ActivityModule
 import ru.ls.donkitchen.app.DonKitchenApplication
@@ -23,7 +23,8 @@ import javax.inject.Inject
 class Splash: MvpAppCompatActivity(), SplashView {
     @Inject lateinit var router: Router
     @Inject lateinit var navigatorHolder: NavigatorHolder
-    @InjectPresenter lateinit var presenter: SplashPresenter
+    @InjectPresenter
+    lateinit var presenter: SplashPresenter
 
     @ProvidePresenter
     fun providePresenter(): SplashPresenter {

@@ -1,11 +1,11 @@
 package ru.ls.donkitchen.ui.receiptdetail
 
 import android.os.Bundle
-import com.arellomobile.mvp.InjectViewState
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
+import moxy.InjectViewState
 import ru.ls.donkitchen.BuildConfig
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.activity.base.SchedulersFactory

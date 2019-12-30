@@ -1,12 +1,11 @@
 package ru.ls.donkitchen.ui.receiptdetail.reviews
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_receipt_detail_reviews.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.fragment.base.BaseFragment
 import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetail
@@ -14,7 +13,8 @@ import ru.ls.donkitchen.ui.receiptdetail.ReceiptDetailModule
 import timber.log.Timber
 
 class ReceiptDetailReviewsFragment : BaseFragment(), ReceiptReviewsView {
-    @InjectPresenter lateinit var presenter: ReceiptReviewsPresenter
+    @InjectPresenter
+    lateinit var presenter: ReceiptReviewsPresenter
     private lateinit var adapter: ReviewAdapter
 
     @ProvidePresenter

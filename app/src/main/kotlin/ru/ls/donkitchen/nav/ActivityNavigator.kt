@@ -2,9 +2,8 @@ package ru.ls.donkitchen.nav
 
 import android.app.Activity
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import android.view.View
-import org.jetbrains.anko.contentView
+import com.google.android.material.snackbar.Snackbar
 import ru.ls.donkitchen.navigate
 import ru.ls.donkitchen.ui.Screens
 import ru.ls.donkitchen.ui.categorylist.CategoryList
@@ -33,10 +32,10 @@ class ActivityNavigator(private val activity: Activity): Navigator {
                     Screens.RECEIPT_DETAIL -> activity.navigate<ReceiptDetail>(true, command.transitionData as Bundle?)
                 }
             }
-            is SystemMessage ->
-                if (activity.contentView != null) {
-                    Snackbar.make(activity.contentView as View, command.message, Snackbar.LENGTH_SHORT).show()
-                }
+            is SystemMessage -> {
+                val rootView = activity.findViewById<View>(android.R.id.content).rootView
+                Snackbar.make(rootView, command.message, Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 }

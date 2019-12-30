@@ -3,10 +3,10 @@ package ru.ls.donkitchen.activity.base
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.arellomobile.mvp.MvpAppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Module
 import dagger.Provides
+import moxy.MvpAppCompatActivity
 import ru.ls.donkitchen.annotation.ConfigPrefs
 import ru.ls.donkitchen.annotation.PerActivity
 

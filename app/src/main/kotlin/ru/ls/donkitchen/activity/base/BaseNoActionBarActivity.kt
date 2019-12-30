@@ -1,20 +1,14 @@
 package ru.ls.donkitchen.activity.base
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.MenuItem
-import com.arellomobile.mvp.MvpAppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
+import moxy.MvpAppCompatActivity
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.app.DonKitchenApplication
 import javax.inject.Inject
 
 
-/**
- *
- * @author Lord (Kuleshov M.V.)
- * @since 11.01.16
- */
 abstract class BaseNoActionBarActivity: MvpAppCompatActivity() {
     val FRAGMENT_TAG = "fragment_main"
     protected var fragment: androidx.fragment.app.Fragment? = null
@@ -45,7 +39,7 @@ abstract class BaseNoActionBarActivity: MvpAppCompatActivity() {
             fragment = loadFragment()
 
             if (fragment != null) {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment, fragment, FRAGMENT_TAG).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment, fragment!!, FRAGMENT_TAG).commit()
             }
         } else {
             fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG)

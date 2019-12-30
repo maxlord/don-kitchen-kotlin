@@ -27,62 +27,75 @@ import javax.inject.Singleton
 
 @Module
 class AppModule(private val application: DonKitchenApplication) {
-    init {
-        Timber.plant(Timber.DebugTree())
-    }
+	init {
+		Timber.plant(Timber.DebugTree())
+	}
 
-    @Provides
-    @Singleton fun provideApplication(): DonKitchenApplication {
-        return application
-    }
+	@Provides
+	@Singleton
+	fun provideApplication(): DonKitchenApplication {
+		return application
+	}
 
-    @Provides
-    @Singleton fun provideApi(gson: Gson): Api {
-        val b = Retrofit.Builder()
+	@Provides
+	@Singleton
+	fun provideApi(gson: Gson): Api {
+		val b = Retrofit.Builder()
 
-        val clientBuilder = OkHttpClient.Builder()
-        val interceptor = HttpLoggingInterceptor()
-        if (BuildConfig.DEBUG) {
-            interceptor.level = HttpLoggingInterceptor.Level.BODY
-        } else {
-            interceptor.level = HttpLoggingInterceptor.Level.BASIC
-        }
-        clientBuilder.addInterceptor(interceptor)
+		val clientBuilder = OkHttpClient.Builder()
+		val interceptor = HttpLoggingInterceptor()
+		if (BuildConfig.DEBUG) {
+			interceptor.level = HttpLoggingInterceptor.Level.BODY
+		} else {
+			interceptor.level = HttpLoggingInterceptor.Level.BASIC
+		}
+		clientBuilder.addInterceptor(interceptor)
 
-        b.client(clientBuilder.build())
-        b.addConverterFactory(GsonConverterFactory.create(gson))
-        b.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+		b.client(clientBuilder.build())
+		b.addConverterFactory(GsonConverterFactory.create(gson))
+		b.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 
-        val retrofit = b.baseUrl(BuildConfig.API_URL).build()
+		val retrofit = b.baseUrl(BuildConfig.API_URL).build()
 
-        return retrofit.create(Api::class.java)
-    }
+		return retrofit.create(Api::class.java)
+	}
 
-    @Provides
-    @Singleton fun provideGson(): Gson {
-        return GsonBuilder()
-                .registerTypeAdapter(Date::class.java, DateTimeDeserializer())
-                .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
-                .create()
-    }
+	@Provides
+	@Singleton
+	fun provideGson(): Gson {
+		return GsonBuilder()
+			.registerTypeAdapter(Date::class.java, DateTimeDeserializer())
+			.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+			.create()
+	}
 
-    @Provides @Singleton fun provideCicerone(): Cicerone<Router> {
-        return Cicerone.create()
-    }
+	@Provides
+	@Singleton
+	fun provideCicerone(): Cicerone<Router> {
+		return Cicerone.create()
+	}
 
-    @Provides @Singleton fun provideNavigatorHolder(cicerone: Cicerone<Router>): NavigatorHolder {
-        return cicerone.navigatorHolder
-    }
+	@Provides
+	@Singleton
+	fun provideNavigatorHolder(cicerone: Cicerone<Router>): NavigatorHolder {
+		return cicerone.navigatorHolder
+	}
 
-    @Provides @Singleton fun provideNavigatorRouter(cicerone: Cicerone<Router>): Router {
-        return cicerone.router
-    }
+	@Provides
+	@Singleton
+	fun provideNavigatorRouter(cicerone: Cicerone<Router>): Router {
+		return cicerone.router
+	}
 
-    @Provides @Singleton fun provideSchedulersFactory(): SchedulersFactory {
-        return SchedulersFactoryImpl()
-    }
+	@Provides
+	@Singleton
+	fun provideSchedulersFactory(): SchedulersFactory {
+		return SchedulersFactoryImpl()
+	}
 
-    @Provides @Singleton fun provideDatabaseHelper(): DatabaseHelper {
-        return OpenHelperManager.getHelper(application, DatabaseHelper::class.java)
-    }
+	@Provides
+	@Singleton
+	fun provideDatabaseHelper(): DatabaseHelper {
+		return OpenHelperManager.getHelper(application, DatabaseHelper::class.java)
+	}
 }

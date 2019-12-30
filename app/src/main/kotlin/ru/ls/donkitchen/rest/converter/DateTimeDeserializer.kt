@@ -5,12 +5,6 @@ import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- *
- *
- * @author Lord (Kuleshov M.V.)
- * @since 21.03.16
- */
 class DateTimeDeserializer : JsonDeserializer<Date>, JsonSerializer<Date> {
     @Throws(JsonParseException::class)
     override fun deserialize(json: JsonElement, type: Type,

@@ -12,7 +12,7 @@ class ReviewRepositoryImpl(
     override fun getReviews(receiptId: Int): Single<List<ReviewEntity>> {
         return api.getReviewsByReceipt(receiptId).map { it.reviews ?: listOf() }
                 .map {
-                    it?.map { converter.convert(it) } ?: listOf()
+                    it.map { converter.convert(it) }
                 }
     }
 

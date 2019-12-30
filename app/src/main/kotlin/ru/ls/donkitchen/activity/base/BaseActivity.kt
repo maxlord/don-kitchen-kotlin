@@ -3,16 +3,15 @@ package ru.ls.donkitchen.activity.base
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
-import androidx.fragment.app.Fragment
-import androidx.core.view.GravityCompat
-import androidx.appcompat.app.ActionBarDrawerToggle
 import android.view.MenuItem
-import com.arellomobile.mvp.MvpAppCompatActivity
-import com.arellomobile.mvp.MvpAppCompatFragment
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
+import moxy.MvpAppCompatActivity
+import moxy.MvpAppCompatFragment
 import ru.ls.donkitchen.R
 import ru.ls.donkitchen.app.DonKitchenApplication
 import javax.inject.Inject
@@ -77,7 +76,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), NavigationView.OnNavigatio
             fragment = loadFragment()
 
             if (fragment != null) {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment, fragment, FRAGMENT_TAG).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment, fragment!!, FRAGMENT_TAG).commit()
             }
         } else {
             fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as MvpAppCompatFragment

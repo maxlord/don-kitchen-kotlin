@@ -6,7 +6,7 @@ import ru.ls.donkitchen.fcm.FcmRegistrationIntentService
 import ru.ls.donkitchen.fcm.ReceiptFirebaseMessagingService
 
 @PerService
-@Subcomponent(modules = arrayOf(ServiceModule::class))
+@Subcomponent(modules = [ServiceModule::class])
 interface ServiceSubComponent {
     fun inject(service: FcmRegistrationIntentService)
     fun inject(service: ReceiptFirebaseMessagingService)
